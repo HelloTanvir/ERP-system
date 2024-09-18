@@ -13,6 +13,7 @@ const config: Config = {
                 footer: '#28374E',
                 form: '#ffffff',
                 primary: '#682FE6',
+                link: '#206EEE',
             },
             padding: {
                 'lg-padding-header-footer': '28px 235px',

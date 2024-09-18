@@ -1,3 +1,5 @@
+import { InputField } from '@/app/_lib/utils';
+
 export enum HeaderLinks {
     LOGIN = '/auth/login',
     ADMIN_DASHBOARD = '/',
@@ -13,16 +15,7 @@ export const getFormTitle = (page: PageType) => {
     return '';
 };
 
-export const getFormFields = (
-    page: PageType
-): {
-    label: string;
-    name: string;
-    type: string;
-    placeholder: string;
-    minLength?: number;
-    required?: boolean;
-}[] => {
+export const getFormFields = (page: PageType): InputField[] => {
     if (page === 'login') {
         return [
             {
@@ -62,7 +55,7 @@ export const getFormFields = (
             {
                 label: 'Phone Number',
                 name: 'phoneNumber',
-                type: 'text',
+                type: 'tel',
                 placeholder: '',
                 required: true,
             },
