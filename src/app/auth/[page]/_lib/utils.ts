@@ -10,7 +10,7 @@ export type PageType = 'login' | 'signup' | 'forgot-password' | 'reset-password'
 export const getFormTitle = (page: PageType) => {
     if (page === 'login') return 'Sign in to your account';
     if (page === 'signup') return 'Sign up for an account';
-    if (page === 'forgot-password') return 'Forgot your Password?';
+    if (page === 'forgot-password') return 'Forgot your password?';
     if (page === 'reset-password') return 'Reset your Password';
     return '';
 };

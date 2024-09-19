@@ -13,18 +13,19 @@ function Input({ field, error }: Props) {
     }
 
     return (
-        <div className="relative">
-            <p className="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">
+        <div>
+            <label className="font-medium text-gray-600" htmlFor={field.name}>
                 {field.label}
-            </p>
+            </label>
 
             <input
+                id={field.name}
                 placeholder={field.placeholder}
                 type={field.type}
                 name={field.name}
                 minLength={field.minLength}
                 required={field.required}
-                className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 mt-2 mr-0 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md text-black autofill:text-black"
+                className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
             />
 
             {error && (

@@ -5,9 +5,18 @@ import { redirect } from 'next/navigation';
 import { getFormFields, PageType } from './utils';
 
 export async function authFormSubmit(page: PageType, formData: FormData) {
-    const rawFormData = getFormFields(page).map((field) => ({
-        [field.name]: formData.get(field.name),
-    }));
+    const rawFormData = getFormFields(page).map((field) => {
+        if (field.type === 'tel') {
+            const countryCode = formData.get('countryCode');
+            return {
+                [field.name]: `${countryCode}${formData.get(field.name)}`,
+            };
+        }
+
+        return {
+            [field.name]: formData.get(field.name),
+        };
+    });
 
     if (page === 'login') {
         rawFormData.push({ remember: formData.get('remember') === 'on' });

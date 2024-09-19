@@ -22,6 +22,7 @@ const config: Config = {
             borderRadius: {
                 'btn-radius': '5px',
                 'form-radius': '10px',
+                'input-radius': '5px',
             },
         },
     },
