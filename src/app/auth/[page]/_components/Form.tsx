@@ -5,9 +5,10 @@
 import Input from '@/app/_components/Input';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
-import { authFormSubmit } from '../_lib/actions';
-import { getFormFields, PageType } from '../_lib/utils';
-import { SubmitButton } from './SubmitButton';
+import { authFormSubmit, sendOtp } from '../_lib/actions';
+import { ACTION_BUTTON_LABEL, getFormFields, PageType } from '../_lib/utils';
+import { ActionButton } from './ActionButton';
+import SecondaryButton from './SecondaryButton';
 
 interface Props {
     page: PageType;
@@ -31,10 +32,10 @@ function Form({ page }: Readonly<Props>) {
             const currentFormState = await authFormSubmit(page, formData);
 
             if (currentFormState.error) {
-                return { error: currentFormState.error };
+                return { error: currentFormState.error, success: false };
             }
 
-            return { success: currentFormState.success };
+            return { success: currentFormState.success, error: null };
         },
         initialState
     );
@@ -49,10 +50,7 @@ function Form({ page }: Readonly<Props>) {
                 </div>
             )}
 
-            <form
-                action={formSubmitAction}
-                className="w-full mt-6 mr-0 mb-0 ml-0 relative space-y-8"
-            >
+            <form action={formSubmitAction} className="w-full mt-6 relative space-y-8">
                 {getFormFields(page).map((field) => (
                     <Input
                         key={field.name}
@@ -107,7 +105,7 @@ function Form({ page }: Readonly<Props>) {
                             </Link>
                         )}
 
-                        {page === 'forgot-password' && (
+                        {['forgot-password', 'reset-password'].includes(page) && (
                             <Link
                                 href="/auth/login"
                                 className="text-xs text-link hover:text-indigo-700 focus:outline-none ml-auto"
@@ -117,9 +115,15 @@ function Form({ page }: Readonly<Props>) {
                         )}
                     </div>
 
-                    <SubmitButton label={page[0].toUpperCase() + page.slice(1).toLowerCase()} />
+                    <ActionButton label={ACTION_BUTTON_LABEL[page]} />
                 </div>
             </form>
+
+            {page === 'otp-verification' && (
+                <div className="mt-4">
+                    <SecondaryButton label="Send again" action={sendOtp} />
+                </div>
+            )}
         </>
     );
 }

@@ -2,7 +2,7 @@
 
 import { useFormStatus } from 'react-dom';
 
-export function SubmitButton({ label }: Readonly<{ label?: string }>) {
+export function ActionButton({ label }: Readonly<{ label?: string }>) {
     const { pending } = useFormStatus();
 
     return (

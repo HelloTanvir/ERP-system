@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { InputField } from '../_lib/utils';
+import { InputProps } from '../_lib/utils';
+import OtpInput from './OtpInput';
 import PhoneNumberInput from './PhoneNumberInput';
 
-interface Props {
-    field: InputField;
-    error?: string;
-}
+function Input({ field, error }: InputProps) {
+    if (field.name === 'otp') {
+        return <OtpInput field={field} error={error} />;
+    }
 
-function Input({ field, error }: Props) {
     if (field.type === 'tel') {
         return <PhoneNumberInput field={field} error={error} />;
     }
@@ -35,4 +35,4 @@ function Input({ field, error }: Props) {
     );
 }
 
-export default Input as FC<Props>;
+export default Input as FC<InputProps>;

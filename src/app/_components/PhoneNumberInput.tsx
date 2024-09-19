@@ -1,10 +1,5 @@
 import { FC } from 'react';
-import { InputField } from '../_lib/utils';
-
-interface Props {
-    field: InputField;
-    error?: string;
-}
+import { InputProps } from '../_lib/utils';
 
 const dropdownIcon = (
     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
@@ -15,7 +10,7 @@ const dropdownIcon = (
     </svg>
 );
 
-function PhoneNumberInput({ field, error }: Props) {
+function PhoneNumberInput({ field, error }: InputProps) {
     return (
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
@@ -57,4 +52,4 @@ function PhoneNumberInput({ field, error }: Props) {
     );
 }
 
-export default PhoneNumberInput as FC<Props>;
+export default PhoneNumberInput as FC<InputProps>;

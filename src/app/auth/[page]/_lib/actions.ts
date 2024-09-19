@@ -13,6 +13,12 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
             };
         }
 
+        if (field.name === 'otp') {
+            return {
+                [field.name]: formData.getAll(field.name).join(''),
+            };
+        }
+
         return {
             [field.name]: formData.get(field.name),
         };
@@ -22,46 +28,55 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         rawFormData.push({ remember: formData.get('remember') === 'on' });
     }
 
-    const tokenRes = await fetch(`${process.env.API_URL}/auth/${page}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-            rawFormData.reduce((acc, curr) => {
-                return { ...acc, ...curr };
-            }, {})
-        ),
-    });
+    console.log(rawFormData);
 
-    const tokenData: {
-        error: {
-            [key: string]: string;
-        } | null;
-        statusCode: number;
-        data: {
-            access_token: string;
-            refresh_token: string;
-        } | null;
-    } = await tokenRes.json();
+    // const tokenRes = await fetch(`${process.env.API_URL}/auth/${page}`, {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(
+    //         rawFormData.reduce((acc, curr) => {
+    //             return { ...acc, ...curr };
+    //         }, {})
+    //     ),
+    // });
 
-    if (![200, 201].includes(tokenData.statusCode) || !tokenData.data) {
-        return {
-            error: tokenData.error,
-            success: false,
-        };
-    }
+    // const tokenData: {
+    //     error: {
+    //         [key: string]: string;
+    //     } | null;
+    //     statusCode: number;
+    //     data: {
+    //         access_token: string;
+    //         refresh_token: string;
+    //     } | null;
+    // } = await tokenRes.json();
 
-    const { access_token, refresh_token } = tokenData.data;
+    // if (![200, 201].includes(tokenData.statusCode) || !tokenData.data) {
+    //     return {
+    //         error: tokenData.error,
+    //         success: false,
+    //     };
+    // }
+
+    // const { access_token, refresh_token } = tokenData.data;
 
     const cookieStore = cookies();
 
-    cookieStore.set('access-token', access_token);
-    cookieStore.set('refresh-token', refresh_token);
+    // cookieStore.set('access-token', access_token);
+    // cookieStore.set('refresh-token', refresh_token);
 
+    if (['signup', 'login'].includes(page)) redirect('/auth/otp-verification');
     if (page === 'forgot-password') redirect('/auth/reset-password');
     if (page === 'reset-password') redirect('/auth/login');
     else redirect('/');
 
+    return { error: null, success: true };
+}
+
+export async function sendOtp() {
+    // TODO: Implement this
+    console.log('sendOtp');
     return { error: null, success: true };
 }
