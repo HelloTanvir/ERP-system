@@ -6,11 +6,30 @@ import { OTP_LENGTH } from '../auth/[page]/_lib/utils';
 
 function OtpInput({ field, error }: InputProps) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
+    const [timeLeft, setTimeLeft] = useState<number>(10);
     const inputRefs = useRef<HTMLInputElement[]>([]);
 
     useEffect(() => {
         inputRefs.current?.[0]?.focus();
+
+        // Timer countdown logic
+        const timerInterval = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev > 0) return prev - 1;
+                clearInterval(timerInterval); // Stop the timer when it reaches zero
+                return 0;
+            });
+        }, 1000);
+
+        return () => clearInterval(timerInterval);
     }, []);
+
+    // Format time as MM:SS
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
         // Ensure only digits are allowed
@@ -65,7 +84,15 @@ function OtpInput({ field, error }: InputProps) {
             </div>
 
             <p className="text-sm text-center text-gray-600">
-                Code expires in <span className="font-bold text-gray-800">03:12</span> seconds
+                {timeLeft > 0 ? (
+                    <>
+                        Code expires in{' '}
+                        <span className="font-bold text-gray-800">{formatTime(timeLeft)}</span>{' '}
+                        seconds
+                    </>
+                ) : (
+                    'Code has expired. Please resend code'
+                )}
             </p>
 
             {error && (
