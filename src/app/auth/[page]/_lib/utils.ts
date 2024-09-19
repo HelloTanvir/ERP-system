@@ -5,6 +5,16 @@ export enum HeaderLinks {
     ADMIN_DASHBOARD = '/',
 }
 
+export enum AuthPath {
+    login = '/login',
+    signup = '/register',
+    logout = '/logout',
+    'refresh-token' = '/token/refresh',
+    'forgot-password' = '/forgot-password',
+    'reset-password' = '/reset-password',
+    'otp-verification' = '/token/verify',
+}
+
 export const ACTION_BUTTON_LABEL = {
     login: 'Sign in',
     signup: 'Register',
@@ -36,7 +46,7 @@ export const getFormFields = (page: PageType): InputField[] => {
         return [
             {
                 label: 'Email or Phone Number',
-                name: 'emailOrPhone',
+                name: 'username',
                 type: 'text',
                 placeholder: '',
                 required: true,
@@ -70,7 +80,7 @@ export const getFormFields = (page: PageType): InputField[] => {
             },
             {
                 label: 'Phone Number',
-                name: 'phoneNumber',
+                name: 'phone',
                 type: 'tel',
                 placeholder: '',
                 required: true,
@@ -85,7 +95,7 @@ export const getFormFields = (page: PageType): InputField[] => {
             },
             {
                 label: 'Confirm Password',
-                name: 'confirmPassword',
+                name: 'password2',
                 type: 'password',
                 placeholder: '',
                 minLength: 6,
@@ -98,7 +108,7 @@ export const getFormFields = (page: PageType): InputField[] => {
         return [
             {
                 label: 'Email or Phone Number',
-                name: 'emailOrPhone',
+                name: 'username',
                 type: 'text',
                 placeholder: '',
                 required: true,
@@ -123,8 +133,8 @@ export const getFormFields = (page: PageType): InputField[] => {
         return [
             {
                 label: 'OTP',
-                name: 'otp',
-                type: 'number',
+                name: 'token',
+                type: 'otp',
                 placeholder: '',
                 minLength: 1,
                 maxLength: 1,

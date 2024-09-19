@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getFormFields, PageType } from './utils';
+import { AuthPath, getFormFields, PageType } from './utils';
 
 export async function authFormSubmit(page: PageType, formData: FormData) {
     const rawFormData = getFormFields(page).map((field) => {
@@ -30,42 +30,42 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
 
     console.log(rawFormData);
 
-    // const tokenRes = await fetch(`${process.env.API_URL}/auth/${page}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(
-    //         rawFormData.reduce((acc, curr) => {
-    //             return { ...acc, ...curr };
-    //         }, {})
-    //     ),
-    // });
+    const tokenRes = await fetch(`${process.env.API_URL}/account/${AuthPath[page]}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+            rawFormData.reduce((acc, curr) => {
+                return { ...acc, ...curr };
+            }, {})
+        ),
+    });
 
-    // const tokenData: {
-    //     error: {
-    //         [key: string]: string;
-    //     } | null;
-    //     statusCode: number;
-    //     data: {
-    //         access_token: string;
-    //         refresh_token: string;
-    //     } | null;
-    // } = await tokenRes.json();
+    const tokenData: {
+        error: {
+            [key: string]: string;
+        } | null;
+        statusCode: number;
+        data: {
+            access_token: string;
+            refresh_token: string;
+        } | null;
+    } = await tokenRes.json();
 
-    // if (![200, 201].includes(tokenData.statusCode) || !tokenData.data) {
-    //     return {
-    //         error: tokenData.error,
-    //         success: false,
-    //     };
-    // }
+    if (![200, 201].includes(tokenData.statusCode) || !tokenData.data) {
+        return {
+            error: tokenData.error,
+            success: false,
+        };
+    }
 
-    // const { access_token, refresh_token } = tokenData.data;
+    const { access_token, refresh_token } = tokenData.data;
 
     const cookieStore = cookies();
 
-    // cookieStore.set('access-token', access_token);
-    // cookieStore.set('refresh-token', refresh_token);
+    cookieStore.set('access-token', access_token);
+    cookieStore.set('refresh-token', refresh_token);
 
     if (['signup', 'login'].includes(page)) redirect('/auth/otp-verification');
     if (page === 'forgot-password') redirect('/auth/reset-password');

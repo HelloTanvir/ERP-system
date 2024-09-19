@@ -4,7 +4,7 @@ import OtpInput from './OtpInput';
 import PhoneNumberInput from './PhoneNumberInput';
 
 function Input({ field, error }: InputProps) {
-    if (field.name === 'otp') {
+    if (field.type === 'otp') {
         return <OtpInput field={field} error={error} />;
     }
 
