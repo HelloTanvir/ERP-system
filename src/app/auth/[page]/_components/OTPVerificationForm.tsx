@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { authFormSubmit, sendOtp } from '../_lib/actions';
 import { ACTION_BUTTON_LABEL, getFormFields, OTP_RESEND_TIME } from '../_lib/utils';
-import ActionButton from './ActionButton';
+import Button from './Button';
 import OtpInput from './OtpInput';
-import SecondaryButton from './SecondaryButton';
 
 interface FormState {
     error: {
@@ -94,12 +93,16 @@ function OTPVerificationForm() {
                         </Link>
                     </div>
 
-                    <ActionButton label={ACTION_BUTTON_LABEL[page]} disabled={timeLeft <= 0} />
+                    <Button
+                        label={ACTION_BUTTON_LABEL[page]}
+                        disabled={timeLeft <= 0}
+                        variant="filled"
+                    />
                 </div>
             </form>
 
             <form action={sendOtpAction} className="mt-4">
-                <SecondaryButton label="Send again" disabled={timeLeft > 0} />
+                <Button label="Send again" disabled={timeLeft > 0} variant="outlined" />
             </form>
         </>
     );

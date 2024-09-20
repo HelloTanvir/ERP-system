@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { authFormSubmit } from '../_lib/actions';
 import { ACTION_BUTTON_LABEL, getFormFields, PageType } from '../_lib/utils';
-import ActionButton from './ActionButton';
+import Button from './Button';
 
 interface Props {
     page: PageType;
@@ -114,7 +114,7 @@ function Form({ page }: Readonly<Props>) {
                         )}
                     </div>
 
-                    <ActionButton label={ACTION_BUTTON_LABEL[page]} />
+                    <Button label={ACTION_BUTTON_LABEL[page]} variant="filled" />
                 </div>
             </form>
         </>
