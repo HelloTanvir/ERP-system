@@ -1,35 +1,27 @@
 'use client';
 
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
-import { InputProps } from '../_lib/utils';
-import { OTP_LENGTH } from '../auth/[page]/_lib/utils';
+import { InputProps } from '../../../_lib/utils';
+import { OTP_LENGTH } from '../_lib/utils';
 
-function OtpInput({ field, error }: InputProps) {
+interface OtpInputProps extends InputProps {
+    timeLeft: number;
+}
+
+// Format time as MM:SS
+const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
+
+function OtpInput({ field, error, timeLeft }: OtpInputProps) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
-    const [timeLeft, setTimeLeft] = useState<number>(10);
     const inputRefs = useRef<HTMLInputElement[]>([]);
 
     useEffect(() => {
         inputRefs.current?.[0]?.focus();
-
-        // Timer countdown logic
-        const timerInterval = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev > 0) return prev - 1;
-                clearInterval(timerInterval); // Stop the timer when it reaches zero
-                return 0;
-            });
-        }, 1000);
-
-        return () => clearInterval(timerInterval);
     }, []);
-
-    // Format time as MM:SS
-    const formatTime = (time: number) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
         // Ensure only digits are allowed
@@ -69,7 +61,6 @@ function OtpInput({ field, error }: InputProps) {
                     <input
                         // eslint-disable-next-line react/no-array-index-key
                         key={`otp-${index}`}
-                        // name={`${field.name}-${index + 1}`}
                         name={field.name}
                         type="text"
                         maxLength={1}
@@ -79,6 +70,7 @@ function OtpInput({ field, error }: InputProps) {
                         onChange={(e) => handleChange(e, index)}
                         onKeyDown={(e) => handleKeyDown(e, index)}
                         ref={(el) => (inputRefs.current[index] = el)}
+                        disabled={timeLeft <= 0}
                     />
                 ))}
             </div>
@@ -88,10 +80,10 @@ function OtpInput({ field, error }: InputProps) {
                     <>
                         Code expires in{' '}
                         <span className="font-bold text-gray-800">{formatTime(timeLeft)}</span>{' '}
-                        seconds
+                        seconds.
                     </>
                 ) : (
-                    'Code has expired. Please resend code'
+                    'Code has expired. Please send again.'
                 )}
             </p>
 

@@ -78,5 +78,4 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
 export async function sendOtp() {
     // TODO: Implement this
     console.log('sendOtp');
-    return { error: null, success: true };
 }

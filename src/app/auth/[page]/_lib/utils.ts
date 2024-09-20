@@ -40,6 +40,7 @@ export const getFormTitle = (page: PageType) => {
 };
 
 export const OTP_LENGTH = 6;
+export const OTP_RESEND_TIME = 180; // in seconds
 
 export const getFormFields = (page: PageType): InputField[] => {
     if (page === 'login') {

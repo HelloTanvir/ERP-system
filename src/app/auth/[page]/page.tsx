@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { redirect } from 'next/navigation';
 import Form from './_components/Form';
+import OTPVerificationForm from './_components/OTPVerificationForm';
 import { getFormTitle, PageType } from './_lib/utils';
 
 function Auth({ params }) {
@@ -30,7 +31,7 @@ function Auth({ params }) {
             >
                 {getFormTitle(page)}
             </p>
-            <Form page={page} />
+            {page === 'otp-verification' ? <OTPVerificationForm /> : <Form page={page} />}
         </div>
     );
 }
