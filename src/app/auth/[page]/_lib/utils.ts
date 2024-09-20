@@ -12,7 +12,7 @@ export enum AuthPath {
     'refresh-token' = '/token/refresh',
     'forgot-password' = '/forgot-password',
     'reset-password' = '/reset-password',
-    'otp-verification' = '/token/verify',
+    'otp-verification' = '/token/verify', // TODO: change to actual path
 }
 
 export const ACTION_BUTTON_LABEL = {
