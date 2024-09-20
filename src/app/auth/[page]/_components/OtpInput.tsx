@@ -17,10 +17,6 @@ const formatTime = (time: number) => {
 
 function OtpInput({ field, error, timeLeft }: OtpInputProps) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
-<<<<<<< HEAD:src/app/_components/OtpInput.tsx
-    const [timeLeft, setTimeLeft] = useState<number>(120);
-=======
->>>>>>> b8e89847fadee7e3ed80439ae015b21a3169a4c9:src/app/auth/[page]/_components/OtpInput.tsx
     const inputRefs = useRef<HTMLInputElement[]>([]);
 
     useEffect(() => {
