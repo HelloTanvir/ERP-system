@@ -1,4 +1,4 @@
-
+/* 
 .hover-effect li {
   position: relative;
   display: block; 
@@ -26,4 +26,4 @@
 } 
 .hover-effect li span:hover::after{
    width: 100%;
-}
+} */

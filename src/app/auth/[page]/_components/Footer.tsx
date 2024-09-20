@@ -12,7 +12,7 @@ function Footer() {
                         {/* Services */}
                         <div>
                             <p className="font-bold mb-6">Services</p>
-                            <ul className="space-y-1 hover-effect">
+                            <ul className="space-y-1 hover-effect hover-gray hover-underline-white">
                                 <li>
                                     <span>Custom Development</span>
                                 </li>
@@ -42,7 +42,7 @@ function Footer() {
                         {/* Community */}
                         <div>
                             <p className="font-bold mb-6">Community Sources</p>
-                            <ul className="space-y-1 hover-effect">
+                            <ul className="space-y-1 hover-effect hover-gray hover-underline-white">
                                 <li>
                                     <span>Register for free</span>
                                 </li>
@@ -70,7 +70,7 @@ function Footer() {
                         {/* About Us */}
                         <div>
                             <p className="font-bold mb-6">About Us</p>
-                            <ul className="cursor-pointer space-y-1 hover-effect">
+                            <ul className="space-y-1 hover-effect hover-gray hover-underline-white">
                                 <li>
                                     <span>Our Company</span>
                                 </li>
@@ -101,7 +101,7 @@ function Footer() {
                         {/* My Account */}
                         <div className="">
                             <p className="font-bold mb-6">My Account</p>
-                            <ul className="cursor-pointer space-y-1 hover-effect">
+                            <ul className="space-y-1 hover-effect hover-gray hover-underline-white">
                                 <li>
                                     <Link href={HeaderLinks.LOGIN}>
                                         <span>Sign in</span>

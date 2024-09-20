@@ -18,3 +18,85 @@ body {
         text-wrap: balance;
     }
 }
+
+/* Links Hover effect */
+
+.hover-effect li span {
+    position: relative;
+    display: inline-block;
+}
+
+/* Separate text and underline color based on background */
+ul.hover-blue li span:hover {
+    color: #022e7a;
+}
+ul.hover-underline-blue li span::after {
+    background-color: rgb(7, 15, 97);
+}
+
+ul.hover-gray li span:hover {
+    color: #9ca3af;
+}
+ul.hover-underline-white  li  span::after {
+    background-color: white;
+}
+
+/* Ends here */
+
+
+ul.hover-effect li span::after {
+    content: '';
+    position: absolute;
+    cursor: pointer;
+    height: 1px;
+    width: 0;
+    left: 0;
+    bottom: 0;
+    transition: width 0.5s ease;
+}
+
+ul.hover-effect li span:hover::after {
+    width: 100%;
+}
+/* Ends here */
+
+/* Navbar hover effect for dropdown items */
+.hover-effect-li li{
+    position: relative;
+    display:block;
+}
+
+ul.hover-blue-li li:hover {
+    color: #265ebe;
+}
+
+ul.hover-underline-blue-li li::after {
+    background-color: rgb(7, 15, 97);
+}
+
+ul.hover-effect-li li::after {
+    content: '';
+    position: absolute;
+    cursor: pointer;
+    height: 1px;
+    width: 0;
+    left: 0;
+    bottom: 0;
+    transition: width 0.5s ease;
+}
+
+ul.hover-effect-li li:hover::after {
+    width: 100%;
+}
+
+ul.nav-hover-effect li {
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+ul.nav-hover-effect li:hover {
+    background-color: #e5e7eb;
+}
+/* Ends here */
