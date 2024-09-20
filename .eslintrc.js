@@ -36,6 +36,7 @@ module.exports = {
     "react/react-in-jsx-scope": 0,
     "react-hooks/rules-of-hooks": "error",
     "no-console": 0,
+    "no-return-assign": 0,
     "react/state-in-constructor": 0,
     "react/jsx-props-no-spreading": 0,
     "react/require-default-props": 0,

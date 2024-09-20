@@ -1,33 +1,52 @@
+import { InputField } from '@/app/_lib/utils';
+
 export enum HeaderLinks {
     LOGIN = '/auth/login',
     ADMIN_DASHBOARD = '/',
 }
 
-export type PageType = 'login' | 'signup' | 'forgot-password' | 'reset-password';
+export enum AuthPath {
+    login = '/login',
+    signup = '/register',
+    logout = '/logout',
+    'refresh-token' = '/token/refresh',
+    'forgot-password' = '/forgot-password',
+    'reset-password' = '/reset-password',
+    'otp-verification' = '/token/verify',
+}
+
+export const ACTION_BUTTON_LABEL = {
+    login: 'Sign in',
+    signup: 'Register',
+    'forgot-password': 'Send OTP',
+    'reset-password': 'Reset password',
+    'otp-verification': 'Verify OTP',
+};
+
+export type PageType =
+    | 'login'
+    | 'signup'
+    | 'forgot-password'
+    | 'reset-password'
+    | 'otp-verification';
 
 export const getFormTitle = (page: PageType) => {
     if (page === 'login') return 'Sign in to your account';
     if (page === 'signup') return 'Sign up for an account';
-    if (page === 'forgot-password') return 'Forgot your Password?';
+    if (page === 'forgot-password') return 'Forgot your password?';
     if (page === 'reset-password') return 'Reset your Password';
+    if (page === 'otp-verification') return 'Verification';
     return '';
 };
 
-export const getFormFields = (
-    page: PageType
-): {
-    label: string;
-    name: string;
-    type: string;
-    placeholder: string;
-    minLength?: number;
-    required?: boolean;
-}[] => {
+export const OTP_LENGTH = 6;
+
+export const getFormFields = (page: PageType): InputField[] => {
     if (page === 'login') {
         return [
             {
                 label: 'Email or Phone Number',
-                name: 'email',
+                name: 'username',
                 type: 'text',
                 placeholder: '',
                 required: true,
@@ -61,8 +80,8 @@ export const getFormFields = (
             },
             {
                 label: 'Phone Number',
-                name: 'phoneNumber',
-                type: 'text',
+                name: 'phone',
+                type: 'tel',
                 placeholder: '',
                 required: true,
             },
@@ -76,7 +95,7 @@ export const getFormFields = (
             },
             {
                 label: 'Confirm Password',
-                name: 'confirmPassword',
+                name: 'password2',
                 type: 'password',
                 placeholder: '',
                 minLength: 6,
@@ -88,10 +107,37 @@ export const getFormFields = (
     if (page === 'forgot-password') {
         return [
             {
-                label: 'Email',
-                name: 'email',
-                type: 'email',
+                label: 'Email or Phone Number',
+                name: 'username',
+                type: 'text',
                 placeholder: '',
+                required: true,
+            },
+        ];
+    }
+
+    if (page === 'reset-password') {
+        return [
+            {
+                label: 'New Password',
+                name: 'password',
+                type: 'password',
+                placeholder: '',
+                minLength: 6,
+                required: true,
+            },
+        ];
+    }
+
+    if (page === 'otp-verification') {
+        return [
+            {
+                label: 'OTP',
+                name: 'token',
+                type: 'otp',
+                placeholder: '',
+                minLength: 1,
+                maxLength: 1,
                 required: true,
             },
         ];

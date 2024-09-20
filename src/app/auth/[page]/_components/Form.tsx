@@ -2,11 +2,13 @@
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
+import Input from '@/app/_components/Input';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
-import { authFormSubmit } from '../_lib/actions';
-import { getFormFields, PageType } from '../_lib/utils';
-import { SubmitButton } from './SubmitButton';
+import { authFormSubmit, sendOtp } from '../_lib/actions';
+import { ACTION_BUTTON_LABEL, getFormFields, PageType } from '../_lib/utils';
+import { ActionButton } from './ActionButton';
+import SecondaryButton from './SecondaryButton';
 
 interface Props {
     page: PageType;
@@ -30,10 +32,10 @@ function Form({ page }: Readonly<Props>) {
             const currentFormState = await authFormSubmit(page, formData);
 
             if (currentFormState.error) {
-                return { error: currentFormState.error };
+                return { error: currentFormState.error, success: false };
             }
 
-            return { success: currentFormState.success };
+            return { success: currentFormState.success, error: null };
         },
         initialState
     );
@@ -48,35 +50,19 @@ function Form({ page }: Readonly<Props>) {
                 </div>
             )}
 
-            <form
-                action={formSubmitAction}
-                className="w-full mt-6 mr-0 mb-0 ml-0 relative space-y-8"
-            >
+            <form action={formSubmitAction} className="w-full mt-6 relative space-y-8">
                 {getFormFields(page).map((field) => (
-                    <div key={field.name} className="relative">
-                        <p className="bg-white pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600 absolute">
-                            {field.label}
-                        </p>
-                        <input
-                            placeholder={field.placeholder}
-                            type={field.type}
-                            name={field.name}
-                            minLength={field.minLength}
-                            required={field.required}
-                            className="border placeholder-gray-400 focus:outline-none focus:border-black w-full pt-4 pr-4 pb-4 pl-4 mt-2 mr-0 mb-0 ml-0 text-base block bg-white border-gray-300 rounded-md text-black autofill:text-black"
-                        />
-                        {authFormState.error?.[field.name] && (
-                            <p className="text-red-400 italic font-semibold text-xs mx-2 mt-1">
-                                {authFormState.error?.[field.name]}
-                            </p>
-                        )}
-                    </div>
+                    <Input
+                        key={field.name}
+                        field={field}
+                        error={authFormState.error?.[field.name]}
+                    />
                 ))}
                 <div className="relative">
                     {page === 'login' && (
                         <Link
                             href="/auth/forgot-password"
-                            className="text-xs text-gray-600 hover:text-indigo-500 focus:outline-none flex mb-2 -mt-2"
+                            className="text-xs text-link opacity-80 hover:opacity-100 focus:outline-none flex mb-2 -mt-2"
                         >
                             Forgot Password?
                         </Link>
@@ -96,7 +82,7 @@ function Form({ page }: Readonly<Props>) {
                                     htmlFor="remember"
                                     className="ml-2 block text-sm text-gray-700 dark:text-gray-300"
                                 >
-                                    Remember me for 30 days
+                                    Remember me
                                 </label>
                             </div>
                         )}
@@ -104,7 +90,7 @@ function Form({ page }: Readonly<Props>) {
                         {page === 'login' && (
                             <Link
                                 href="/auth/signup"
-                                className="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none"
+                                className="text-xs text-link hover:text-indigo-700 focus:outline-none"
                             >
                                 Create an account
                             </Link>
@@ -113,25 +99,31 @@ function Form({ page }: Readonly<Props>) {
                         {page === 'signup' && (
                             <Link
                                 href="/auth/login"
-                                className="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none ml-auto"
+                                className="text-xs text-link hover:text-indigo-700 focus:outline-none ml-auto"
                             >
                                 Already have an account?
                             </Link>
                         )}
 
-                        {page === 'forgot-password' && (
+                        {['forgot-password', 'reset-password'].includes(page) && (
                             <Link
                                 href="/auth/login"
-                                className="text-xs text-indigo-500 hover:text-indigo-700 focus:outline-none ml-auto"
+                                className="text-xs text-link hover:text-indigo-700 focus:outline-none ml-auto"
                             >
                                 Back to login
                             </Link>
                         )}
                     </div>
 
-                    <SubmitButton label={page[0].toUpperCase() + page.slice(1).toLowerCase()} />
+                    <ActionButton label={ACTION_BUTTON_LABEL[page]} />
                 </div>
             </form>
+
+            {page === 'otp-verification' && (
+                <div className="mt-4">
+                    <SecondaryButton label="Send again" action={sendOtp} />
+                </div>
+            )}
         </>
     );
 }
