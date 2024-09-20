@@ -1,59 +1,121 @@
+import Link from 'next/link';
+import { HeaderLinks } from '../_lib/utils';
 import './Footer.css';
 
 function Footer() {
     return (
         <div className="bg-footer shadow-sm py-16  text-white">
             <div className="w-[80%] mx-auto ">
-                <div className="flex lg:flex-row flex-col justify-between lg:gap-44 gap-20">
+                <div className="flex lg:flex-row flex-col justify-between xl:gap-44 md:gap-32 gap-20">
                     {/* Services & Community section */}
-                    <div className="lg:w-1/3 w-full flex justify-between ">
+                    <div className="xl:w-[40%] w-full flex justify-between ">
+                        {/* Services */}
                         <div>
                             <p className="font-bold mb-6">Services</p>
-                            <ul className="cursor-pointer space-y-1 hover-effect">
-                                <li>Custom Development</li>
-                                <li>Find an Accountant</li>
-                                <li>ERP</li>
-                                <li>Support</li>
-                                <li>Upgrade</li>
-                                <li>Find a Partner</li>
-                                <li>Become a Partner</li>
-                                <li>Products & prices</li>
+                            <ul className="space-y-1 hover-effect">
+                                <li>
+                                    <span>Custom Development</span>
+                                </li>
+                                <li>
+                                    <span>Find an Accountant</span>
+                                </li>
+                                <li>
+                                    <span>ERP</span>
+                                </li>
+                                <li>
+                                    <span>Support</span>
+                                </li>
+                                <li>
+                                    <span>Upgrade</span>
+                                </li>
+                                <li>
+                                    <span>Find a Partner</span>
+                                </li>
+                                <li>
+                                    <span>Become a Partner</span>
+                                </li>
+                                <li>
+                                    <span>Products & prices</span>
+                                </li>
                             </ul>
                         </div>
+                        {/* Community */}
                         <div>
                             <p className="font-bold mb-6">Community Sources</p>
-                            <ul className="cursor-pointer space-y-1 hover-effect">
-                                <li>Register for free</li>
-                                <li>Documentation</li>
-                                <li>Forum</li>
-                                <li>Tutorial</li>
-                                <li>Download</li>
-                                <li>Github</li>
+                            <ul className="space-y-1 hover-effect">
+                                <li>
+                                    <span>Register for free</span>
+                                </li>
+                                <li>
+                                    <span>Documentation</span>{' '}
+                                </li>
+                                <li>
+                                    <span>Forum</span>{' '}
+                                </li>
+                                <li>
+                                    <span>Tutorial</span>
+                                </li>
+                                <li>
+                                    <span>Download</span>
+                                </li>
+                                <li>
+                                    <span>Github</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
 
                     {/* About us & My Account section */}
-                    <div className="lg:w-2/3 w-full flex justify-between">
+                    <div className="xl:w-[60%] w-full flex justify-between">
+                        {/* About Us */}
                         <div>
                             <p className="font-bold mb-6">About Us</p>
                             <ul className="cursor-pointer space-y-1 hover-effect">
-                                <li>Our Company</li>
-                                <li>Brand Asset</li>
-                                <li>Contact us</li>
-                                <li>Jobs</li>
-                                <li>Events</li>
-                                <li>Partner services</li>
-                                <li>Terms & conditions</li>
-                                <li>Privacy policy</li>
+                                <li>
+                                    <span>Our Company</span>
+                                </li>
+                                <li>
+                                    <span>Brand Asset</span>
+                                </li>
+                                <li>
+                                    <span>Contact us</span>
+                                </li>
+                                <li>
+                                    <span>Jobs</span>
+                                </li>
+                                <li>
+                                    <span>Events</span>
+                                </li>
+                                <li>
+                                    <span>Partner services</span>
+                                </li>
+                                <li>
+                                    <span>Terms & conditions</span>
+                                </li>
+                                <li>
+                                    <span>Privacy policy</span>
+                                </li>
                             </ul>
                         </div>
-                        <div>
+
+                        {/* My Account */}
+                        <div className="">
                             <p className="font-bold mb-6">My Account</p>
                             <ul className="cursor-pointer space-y-1 hover-effect">
-                                <li>Sign in</li>
-                                <li>Register</li>
-                                <li>Saved Contents</li>
+                                <li>
+                                    <Link href={HeaderLinks.LOGIN}>
+                                        <span>Sign in</span>
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link href="/auth/signup">
+                                        <span>Register</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <span>Saved Contents</span>
+                                </li>
                             </ul>
                         </div>
                     </div>

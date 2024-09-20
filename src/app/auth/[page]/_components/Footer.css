@@ -1,3 +1,29 @@
-.hover-effect li:hover {
-  color: #9CA3AF; /* Tailwind's gray-400 */
+
+.hover-effect li {
+  position: relative;
+  display: block; 
+}
+
+.hover-effect li span {
+  position: relative;
+  display: inline-block; 
+}
+
+.hover-effect li span:hover {
+  color: #9CA3AF; 
+  cursor: pointer;
+}
+
+.hover-effect li span::after{
+   content: "";
+   position: absolute;
+   background-color: white;
+   height: 1px;
+   width: 0;
+   left: 0;
+   bottom: 0;
+   transition: width 0.5s ease; 
+} 
+.hover-effect li span:hover::after{
+   width: 100%;
 }
