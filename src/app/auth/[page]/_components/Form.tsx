@@ -5,10 +5,9 @@
 import Input from '@/app/_components/Input';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
-import { authFormSubmit, sendOtp } from '../_lib/actions';
+import { authFormSubmit } from '../_lib/actions';
 import { ACTION_BUTTON_LABEL, getFormFields, PageType } from '../_lib/utils';
-import { ActionButton } from './ActionButton';
-import SecondaryButton from './SecondaryButton';
+import Button from './Button';
 
 interface Props {
     page: PageType;
@@ -115,15 +114,9 @@ function Form({ page }: Readonly<Props>) {
                         )}
                     </div>
 
-                    <ActionButton label={ACTION_BUTTON_LABEL[page]} />
+                    <Button label={ACTION_BUTTON_LABEL[page]} variant="filled" />
                 </div>
             </form>
-
-            {page === 'otp-verification' && (
-                <div className="mt-4">
-                    <SecondaryButton label="Send again" action={sendOtp} />
-                </div>
-            )}
         </>
     );
 }

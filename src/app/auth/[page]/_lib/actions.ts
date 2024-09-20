@@ -48,8 +48,8 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         } | null;
         statusCode: number;
         data: {
-            access_token: string;
-            refresh_token: string;
+            access: string;
+            refresh: string;
         } | null;
     } = await tokenRes.json();
 
@@ -60,12 +60,12 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         };
     }
 
-    const { access_token, refresh_token } = tokenData.data;
+    const { access, refresh } = tokenData.data;
 
     const cookieStore = cookies();
 
-    cookieStore.set('access-token', access_token);
-    cookieStore.set('refresh-token', refresh_token);
+    cookieStore.set('access-token', access);
+    cookieStore.set('refresh-token', refresh);
 
     if (['signup', 'login'].includes(page)) redirect('/auth/otp-verification');
     if (page === 'forgot-password') redirect('/auth/reset-password');
@@ -78,5 +78,4 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
 export async function sendOtp() {
     // TODO: Implement this
     console.log('sendOtp');
-    return { error: null, success: true };
 }

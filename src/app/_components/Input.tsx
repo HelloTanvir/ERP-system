@@ -1,13 +1,8 @@
 import { FC } from 'react';
 import { InputProps } from '../_lib/utils';
-import OtpInput from './OtpInput';
 import PhoneNumberInput from './PhoneNumberInput';
 
 function Input({ field, error }: InputProps) {
-    if (field.type === 'otp') {
-        return <OtpInput field={field} error={error} />;
-    }
-
     if (field.type === 'tel') {
         return <PhoneNumberInput field={field} error={error} />;
     }

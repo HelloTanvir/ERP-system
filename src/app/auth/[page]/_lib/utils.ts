@@ -12,7 +12,7 @@ export enum AuthPath {
     'refresh-token' = '/token/refresh',
     'forgot-password' = '/forgot-password',
     'reset-password' = '/reset-password',
-    'otp-verification' = '/token/verify',
+    'otp-verification' = '/token/verify', // TODO: change to actual path
 }
 
 export const ACTION_BUTTON_LABEL = {
@@ -40,6 +40,7 @@ export const getFormTitle = (page: PageType) => {
 };
 
 export const OTP_LENGTH = 6;
+export const OTP_RESEND_TIME = 180; // in seconds
 
 export const getFormFields = (page: PageType): InputField[] => {
     if (page === 'login') {
