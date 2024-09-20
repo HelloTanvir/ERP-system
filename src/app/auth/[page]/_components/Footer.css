@@ -1,0 +1,3 @@
+.hover-effect li:hover {
+  color: #9CA3AF; /* Tailwind's gray-400 */
+}

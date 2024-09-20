@@ -6,7 +6,7 @@ import { OTP_LENGTH } from '../auth/[page]/_lib/utils';
 
 function OtpInput({ field, error }: InputProps) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
-    const [timeLeft, setTimeLeft] = useState<number>(10);
+    const [timeLeft, setTimeLeft] = useState<number>(120);
     const inputRefs = useRef<HTMLInputElement[]>([]);
 
     useEffect(() => {
