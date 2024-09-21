@@ -6,13 +6,14 @@ export enum HeaderLinks {
 }
 
 export enum AuthPath {
-    login = '/login',
-    signup = '/register',
-    logout = '/logout',
-    'refresh-token' = '/token/refresh',
-    'forgot-password' = '/forgot-password',
-    'reset-password' = '/reset-password',
-    'otp-verification' = '/token/verify', // TODO: change to actual path
+    login = 'login/',
+    signup = 'register/',
+    logout = 'logout/',
+    'refresh-token' = 'token/refresh/',
+    'forgot-password' = 'forgot-password/',
+    'reset-password' = 'reset-password/',
+    'verify-access-token' = 'token/verify/',
+    'otp-verification' = 'otp/verify/', // TODO: change to actual path
 }
 
 export const ACTION_BUTTON_LABEL = {
@@ -146,3 +147,16 @@ export const getFormFields = (page: PageType): InputField[] => {
 
     return [];
 };
+
+export interface TokenResponse {
+    status: boolean;
+    status_code: number;
+    message?: string;
+    data: {
+        access: string;
+        refresh: string;
+    } | null;
+    error: {
+        [key: string]: string;
+    } | null;
+}

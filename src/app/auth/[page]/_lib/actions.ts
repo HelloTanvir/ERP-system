@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { AuthPath, getFormFields, PageType } from './utils';
+import { AuthPath, getFormFields, PageType, TokenResponse } from './utils';
 
 export async function authFormSubmit(page: PageType, formData: FormData) {
     const rawFormData = getFormFields(page).map((field) => {
@@ -42,18 +42,9 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         ),
     });
 
-    const tokenData: {
-        error: {
-            [key: string]: string;
-        } | null;
-        statusCode: number;
-        data: {
-            access: string;
-            refresh: string;
-        } | null;
-    } = await tokenRes.json();
+    const tokenData: TokenResponse = await tokenRes.json();
 
-    if (![200, 201].includes(tokenData.statusCode) || !tokenData.data) {
+    if (![200, 201].includes(tokenData.status_code) || !tokenData.data) {
         return {
             error: tokenData.error,
             success: false,

@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { AuthPath, TokenResponse } from './app/auth/[page]/_lib/utils';
 
 export async function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('access-token');
@@ -8,16 +9,19 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
-    const verifiedAccessToken = await fetch(`${process.env.API_URL}/account/token/verify`, {
-        cache: 'no-store',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: accessToken?.value,
-        }),
-    });
+    const verifiedAccessToken = await fetch(
+        `${process.env.API_URL}/account/${AuthPath['verify-access-token']}`,
+        {
+            cache: 'no-store',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: accessToken?.value,
+            }),
+        }
+    );
 
     const response = NextResponse.next();
 
@@ -30,7 +34,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
-    const tokenRes = await fetch(`${process.env.API_URL}/account/token/refresh`, {
+    const tokenRes = await fetch(`${process.env.API_URL}/account/${AuthPath['refresh-token']}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -40,19 +44,9 @@ export async function middleware(request: NextRequest) {
         }),
     });
 
-    const tokenData: {
-        message: string;
-        statusCode: number;
-        data: {
-            access: string;
-            refresh: string;
-        } | null;
-        error: {
-            [key: string]: string;
-        } | null;
-    } = await tokenRes.json();
+    const tokenData: TokenResponse = await tokenRes.json();
 
-    if (tokenData.statusCode === 401 || !tokenData.data) {
+    if (tokenData.status_code === 401 || !tokenData.data) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
