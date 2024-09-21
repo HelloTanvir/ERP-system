@@ -2,15 +2,28 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GiTireIronCross } from 'react-icons/gi';
 import { HeaderLinks } from '../_lib/utils';
 
 function Header() {
     const pathname = usePathname();
-    console.log(pathname);
 
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -20,7 +33,7 @@ function Header() {
         <div className="w-full bg-header shadow-sm  sticky top-0 z-50">
             <div className="navbar justify-between lg:w-[80%] p-0  w-[95%] mx-auto">
                 <div className="navbar-start lg:w-[30%] w-full">
-                    <div className="dropdown">
+                    <div className="dropdown" ref={dropdownRef}>
                         <div
                             tabIndex={0}
                             role="button"
@@ -56,6 +69,7 @@ function Header() {
                         {isOpen && (
                             <ul
                                 tabIndex={0}
+                                role="menu"
                                 className="dropdown-content mt-4 z-[1] p-2 shadow rounded-none bg-gray-100 bg-opacity-50 w-52 nav-hover-effect hover-effect-li hover-blue-li hover-underline-blue-li"
                             >
                                 <li>
