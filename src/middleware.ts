@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { AuthPath, TokenResponse } from './app/auth/[page]/_lib/utils';
+import { AuthPath, formatTokenResponse, TokenResponse } from './app/auth/[page]/_lib/utils';
 
 export async function middleware(request: NextRequest) {
     const accessToken = request.cookies.get('access-token');
@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
-    const verifiedAccessToken = await fetch(
+    const verifiedAccessTokenRes = await fetch(
         `${process.env.API_URL}/account/${AuthPath['verify-access-token']}`,
         {
             cache: 'no-store',
@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
 
     const response = NextResponse.next();
 
-    if (verifiedAccessToken.status === 201) {
+    if (verifiedAccessTokenRes.ok) {
         return response;
     }
 
@@ -44,16 +44,17 @@ export async function middleware(request: NextRequest) {
         }),
     });
 
-    const tokenData: TokenResponse = await tokenRes.json();
+    const tokenJsonData = await tokenRes.json();
+    const tokenData: TokenResponse = formatTokenResponse(tokenJsonData);
 
     if (tokenData.status_code === 401 || !tokenData.data) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
-    const { access, refresh } = tokenData.data;
+    const { access_token, refresh_token } = tokenData.data;
 
-    response.cookies.set('access-token', access);
-    response.cookies.set('refresh-token', refresh);
+    response.cookies.set('access-token', access_token);
+    response.cookies.set('refresh-token', refresh_token);
 
     return response;
 }

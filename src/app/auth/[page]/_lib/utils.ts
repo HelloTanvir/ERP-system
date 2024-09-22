@@ -153,10 +153,38 @@ export interface TokenResponse {
     status_code: number;
     message?: string;
     data: {
-        access: string;
-        refresh: string;
+        access_token: string;
+        refresh_token: string;
     } | null;
-    error: {
+    errors: {
         [key: string]: string;
     } | null;
 }
+
+export const formatTokenResponse = (response: any): TokenResponse => {
+    let errors = null;
+    let data = null;
+
+    if (response.errors) {
+        errors = {};
+
+        Object.entries(response.errors).forEach(([key, value]) => {
+            errors[key] = value.join(', ');
+        });
+    }
+
+    if (response.access_token && response.refresh_token) {
+        data = {
+            access_token: response.access_token,
+            refresh_token: response.refresh_token,
+        };
+    }
+
+    return {
+        status: response.status,
+        status_code: response.status_code,
+        message: response.message,
+        data,
+        errors,
+    };
+};

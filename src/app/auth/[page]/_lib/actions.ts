@@ -2,9 +2,12 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { AuthPath, getFormFields, PageType, TokenResponse } from './utils';
+import { AuthPath, formatTokenResponse, getFormFields, PageType, TokenResponse } from './utils';
 
-export async function authFormSubmit(page: PageType, formData: FormData) {
+export async function authFormSubmit(
+    page: PageType,
+    formData: FormData
+): Promise<{ errors: Record<string, string> | null; success: boolean }> {
     const rawFormData = getFormFields(page).map((field) => {
         if (field.type === 'tel') {
             const countryCode = formData.get('countryCode');
@@ -28,8 +31,6 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         rawFormData.push({ remember: formData.get('remember') === 'on' });
     }
 
-    console.log(rawFormData);
-
     const tokenRes = await fetch(`${process.env.API_URL}/account/${AuthPath[page]}`, {
         method: 'POST',
         headers: {
@@ -42,28 +43,29 @@ export async function authFormSubmit(page: PageType, formData: FormData) {
         ),
     });
 
-    const tokenData: TokenResponse = await tokenRes.json();
+    const jsonData = await tokenRes.json();
+    const tokenData: TokenResponse = formatTokenResponse(jsonData);
 
-    if (![200, 201].includes(tokenData.status_code) || !tokenData.data) {
+    if (tokenData.errors) {
         return {
-            error: tokenData.error,
+            errors: tokenData.errors,
             success: false,
         };
     }
 
-    const { access, refresh } = tokenData.data;
+    const { access_token, refresh_token } = tokenData.data;
 
     const cookieStore = cookies();
 
-    cookieStore.set('access-token', access);
-    cookieStore.set('refresh-token', refresh);
+    cookieStore.set('access-token', access_token);
+    cookieStore.set('refresh-token', refresh_token);
 
-    if (['signup', 'login'].includes(page)) redirect('/auth/otp-verification');
+    if (['signup'].includes(page)) redirect('/auth/otp-verification');
     if (page === 'forgot-password') redirect('/auth/reset-password');
     if (page === 'reset-password') redirect('/auth/login');
     else redirect('/');
 
-    return { error: null, success: true };
+    return { errors: null, success: true };
 }
 
 export async function sendOtp() {

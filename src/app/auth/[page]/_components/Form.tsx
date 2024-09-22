@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface FormState {
-    error: {
+    errors: {
         [key: string]: string;
     } | null;
     success: boolean;
@@ -22,7 +22,7 @@ interface FormState {
 
 function Form({ page }: Readonly<Props>) {
     const initialState: FormState = {
-        error: null,
+        errors: null,
         success: false,
     };
 
@@ -30,21 +30,21 @@ function Form({ page }: Readonly<Props>) {
         async (prevState: FormState, formData: FormData) => {
             const currentFormState = await authFormSubmit(page, formData);
 
-            if (currentFormState.error) {
-                return { error: currentFormState.error, success: false };
+            if (currentFormState?.errors) {
+                return { errors: currentFormState.errors, success: false };
             }
 
-            return { success: currentFormState.success, error: null };
+            return { success: !!currentFormState?.success, errors: null };
         },
         initialState
     );
 
     return (
         <>
-            {authFormState.error?.global && (
+            {authFormState.errors?.global && (
                 <div className="rounded-md py-3 px-5 bg-red-100 border border-red-500 w-full mt-3">
                     <p className="text-red-500 font-semibold text-sm">
-                        {authFormState.error.global}
+                        {authFormState.errors.global}
                     </p>
                 </div>
             )}
@@ -54,7 +54,7 @@ function Form({ page }: Readonly<Props>) {
                     <Input
                         key={field.name}
                         field={field}
-                        error={authFormState.error?.[field.name]}
+                        error={authFormState.errors?.[field.name]}
                     />
                 ))}
                 <div className="relative">
