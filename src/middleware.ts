@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server';
 import { AuthPath, formatTokenResponse, TokenResponse } from './app/auth/[page]/_lib/utils';
 
 export async function middleware(request: NextRequest) {
+    // Ignore auth check for home page (/)
+    if (request.nextUrl.pathname === '/') {
+        return NextResponse.next();
+    }
+
     const accessToken = request.cookies.get('access-token');
 
     if (!accessToken) {

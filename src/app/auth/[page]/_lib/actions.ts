@@ -63,7 +63,7 @@ export async function authFormSubmit(
     if (['signup'].includes(page)) redirect('/auth/otp-verification');
     if (page === 'forgot-password') redirect('/auth/reset-password');
     if (page === 'reset-password') redirect('/auth/login');
-    else redirect('/');
+    else redirect('/dashboard');
 
     return { errors: null, success: true };
 }
