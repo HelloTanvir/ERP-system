@@ -24,6 +24,7 @@ body {
 .hover-effect li span {
     position: relative;
     display: inline-block;
+    cursor: pointer;
 }
 
 /* Separate text and underline color based on background */
@@ -47,12 +48,11 @@ ul.hover-underline-white  li  span::after {
 ul.hover-effect li span::after {
     content: '';
     position: absolute;
-    cursor: pointer;
     height: 1px;
     width: 0;
     left: 0;
     bottom: 0;
-    transition: width 0.5s ease;
+    transition: width 0.7s ease;
 }
 
 ul.hover-effect li span:hover::after {
@@ -64,6 +64,7 @@ ul.hover-effect li span:hover::after {
 .hover-effect-li li{
     position: relative;
     display:block;
+    cursor: pointer;
 }
 
 ul.hover-blue-li li:hover {
@@ -77,12 +78,11 @@ ul.hover-underline-blue-li li::after {
 ul.hover-effect-li li::after {
     content: '';
     position: absolute;
-    cursor: pointer;
     height: 1px;
     width: 0;
     left: 0;
     bottom: 0;
-    transition: width 0.5s ease;
+    transition: width 0.7s ease;
 }
 
 ul.hover-effect-li li:hover::after {
