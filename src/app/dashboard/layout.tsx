@@ -18,7 +18,9 @@ export default function AuthLayout({
             <Sidebar />
             <div className="flex-1 flex flex-col">
                 <Header />
-                {children}
+                <div className="flex-1 p-5 max-h-full overflow-y-auto mx-2 my-4 rounded-[10px] bg-[#FCFDFE] shadow-md">
+                    {children}
+                </div>
             </div>
         </div>
     );
