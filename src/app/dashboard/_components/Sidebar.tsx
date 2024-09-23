@@ -12,6 +12,7 @@ import {
     SubMenu,
 } from 'react-pro-sidebar';
 import { collapseButtonSvg, sidebarItems } from '../_lib/utils';
+import LogoutButton from './LogoutButton';
 import SearchField from './SearchField';
 
 function Sidebar() {
@@ -36,6 +37,8 @@ function Sidebar() {
                     backgroundColor: '#FCFDFE',
                     [`.${sidebarClasses.container}`]: {
                         backgroundColor: '#FCFDFE',
+                        display: 'flex',
+                        flexDirection: 'column',
                     },
                     [`.${menuClasses.subMenuRoot}`]: {
                         marginTop: '10px',
@@ -53,7 +56,7 @@ function Sidebar() {
             >
                 <SearchField />
 
-                <Menu className="mt-5 bg-[#FCFDFE]">
+                <Menu className="flex-1 mt-5 bg-[#FCFDFE]">
                     <Menu>
                         {sidebarItems.map((item) => {
                             if (item.subItems) {
@@ -126,6 +129,8 @@ function Sidebar() {
                         })}
                     </Menu>
                 </Menu>
+
+                <LogoutButton />
             </ProSidebar>
         </div>
     );
