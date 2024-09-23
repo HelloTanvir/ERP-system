@@ -46,6 +46,9 @@ function Sidebar() {
                     [`.${menuClasses.icon}`]: {
                         scale: '0.75',
                     },
+                    [`.${menuClasses.active}`]: {
+                        color: '#682FE6',
+                    },
                 }}
             >
                 <SearchField />
