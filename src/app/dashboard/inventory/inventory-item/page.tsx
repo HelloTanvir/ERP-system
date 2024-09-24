@@ -1,8 +1,20 @@
+'use client';
+
+import { useRef } from 'react';
 import { BiExport } from 'react-icons/bi';
 import { LuImport } from 'react-icons/lu';
 import { RiFolderAddLine } from 'react-icons/ri';
+import Modal from '../../_components/Modal';
 
 export default function InventoryItem() {
+    const modalRef = useRef<HTMLDialogElement | null>(null);
+
+    const openModal = () => {
+        if (modalRef.current) {
+            modalRef.current.showModal();
+        }
+    };
+
     return (
         <div>
             {/* Header Part */}
@@ -27,6 +39,7 @@ export default function InventoryItem() {
                     </button>
                     <button
                         type="button"
+                        onClick={openModal}
                         className="btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
                     >
                         <RiFolderAddLine /> New
@@ -42,7 +55,9 @@ export default function InventoryItem() {
                         <th className="w-[5%] text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
                             <input type="checkbox" className="checkbox w-4 h-4 rounded-sm" />
                         </th>
-                        <th className="w-[15%] border border-l-0   border-t-0  border-gray-300">Name</th>
+                        <th className="w-[15%] border border-l-0   border-t-0  border-gray-300">
+                            Name
+                        </th>
                         <th className="w-[15%] border border-t-0  border-gray-300">Units left</th>
                         <th className="border border-t-0 border-gray-300">Code/SKU</th>
                         <th className="text-center w-[15%] border border-t-0  border-gray-300">
@@ -85,6 +100,7 @@ export default function InventoryItem() {
                     </tr>
                 </tbody>
             </table>
+            <Modal ref={modalRef} />
         </div>
     );
 }
