@@ -6,7 +6,7 @@ export default function InventoryItem() {
     return (
         <div>
             {/* Header Part */}
-            <div className="flex justify-between border-2 p-2 rounded-lg bg-gradient-to-tr from-blue-100 to-white">
+            <div className="flex justify-between border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg ">
                 <h3 className="text-2xl text-purple-700  font-semibold">Inventory Item</h3>
 
                 {/* Action Buttons */}
@@ -39,10 +39,10 @@ export default function InventoryItem() {
                 {/* head */}
                 <thead>
                     <tr className="text-purple-700">
-                        <th className="w-[5%] text-right border border-l-0 border-t-0  border-gray-300">
+                        <th className="w-[5%] text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
                             <input type="checkbox" className="checkbox w-4 h-4 rounded-sm" />
                         </th>
-                        <th className="w-[15%] border border-t-0 border-gray-300">Name</th>
+                        <th className="w-[15%] border border-l-0   border-t-0  border-gray-300">Name</th>
                         <th className="w-[15%] border border-t-0  border-gray-300">Units left</th>
                         <th className="border border-t-0 border-gray-300">Code/SKU</th>
                         <th className="text-center w-[15%] border border-t-0  border-gray-300">
@@ -59,10 +59,10 @@ export default function InventoryItem() {
                 <tbody>
                     {/* row 1 */}
                     <tr className="">
-                        <td className="text-right border border-l-0">
+                        <td className="text-right border border-r-0 border-l-0">
                             <input type="checkbox" className="checkbox w-4 h-4 rounded-sm" />
                         </td>
-                        <td className="border border-gray-300">iPhone 16</td>
+                        <td className="border border-l-0 border-gray-300">iPhone 16</td>
                         <td className="border border-gray-300">20000000</td>
                         <td className="border border-gray-300">1351DFA65</td>
                         <td className="border border-gray-300">
