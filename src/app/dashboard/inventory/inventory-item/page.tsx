@@ -42,7 +42,9 @@ export default function InventoryItem() {
                         <th className="w-[5%] text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
                             <input type="checkbox" className="checkbox w-4 h-4 rounded-sm" />
                         </th>
-                        <th className="w-[15%] border border-l-0   border-t-0  border-gray-300">Name</th>
+                        <th className="w-[15%] border border-l-0   border-t-0  border-gray-300">
+                            Name
+                        </th>
                         <th className="w-[15%] border border-t-0  border-gray-300">Units left</th>
                         <th className="border border-t-0 border-gray-300">Code/SKU</th>
                         <th className="text-center w-[15%] border border-t-0  border-gray-300">
