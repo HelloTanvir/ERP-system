@@ -118,6 +118,7 @@ export default function CRUDDataTable({
 
                                 {row.map((item) => (
                                     <td
+                                        key={item}
                                         className={`border border-gray-300 ${index === 0 ? 'border-l-0' : ''}`}
                                     >
                                         {item}
