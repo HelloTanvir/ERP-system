@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { notificationIcon, settingsIcon, sidebarItems, userIcon } from '../_lib/utils';
+import { notificationIcon, settingsIcon, userIcon } from '../_lib/icons';
+import { sidebarItems } from '../_lib/utils';
 
 function Header() {
     const pathname = usePathname();

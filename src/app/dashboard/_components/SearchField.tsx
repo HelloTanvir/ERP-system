@@ -1,4 +1,4 @@
-import { searchIcon } from '../_lib/utils';
+import { searchIcon } from '../_lib/icons';
 
 export default function SearchField() {
     return (
