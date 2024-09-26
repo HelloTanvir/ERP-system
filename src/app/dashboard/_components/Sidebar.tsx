@@ -11,7 +11,8 @@ import {
     sidebarClasses,
     SubMenu,
 } from 'react-pro-sidebar';
-import { collapseButtonSvg, sidebarItems } from '../_lib/utils';
+import { collapseButtonSvg } from '../_lib/icons';
+import { sidebarItems } from '../_lib/utils';
 import LogoutButton from './LogoutButton';
 import SearchField from './SearchField';
 
