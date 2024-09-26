@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
 interface ModalProps {
     modalOpenerTitle: ReactNode;
@@ -10,6 +10,20 @@ interface ModalProps {
 
 function Modal({ modalOpenerTitle, modalTitle, modalBody }: ModalProps) {
     const modalRef = useRef<HTMLDialogElement | null>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalRef.current && event.target === modalRef.current) {
+                modalRef.current.close();
+            }
+        };
+
+        document.addEventListener('click', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     const openModal = () => {
         if (modalRef.current) {
