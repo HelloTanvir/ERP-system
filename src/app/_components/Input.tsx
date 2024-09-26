@@ -1,10 +1,20 @@
 import { FC } from 'react';
 import { InputProps } from '../_lib/utils';
+import DropdownInput from './DropdownInput';
 import PhoneNumberInput from './PhoneNumberInput';
+import TextareaInput from './TextareaInput';
 
 function Input({ field, error }: InputProps) {
     if (field.type === 'tel') {
         return <PhoneNumberInput field={field} error={error} />;
+    }
+
+    if (field.type === 'dropdown') {
+        return <DropdownInput field={field} error={error} />;
+    }
+
+    if (field.type === 'textarea') {
+        return <TextareaInput field={field} error={error} />;
     }
 
     return (
