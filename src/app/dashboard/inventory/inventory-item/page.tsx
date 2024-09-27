@@ -17,7 +17,16 @@ export default async function InventoryItem() {
                     'Any kind of description according to the product',
                     'True',
                 ],
+                [
+                    'Laptop',
+                    '20000000',
+                    '1351DA5F5',
+                    'Any kind of description according to the product',
+                    'True',
+                ],
             ]}
+            checkbox
+            actionField
             withExport
             handleExport={async () => {
                 'use server';

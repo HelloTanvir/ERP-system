@@ -14,7 +14,7 @@ export interface InputField {
         | 'file'
         | 'multiple-drag-drop-file';
     placeholder: string;
-    options?: string[];
+    options?: string[]; // for dropdown option input
     minLength?: number;
     maxLength?: number;
     required?: boolean;
