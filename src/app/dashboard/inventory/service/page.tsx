@@ -1,8 +1,9 @@
 import { LuImport } from 'react-icons/lu';
 import { RiFolderAddLine } from 'react-icons/ri';
 import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
+import AddServiceForm from './_components/AddServiceForm';
 
-export default async function UnitOfMeasure() {
+export default async function service() {
     return (
         <CRUDDataTable
             title="Services"
@@ -33,8 +34,8 @@ export default async function UnitOfMeasure() {
                     className:
                         'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
                 },
-                modalTitle: 'Add Service',
-                modalBody: null,
+                modalTitle: 'Create Service',
+                modalBody: <AddServiceForm />,
             }}
         />
     );
