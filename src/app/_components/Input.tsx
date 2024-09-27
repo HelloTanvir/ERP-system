@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { InputProps } from '../_lib/utils';
 import DropdownInput from './DropdownInput';
+import MultipleDragDropFile from './MultipleDragDropFile';
 import PhoneNumberInput from './PhoneNumberInput';
 import TextareaInput from './TextareaInput';
 
@@ -15,6 +16,10 @@ function Input({ field, error }: InputProps) {
 
     if (field.type === 'textarea') {
         return <TextareaInput field={field} error={error} />;
+    }
+
+    if (field.type === 'multiple-drag-drop-file') {
+        return <MultipleDragDropFile field={field} error={error} />;
     }
 
     return (

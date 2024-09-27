@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { BiExport } from 'react-icons/bi';
-import { LuImport } from 'react-icons/lu';
-import Modal from './Modal';
+import Modal, { ModalProps } from './Modal';
 
 type WithExport = {
     withExport: boolean;
@@ -10,37 +9,39 @@ type WithExport = {
 
 type WithImport = {
     withImport: boolean;
-    handleImport: () => void;
+    withImportOptions: ModalProps;
 };
 
 type WithAddNew = {
     withAddNew: boolean;
-    modalOpenerTitle: ReactNode;
-    modalTitle: string;
-    modalBody: ReactNode;
+    optionsForAddNew: ModalProps;
 };
 
 type CRUDDataTableProps = {
     title: string;
     columns: string[];
     rows: ReactNode[][];
+    width?: number;
+    checkbox?: boolean;
+    actionField?: boolean;
 } & (WithExport | WithImport | WithAddNew);
 
 export default function CRUDDataTable({
     title,
     columns,
     rows,
+    width,
     withExport,
-    withImport,
     handleExport,
-    handleImport,
+    withImport,
+    withImportOptions,
     withAddNew,
-    modalOpenerTitle,
-    modalTitle,
-    modalBody,
+    optionsForAddNew,
+    checkbox,
+    actionField,
 }: CRUDDataTableProps) {
     return (
-        <div className="flex flex-col gap-6">
+        <div style={{ width }} className="flex flex-col gap-6">
             {/* Header Part */}
             <div className="flex justify-between border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg ">
                 <h3 className="text-2xl text-purple-700  font-semibold">{title}</h3>
@@ -60,22 +61,18 @@ export default function CRUDDataTable({
                     )}
 
                     {withImport && (
-                        <form action={handleImport}>
-                            <button
-                                type="submit"
-                                className="btn btn-sm  rounded-md  border-purple-700 text-purple-700 transition-all  duration-500 hover:border-yellow-600 hover:text-yellow-600"
-                            >
-                                <LuImport />
-                                Import
-                            </button>
-                        </form>
+                        <Modal
+                            modalOpenerTitle={withImportOptions.modalOpenerTitle}
+                            modalTitle={withImportOptions.modalTitle}
+                            modalBody={withImportOptions.modalBody}
+                        />
                     )}
 
                     {withAddNew && (
                         <Modal
-                            modalOpenerTitle={modalOpenerTitle}
-                            modalTitle={modalTitle}
-                            modalBody={modalBody}
+                            modalOpenerTitle={optionsForAddNew.modalOpenerTitle}
+                            modalTitle={optionsForAddNew.modalTitle}
+                            modalBody={optionsForAddNew.modalBody}
                         />
                     )}
                 </div>
@@ -86,9 +83,14 @@ export default function CRUDDataTable({
                 <table className="table border-collapse w-full">
                     <thead>
                         <tr className="text-purple-700">
-                            <th className="text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
-                                <input type="checkbox" className="checkbox w-4 h-4 rounded-sm" />
-                            </th>
+                            {checkbox && (
+                                <th className="text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox w-4 h-4 rounded-sm"
+                                    />
+                                </th>
+                            )}
 
                             {columns.map((column, index) => (
                                 <th
@@ -99,9 +101,11 @@ export default function CRUDDataTable({
                                 </th>
                             ))}
 
-                            <th className="border border-t-0 border-r-0  border-gray-300 text-right pr-8">
-                                Action
-                            </th>
+                            {actionField && (
+                                <th className="border border-t-0 border-r-0  border-gray-300 text-right pr-8">
+                                    Action
+                                </th>
+                            )}
                         </tr>
                     </thead>
 
@@ -109,38 +113,40 @@ export default function CRUDDataTable({
                         {rows.map((row, index) => (
                             // eslint-disable-next-line react/no-array-index-key
                             <tr key={`data-table-${title}${index}`}>
-                                <td className="text-right border border-r-0 border-l-0">
-                                    <input
-                                        type="checkbox"
-                                        className="checkbox w-4 h-4 rounded-sm"
-                                    />
-                                </td>
+                                {checkbox && (
+                                    <td className="text-right border border-r-0 border-l-0">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox w-4 h-4 rounded-sm"
+                                        />
+                                    </td>
+                                )}
 
                                 {row.map((item) => (
-                                    <td
-                                        className={`border border-gray-300 ${index === 0 ? 'border-l-0' : ''}`}
-                                    >
+                                    <td key={item} className="border border-gray-300 border-l-0">
                                         {item}
                                     </td>
                                 ))}
 
-                                <td className="border border-r-0 border-gray-300">
-                                    <div className="flex gap-2 justify-end">
-                                        <button
-                                            type="button"
-                                            className="btn btn-ghost btn-sm text-blue-400"
-                                        >
-                                            Edit
-                                        </button>
+                                {actionField && (
+                                    <td className="border border-r-0 border-gray-300">
+                                        <div className="flex gap-2 justify-end">
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost btn-sm text-blue-400"
+                                            >
+                                                Edit
+                                            </button>
 
-                                        <button
-                                            type="button"
-                                            className="btn btn-ghost btn-sm text-red-400"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-ghost btn-sm text-red-400"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>

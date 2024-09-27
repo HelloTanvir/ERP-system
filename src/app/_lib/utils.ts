@@ -10,12 +10,18 @@ export interface InputField {
         | 'number'
         | 'checkbox'
         | 'textarea'
-        | 'date';
+        | 'date'
+        | 'file'
+        | 'multiple-drag-drop-file';
     placeholder: string;
-    options?: string[];
+    options?: string[]; // for dropdown option input
     minLength?: number;
     maxLength?: number;
     required?: boolean;
+    accept?: {
+        // for file input
+        [key: string]: string[];
+    };
 }
 
 export interface InputProps {
