@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { BiExport } from 'react-icons/bi';
-import { LuImport } from 'react-icons/lu';
-import Modal from './Modal';
+import Modal, { ModalProps } from './Modal';
 
 type WithExport = {
     withExport: boolean;
@@ -10,14 +9,12 @@ type WithExport = {
 
 type WithImport = {
     withImport: boolean;
-    handleImport: () => void;
+    withImportOptions: ModalProps;
 };
 
 type WithAddNew = {
     withAddNew: boolean;
-    modalOpenerTitle: ReactNode;
-    modalTitle: string;
-    modalBody: ReactNode;
+    optionsForAddNew: ModalProps;
 };
 
 type CRUDDataTableProps = {
@@ -31,13 +28,11 @@ export default function CRUDDataTable({
     columns,
     rows,
     withExport,
-    withImport,
     handleExport,
-    handleImport,
+    withImport,
+    withImportOptions,
     withAddNew,
-    modalOpenerTitle,
-    modalTitle,
-    modalBody,
+    optionsForAddNew,
 }: CRUDDataTableProps) {
     return (
         <div className="flex flex-col gap-6">
@@ -60,22 +55,18 @@ export default function CRUDDataTable({
                     )}
 
                     {withImport && (
-                        <form action={handleImport}>
-                            <button
-                                type="submit"
-                                className="btn btn-sm  rounded-md  border-purple-700 text-purple-700 transition-all  duration-500 hover:border-yellow-600 hover:text-yellow-600"
-                            >
-                                <LuImport />
-                                Import
-                            </button>
-                        </form>
+                        <Modal
+                            modalOpenerTitle={withImportOptions.modalOpenerTitle}
+                            modalTitle={withImportOptions.modalTitle}
+                            modalBody={withImportOptions.modalBody}
+                        />
                     )}
 
                     {withAddNew && (
                         <Modal
-                            modalOpenerTitle={modalOpenerTitle}
-                            modalTitle={modalTitle}
-                            modalBody={modalBody}
+                            modalOpenerTitle={optionsForAddNew.modalOpenerTitle}
+                            modalTitle={optionsForAddNew.modalTitle}
+                            modalBody={optionsForAddNew.modalBody}
                         />
                     )}
                 </div>

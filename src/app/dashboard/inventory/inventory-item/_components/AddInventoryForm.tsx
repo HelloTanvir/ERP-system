@@ -1,5 +1,6 @@
 import Input from '@/app/_components/Input';
 import { InputField } from '@/app/_lib/utils';
+import { addInventoryItem } from '../_lib/actions';
 
 const inputFields: InputField[] = [
     {
@@ -150,8 +151,8 @@ const inputFields: InputField[] = [
 
 function AddInventoryForm() {
     return (
-        <form className="flex flex-col gap-6">
-            <div className="grid grid-cols-2 gap-x-5 gap-y-4 overflow-y-auto max-h-[40rem]">
+        <form action={addInventoryItem} className="flex flex-col gap-6">
+            <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {inputFields.map((field) => (
                     <div key={field.name}>
                         <Input field={field} error="" />

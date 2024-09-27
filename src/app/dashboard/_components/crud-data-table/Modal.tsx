@@ -2,8 +2,12 @@
 
 import { ReactNode, useEffect, useRef } from 'react';
 
-interface ModalProps {
-    modalOpenerTitle: ReactNode;
+export interface ModalProps {
+    modalOpenerTitle: {
+        text: string;
+        icon?: ReactNode;
+        className?: string;
+    };
     modalTitle: string;
     modalBody: ReactNode;
 }
@@ -43,12 +47,9 @@ function Modal({ modalOpenerTitle, modalTitle, modalBody }: ModalProps) {
 
     return (
         <>
-            <button
-                type="button"
-                onClick={openModal}
-                className="btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
-            >
-                {modalOpenerTitle}
+            <button type="button" onClick={openModal} className={modalOpenerTitle.className}>
+                {modalOpenerTitle.icon}
+                {modalOpenerTitle.text}
             </button>
 
             <div>
