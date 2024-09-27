@@ -5,11 +5,11 @@ import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
 export default async function UnitOfMeasure() {
     return (
         <CRUDDataTable
-            title="Unit of Measure"
-            columns={['Unit Name', 'Symbol']}
+            title="Services"
+            columns={['Service Name', 'Service Description']}
             rows={[
-                ['Kilogram', 'kg'],
-                ['Litre', 'lt'],
+                ['Packaging', 'There will be a short description'],
+                ['Call rate', 'There will be a short description'],
             ]}
             width={600}
             checkbox={false}
@@ -33,7 +33,7 @@ export default async function UnitOfMeasure() {
                     className:
                         'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
                 },
-                modalTitle: 'Add Inventory Item',
+                modalTitle: 'Add Service',
                 modalBody: null,
             }}
         />
