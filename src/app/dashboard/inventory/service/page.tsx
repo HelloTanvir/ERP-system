@@ -3,7 +3,7 @@ import { RiFolderAddLine } from 'react-icons/ri';
 import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
 import AddServiceForm from './_components/AddServiceForm';
 
-export default async function service() {
+export default async function Service() {
     return (
         <CRUDDataTable
             title="Services"
