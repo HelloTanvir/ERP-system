@@ -170,7 +170,7 @@ function AddInventoryForm() {
                 </button>
 
                 <button
-                    type="button"
+                    type="submit"
                     className="btn btn-sm transition duration-500 bg-purple-500  text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 btn-outline font-bold rounded-md  px-8"
                 >
                     Save

@@ -1,64 +1,43 @@
 import Input from '@/app/_components/Input';
 import { InputField } from '@/app/_lib/utils';
-import { createServiceItem } from '../_lib/actions';
+import { createUnitOfMeasureItem } from '../_lib/actions';
 
 const inputFields: InputField[] = [
     {
-        label: 'Service Name',
-        name: 'service',
+        label: 'Units Name',
+        name: 'unitName',
         type: 'text',
-        placeholder: 'Enter Service name',
+        placeholder: 'Enter units name',
         required: true,
     },
     {
-        label: 'SKU/SAC',
-        name: 'sku',
+        label: 'Symbol',
+        name: 'symbol',
         type: 'text',
-        placeholder: 'Enter sku/sac',
+        placeholder: 'Enter a symbol',
         required: true,
     },
     {
-        label: 'Service Description',
-        name: 'description',
-        type: 'textarea',
-        placeholder: 'Give a short description..',
-        required: true,
-    },
-    {
-        label: 'Unit of Measure',
-        name: 'unit',
+        label: 'Conversion',
+        name: 'conversion',
         type: 'dropdown',
-        placeholder: 'Select Unit of Measure',
-        options: [
-            'Grams (g)',
-            'Kilograms (kg)',
-            'Pounds (lb)',
-            'Ounces (oz)',
-            'Milliliters (ml)',
-            'Liters (L)',
-        ],
+        placeholder: 'Select Conversion',
+        options: ['Grams (g)', 'Kilograms (kg)', 'Pounds (lb)'],
         required: true,
     },
     {
-        label: 'Default Tax Account',
-        name: 'taxAccount',
+        label: 'Second Unit',
+        name: 'secondUnit',
         type: 'dropdown',
-        placeholder: 'Select Default Tax Account',
-        options: ['Account 1', 'Account 2'],
-        required: true,
-    },
-    {
-        label: 'Remarks',
-        name: 'remarks',
-        type: 'text',
-        placeholder: 'Enter remarks',
+        placeholder: 'Select Second Unit',
+        options: ['Ounces (oz)', 'Milliliters (ml)', 'Liters (L)'],
         required: true,
     },
 ];
 
-function AddServiceForm() {
+function AddUnitOFMeasureForm() {
     return (
-        <form action={createServiceItem} className="flex flex-col gap-6">
+        <form action={createUnitOfMeasureItem} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {inputFields.map((field) => (
                     <div key={field.name}>
@@ -87,4 +66,4 @@ function AddServiceForm() {
     );
 }
 
-export default AddServiceForm;
+export default AddUnitOFMeasureForm;

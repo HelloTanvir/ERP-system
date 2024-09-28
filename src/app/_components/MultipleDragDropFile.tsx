@@ -50,7 +50,7 @@ function MultipleDragDropFile({ field, error }: Readonly<InputProps>) {
 
             <div
                 {...getRootProps()}
-                className={`mt-1 p-6 border-2 border-dashed rounded-md relative h-52 flex items-end justify-center ${
+                className={`mt-1 p-6 border-2 cursor-pointer border-dashed rounded-md relative h-52 flex items-end justify-center ${
                     isDragActive ? 'border-primary bg-blue-50' : 'border-gray-300'
                 }`}
             >

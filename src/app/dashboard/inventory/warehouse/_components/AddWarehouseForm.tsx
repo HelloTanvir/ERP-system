@@ -1,64 +1,27 @@
 import Input from '@/app/_components/Input';
 import { InputField } from '@/app/_lib/utils';
-import { createServiceItem } from '../_lib/actions';
+import { addWarehouseItem } from '../_lib/action';
 
 const inputFields: InputField[] = [
     {
-        label: 'Service Name',
-        name: 'service',
+        label: 'Warehouse Name',
+        name: 'warehouse',
         type: 'text',
-        placeholder: 'Enter Service name',
+        placeholder: 'Enter warehouse name',
         required: true,
     },
     {
-        label: 'SKU/SAC',
-        name: 'sku',
-        type: 'text',
-        placeholder: 'Enter sku/sac',
-        required: true,
-    },
-    {
-        label: 'Service Description',
-        name: 'description',
+        label: 'Warehouse Address/Other Details',
+        name: 'wareAddress',
         type: 'textarea',
-        placeholder: 'Give a short description..',
-        required: true,
-    },
-    {
-        label: 'Unit of Measure',
-        name: 'unit',
-        type: 'dropdown',
-        placeholder: 'Select Unit of Measure',
-        options: [
-            'Grams (g)',
-            'Kilograms (kg)',
-            'Pounds (lb)',
-            'Ounces (oz)',
-            'Milliliters (ml)',
-            'Liters (L)',
-        ],
-        required: true,
-    },
-    {
-        label: 'Default Tax Account',
-        name: 'taxAccount',
-        type: 'dropdown',
-        placeholder: 'Select Default Tax Account',
-        options: ['Account 1', 'Account 2'],
-        required: true,
-    },
-    {
-        label: 'Remarks',
-        name: 'remarks',
-        type: 'text',
-        placeholder: 'Enter remarks',
+        placeholder: 'Enter warehouse address/other details',
         required: true,
     },
 ];
 
-function AddServiceForm() {
+function AddWarehouseForm() {
     return (
-        <form action={createServiceItem} className="flex flex-col gap-6">
+        <form action={addWarehouseItem} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {inputFields.map((field) => (
                     <div key={field.name}>
@@ -87,4 +50,4 @@ function AddServiceForm() {
     );
 }
 
-export default AddServiceForm;
+export default AddWarehouseForm;
