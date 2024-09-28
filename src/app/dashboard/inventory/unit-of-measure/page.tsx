@@ -33,7 +33,7 @@ export default async function UnitOfMeasure() {
                     className:
                         'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
                 },
-                modalTitle: 'Add Inventory Item',
+                modalTitle: 'Create Unit of Measure',
                 modalBody: null,
             }}
         />

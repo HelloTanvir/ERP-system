@@ -1,5 +1,6 @@
 import Input from '@/app/_components/Input';
 import { InputField } from '@/app/_lib/utils';
+import { createServiceItem } from '../_lib/actions';
 
 const inputFields: InputField[] = [
     {
@@ -57,7 +58,7 @@ const inputFields: InputField[] = [
 
 function AddServiceForm() {
     return (
-        <form className="flex flex-col gap-6">
+        <form action={createServiceItem} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {inputFields.map((field) => (
                     <div key={field.name}>
@@ -76,7 +77,7 @@ function AddServiceForm() {
                 </button>
 
                 <button
-                    type="button"
+                    type="submit"
                     className="btn btn-sm transition duration-500 bg-purple-500  text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 btn-outline font-bold rounded-md  px-8"
                 >
                     Save

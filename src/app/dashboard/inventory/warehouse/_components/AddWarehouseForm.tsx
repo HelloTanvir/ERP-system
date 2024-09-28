@@ -1,5 +1,6 @@
 import Input from '@/app/_components/Input';
 import { InputField } from '@/app/_lib/utils';
+import { addWarehouseItem } from '../_lib/action';
 
 const inputFields: InputField[] = [
     {
@@ -11,7 +12,7 @@ const inputFields: InputField[] = [
     },
     {
         label: 'Warehouse Address/Other Details',
-        name: 'warehouseAddress',
+        name: 'wareAddress',
         type: 'textarea',
         placeholder: 'Enter warehouse address/other details',
         required: true,
@@ -20,7 +21,7 @@ const inputFields: InputField[] = [
 
 function AddWarehouseForm() {
     return (
-        <form className="flex flex-col gap-6">
+        <form action={addWarehouseItem} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {inputFields.map((field) => (
                     <div key={field.name}>
@@ -39,7 +40,7 @@ function AddWarehouseForm() {
                 </button>
 
                 <button
-                    type="button"
+                    type="submit"
                     className="btn btn-sm transition duration-500 bg-purple-500  text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 btn-outline font-bold rounded-md  px-8"
                 >
                     Save
