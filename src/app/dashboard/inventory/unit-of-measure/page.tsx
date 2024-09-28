@@ -1,6 +1,7 @@
 import { LuImport } from 'react-icons/lu';
 import { RiFolderAddLine } from 'react-icons/ri';
 import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
+import AddUnitOFMeasureForm from './_components/AddUnitOfMeasureForm';
 
 export default async function UnitOfMeasure() {
     return (
@@ -34,7 +35,7 @@ export default async function UnitOfMeasure() {
                         'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
                 },
                 modalTitle: 'Create Unit of Measure',
-                modalBody: null,
+                modalBody: <AddUnitOFMeasureForm />,
             }}
         />
     );
