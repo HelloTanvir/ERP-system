@@ -13,8 +13,6 @@ export default async function UnitOfMeasure() {
                 ['Litre', 'lt'],
             ]}
             width={600}
-            checkbox={false}
-            actionField={false}
             withImport
             withImportOptions={{
                 modalOpenerTitle: {

@@ -25,8 +25,8 @@ export default async function InventoryItem() {
                     'True',
                 ],
             ]}
-            checkbox
-            actionField
+            withCheckbox
+            withActionField
             withExport
             handleExport={async () => {
                 'use server';

@@ -10,8 +10,8 @@ export default async function Warehouse() {
             rows={[['Mirpur DOHS'], ['Uttara']]}
             width={600}
             checkbox={false}
-            actionField
-            withAddNew
+            withCheckbox
+            withActionField
             optionsForAddNew={{
                 modalOpenerTitle: {
                     text: 'New',

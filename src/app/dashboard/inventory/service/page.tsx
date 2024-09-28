@@ -13,8 +13,6 @@ export default async function Service() {
                 ['Call rate', 'There will be a short description'],
             ]}
             width={600}
-            checkbox={false}
-            actionField={false}
             withImport
             withImportOptions={{
                 modalOpenerTitle: {

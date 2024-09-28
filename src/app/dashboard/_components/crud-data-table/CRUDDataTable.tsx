@@ -22,8 +22,8 @@ type CRUDDataTableProps = {
     columns: string[];
     rows: ReactNode[][];
     width?: number;
-    checkbox?: boolean;
-    actionField?: boolean;
+    withCheckbox?: boolean;
+    withActionField?: boolean;
 } & (WithExport | WithImport | WithAddNew);
 
 export default function CRUDDataTable({
@@ -37,8 +37,8 @@ export default function CRUDDataTable({
     withImportOptions,
     withAddNew,
     optionsForAddNew,
-    checkbox,
-    actionField,
+    withCheckbox,
+    withActionField,
 }: CRUDDataTableProps) {
     return (
         <div style={{ width }} className="flex flex-col gap-6">
@@ -83,7 +83,7 @@ export default function CRUDDataTable({
                 <table className="table border-collapse w-full">
                     <thead>
                         <tr className="text-purple-700">
-                            {checkbox && (
+                            {withCheckbox && (
                                 <th className="text-right border border-l-0 border-t-0 border-r-0  border-gray-300">
                                     <input
                                         type="checkbox"
@@ -101,7 +101,7 @@ export default function CRUDDataTable({
                                 </th>
                             ))}
 
-                            {actionField && (
+                            {withActionField && (
                                 <th className="border border-t-0 border-r-0  border-gray-300 text-right pr-8">
                                     Action
                                 </th>
@@ -113,7 +113,7 @@ export default function CRUDDataTable({
                         {rows.map((row, index) => (
                             // eslint-disable-next-line react/no-array-index-key
                             <tr key={`data-table-${title}${index}`}>
-                                {checkbox && (
+                                {withCheckbox && (
                                     <td className="text-right border border-r-0 border-l-0">
                                         <input
                                             type="checkbox"
@@ -128,7 +128,7 @@ export default function CRUDDataTable({
                                     </td>
                                 ))}
 
-                                {actionField && (
+                                {withActionField && (
                                     <td className="border border-r-0 border-gray-300">
                                         <div className="flex gap-2 justify-end">
                                             <button
