@@ -30,6 +30,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'camelcase': 'off',
+    'no-plusplus': 0,
     "import/prefer-default-export": 0,
     "import/extensions": 0,
     "import/order": 0,

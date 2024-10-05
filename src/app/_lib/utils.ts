@@ -14,7 +14,11 @@ export interface InputField {
         | 'file'
         | 'multiple-drag-drop-file';
     placeholder: string;
-    options?: string[]; // for dropdown option input
+    options?: {
+        // for dropdown option input
+        label: string;
+        value: string;
+    }[];
     minLength?: number;
     maxLength?: number;
     required?: boolean;
@@ -22,9 +26,16 @@ export interface InputField {
         // for file input
         [key: string]: string[];
     };
+    defaultValue?: unknown;
+    disabled?: boolean;
 }
 
 export interface InputProps {
     field: InputField;
     error?: string;
+}
+
+export interface DropdownSelectOption {
+    label: string;
+    value: string;
 }

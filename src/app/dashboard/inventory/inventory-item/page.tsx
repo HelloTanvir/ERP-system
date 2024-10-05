@@ -3,28 +3,22 @@ import { RiFolderAddLine } from 'react-icons/ri';
 import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
 import AddInventoryForm from './_components/AddInventoryForm';
 import ImportInventoryFromFile from './_components/ImportInventoryFromFile';
+import { getInventoryItems } from './_lib/actions';
 
 export default async function InventoryItem() {
+    const inventoryItems = await getInventoryItems();
+
     return (
         <CRUDDataTable
             title="Inventory Item"
             columns={['Name', 'Units left', 'Code/SKU', 'Description', 'Active/Inactive']}
-            rows={[
-                [
-                    'iPhone 16',
-                    '20000000',
-                    '1351DFA65',
-                    'Any kind of description according to the product',
-                    'True',
-                ],
-                [
-                    'Laptop',
-                    '20000000',
-                    '1351DA5F5',
-                    'Any kind of description according to the product',
-                    'True',
-                ],
-            ]}
+            rows={inventoryItems.map((item) => [
+                item.name,
+                item.quantity_on_warehouse,
+                item.code,
+                item.description,
+                item.quantity_on_warehouse > 0 ? 'True' : 'False',
+            ])}
             withCheckbox
             withActionField
             withExport
@@ -52,7 +46,7 @@ export default async function InventoryItem() {
                     className:
                         'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
                 },
-                modalTitle: 'Add Inventory Item',
+                modalTitle: 'Add Item',
                 modalBody: <AddInventoryForm />,
             }}
         />
