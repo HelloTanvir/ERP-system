@@ -4,35 +4,42 @@ import Input from '@/app/_components/Input';
 import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
 import { useState } from 'react';
 import { GoPlus } from 'react-icons/go';
+import { TiDeleteOutline } from 'react-icons/ti';
 
 interface Props {
     warehouseOptions: DropdownSelectOption[];
 }
 
-const getFields = (warehouseOptions: DropdownSelectOption[]) => [
-    {
-        label: 'Warehouse',
-        name: 'warehouse',
-        type: 'dropdown',
-        placeholder: 'Select Warehouse to Store',
-        options: warehouseOptions,
-        required: true,
-    },
-    {
-        label: 'Quantity on Warehouse',
-        name: 'quantity',
-        type: 'number',
-        placeholder: 'Enter quantity on warehouse',
-        required: true,
-    },
+const getFieldRows = (warehouseOptions: DropdownSelectOption[]): InputField[][] => [
+    [
+        {
+            label: 'Warehouse',
+            name: 'warehouse',
+            type: 'dropdown',
+            placeholder: 'Select Warehouse to Store',
+            options: warehouseOptions,
+            required: true,
+        },
+        {
+            label: 'Quantity on Warehouse',
+            name: 'quantity',
+            type: 'number',
+            placeholder: 'Enter quantity on warehouse',
+            required: true,
+        },
+    ],
 ];
 
 function InventoryOnlyFields({ warehouseOptions }: Props) {
     const [checked, setChecked] = useState<boolean>(false);
-    const [fields, setFields] = useState<InputField[]>(getFields(warehouseOptions));
+    const [fieldRows, setFieldRows] = useState<InputField[][]>(getFieldRows(warehouseOptions));
 
-    const handleAddMoreFields = () => {
-        setFields((prev) => [...prev, ...getFields(warehouseOptions)]);
+    const handleAddMoreRow = () => {
+        setFieldRows((prev) => [...prev, ...getFieldRows(warehouseOptions)]);
+    };
+
+    const handleRemoveRow = (rowIndex: number) => {
+        setFieldRows((prev) => [...prev].filter((_, index) => index !== rowIndex));
     };
 
     return (
@@ -70,20 +77,34 @@ function InventoryOnlyFields({ warehouseOptions }: Props) {
                         </div>
                     </div>
 
-                    {fields.map((field, index) => (
-                        <Input
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={`inventory_only_field-${field.name}-${index}`}
-                            field={field}
-                            error=""
-                        />
+                    {fieldRows?.map((row, rowIndex) => (
+                        <div className="col-span-2 flex gap-x-5 items-center">
+                            {row?.map((field, fieldIndex) => (
+                                <div className="flex-1">
+                                    <Input
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={`inventory_only_field-${field.name}-${rowIndex}-${fieldIndex}`}
+                                        field={field}
+                                        error=""
+                                    />
+                                </div>
+                            ))}
+
+                            <button
+                                type="button"
+                                className="mt-5"
+                                onClick={() => handleRemoveRow(rowIndex)}
+                            >
+                                <TiDeleteOutline size={24} color="#e95a5a" />
+                            </button>
+                        </div>
                     ))}
 
                     <div className="col-span-2">
                         <button
                             type="button"
                             className="flex items-center gap-2 text-sm rounded-btn-radius px-2 py-1 border border-primary bg-primary bg-opacity-15 hover:bg-opacity-30 duration-75"
-                            onClick={handleAddMoreFields}
+                            onClick={handleAddMoreRow}
                         >
                             <GoPlus /> Allocate more
                         </button>
