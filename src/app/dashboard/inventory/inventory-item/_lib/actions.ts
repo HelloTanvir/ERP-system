@@ -49,25 +49,23 @@ export async function addInventoryItem(formData: FormData) {
 
     if (allocations.length > 0) inventoryItem.allocations = allocations;
 
-    console.log({ inventoryItem: JSON.stringify(inventoryItem) });
+    const cookieStore = cookies();
+    const access_token = cookieStore.get('access-token');
 
-    // const cookieStore = cookies();
-    // const access_token = cookieStore.get('access-token');
+    const res = await fetch(`${process.env.API_URL}/inventory/item/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token?.value}`,
+        },
+        body: JSON.stringify(inventoryItem),
+    });
 
-    // const res = await fetch(`${process.env.API_URL}/inventory/item/`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${access_token?.value}`,
-    //     },
-    //     body: JSON.stringify(inventoryItem),
-    // });
-
-    // if (!res.ok) {
-    //     const data = await res.json();
-    //     console.error('Something went wrong', data);
-    //     return;
-    // }
+    if (!res.ok) {
+        const data = await res.json();
+        console.error('Something went wrong', data);
+        return;
+    }
 
     revalidatePath('/dashboard/inventory/inventory-item');
 }
