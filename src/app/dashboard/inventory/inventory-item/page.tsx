@@ -1,54 +1,24 @@
-import { LuImport } from 'react-icons/lu';
-import { RiFolderAddLine } from 'react-icons/ri';
-import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
-import AddInventoryForm from './_components/AddInventoryForm';
-import ImportInventoryFromFile from './_components/ImportInventoryFromFile';
-import { getInventoryItems } from './_lib/actions';
+import Actions from './_components/Actions';
+import ItemTable from './_components/ItemTable';
+import { getInventoryItemFormDropdownOptions, getInventoryItems } from './_lib/actions';
 
 export default async function InventoryItem() {
     const inventoryItems = await getInventoryItems();
+    const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
 
     return (
-        <CRUDDataTable
-            title="Inventory Item"
-            columns={['Name', 'Units left', 'Code/SKU', 'Description', 'Active/Inactive']}
-            rows={inventoryItems.map((item) => [
-                item.name,
-                item.quantity_on_warehouse,
-                item.code,
-                item.description,
-                item.quantity_on_warehouse > 0 ? 'True' : 'False',
-            ])}
-            withCheckbox
-            withActionField
-            withExport
-            handleExport={async () => {
-                'use server';
+        <div className="flex flex-col gap-6">
+            <div className="flex justify-between border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg ">
+                <h3 className="text-2xl text-purple-700  font-semibold">Inventory Item</h3>
+                <Actions itemFormDropdownOptions={itemFormDropdownOptions} />
+            </div>
 
-                console.log('Exporting data');
-            }}
-            withImport
-            withImportOptions={{
-                modalOpenerTitle: {
-                    text: 'Import',
-                    icon: <LuImport />,
-                    className:
-                        'btn btn-sm  rounded-md  border-purple-700 text-purple-700 transition-all  duration-500 hover:border-yellow-600 hover:text-yellow-600',
-                },
-                modalTitle: 'Import csv, xls document',
-                modalBody: <ImportInventoryFromFile />,
-            }}
-            withAddNew
-            optionsForAddNew={{
-                modalOpenerTitle: {
-                    text: 'New',
-                    icon: <RiFolderAddLine />,
-                    className:
-                        'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
-                },
-                modalTitle: 'Add Item',
-                modalBody: <AddInventoryForm />,
-            }}
-        />
+            <div className="overflow-x-auto">
+                <ItemTable
+                    inventoryItems={inventoryItems}
+                    itemFormDropdownOptions={itemFormDropdownOptions}
+                />
+            </div>
+        </div>
     );
 }

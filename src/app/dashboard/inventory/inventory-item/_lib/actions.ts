@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { InventoryCreationDropdownOptions, InventoryItem } from './utils';
 
-export async function getInventoryItems(): InventoryItem[] {
+export async function getInventoryItems(): Promise<InventoryItem[]> {
     const cookieStore = cookies();
     const access_token = cookieStore.get('access-token');
 
@@ -22,7 +22,9 @@ export async function getInventoryItems(): InventoryItem[] {
     return data as InventoryItem[];
 }
 
-export async function addInventoryItem(formData: FormData) {
+export async function addInventoryItem(
+    formData: FormData
+): Promise<{ errors: Record<string, string> | null; success: boolean }> {
     const inventoryItem: InventoryItem = {};
 
     [...formData.entries()].forEach((entry) => {
@@ -62,12 +64,31 @@ export async function addInventoryItem(formData: FormData) {
     });
 
     if (!res.ok) {
-        const data = await res.json();
-        console.error('Something went wrong', data);
-        return;
+        const errors = await res.json();
+        return { success: false, errors };
     }
 
     revalidatePath('/dashboard/inventory/inventory-item');
+    return { success: true, errors: null };
+}
+
+export async function deleteInventoryItem(formData: FormData) {
+    const itemId = formData.get('id');
+
+    const cookieStore = cookies();
+    const access_token = cookieStore.get('access-token');
+
+    const res = await fetch(`${process.env.API_URL}/inventory/item/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token?.value}`,
+        },
+    });
+
+    if (res.ok) {
+        revalidatePath('/dashboard/inventory/inventory-item');
+    }
 }
 
 export async function importInventoryFromFile(formData: FormData) {
@@ -75,7 +96,7 @@ export async function importInventoryFromFile(formData: FormData) {
     revalidatePath('/dashboard/inventory/inventory-item');
 }
 
-export async function getInventoryAddFormDropdownOptions(): Promise<InventoryCreationDropdownOptions> {
+export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCreationDropdownOptions> {
     const dropdownOptions: InventoryCreationDropdownOptions = {
         unitOfMeasureOptions: [],
         categoryOptions: [],

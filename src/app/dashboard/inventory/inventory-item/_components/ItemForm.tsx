@@ -2,9 +2,13 @@
 
 import Input from '@/app/_components/Input';
 import { useFormState } from 'react-dom';
-import { importInventoryFromFile } from '../_lib/actions';
+import { addInventoryItem } from '../_lib/actions';
+import { getInputFields, InventoryCreationDropdownOptions, InventoryItem } from '../_lib/utils';
+import InventoryOnlyFields from './InventoryOnlyFields';
 
 interface Props {
+    dropdownOptions: InventoryCreationDropdownOptions;
+    selectedItem?: InventoryItem;
     closeModal: () => void;
 }
 
@@ -15,15 +19,15 @@ interface FormState {
     success: boolean;
 }
 
-function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
+function ItemForm({ dropdownOptions, selectedItem, closeModal }: Readonly<Props>) {
     const initialState: FormState = {
         errors: null,
         success: false,
     };
 
-    const [importInventoryFormState, formSubmitAction] = useFormState(
+    const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const currentFormState = await importInventoryFromFile(formData);
+            const currentFormState = await addInventoryItem(formData);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -36,25 +40,23 @@ function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
         initialState
     );
 
-    console.log({ importInventoryFormState });
-
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <div className="overflow-y-auto max-h-[40rem]">
-                <Input
-                    field={{
-                        label: 'Upload file here',
-                        name: 'file',
-                        type: 'multiple-drag-drop-file',
-                        required: true,
-                        accept: {
-                            'text/csv': ['.csv'],
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
-                                '.xlsx',
-                            ],
-                            'application/vnd.ms-excel': ['.xls'],
-                        },
-                    }}
+            <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
+                {getInputFields({ dropdownOptions, selectedItem }).map((field) => (
+                    <div
+                        key={field.name}
+                        className={
+                            ['description', 'remarks'].includes(field.name) ? 'col-span-2' : ''
+                        }
+                    >
+                        <Input field={field} error={itemFormState.errors?.[field.name]} />
+                    </div>
+                ))}
+                <InventoryOnlyFields
+                    warehouseOptions={dropdownOptions?.warehouseOptions || []}
+                    selectedItem={selectedItem}
+                    errors={itemFormState.errors}
                 />
             </div>
 
@@ -78,4 +80,4 @@ function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
     );
 }
 
-export default ImportInventoryFromFile;
+export default ItemForm;
