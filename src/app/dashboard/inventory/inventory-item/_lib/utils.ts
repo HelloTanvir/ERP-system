@@ -35,13 +35,9 @@ export interface InventoryItem {
     as_of_date: string | Date;
 }
 
-export const getInputFields = ({
-    dropdownOptions,
-    selectedItem,
-}: {
-    dropdownOptions?: InventoryCreationDropdownOptions;
-    selectedItem?: InventoryItem;
-}): InputField[] => {
+export const getInputFields = (
+    dropdownOptions?: InventoryCreationDropdownOptions
+): InputField[] => {
     return [
         {
             label: 'Name',
@@ -49,7 +45,6 @@ export const getInputFields = ({
             type: 'text',
             placeholder: 'Enter inventory name',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.name } : {}),
         },
         {
             label: 'SKU',
@@ -57,7 +52,6 @@ export const getInputFields = ({
             type: 'text',
             placeholder: 'Enter sku',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.code } : {}),
         },
         {
             label: 'Barcode',
@@ -65,7 +59,6 @@ export const getInputFields = ({
             type: 'text',
             placeholder: 'Enter barcode',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.barcode } : {}),
         },
         {
             label: 'Unit of Measure',
@@ -74,7 +67,6 @@ export const getInputFields = ({
             placeholder: 'Select Unit of Measure',
             options: dropdownOptions?.unitOfMeasureOptions || [],
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.measure_unit } : {}),
         },
         {
             label: 'Items Description',
@@ -82,7 +74,7 @@ export const getInputFields = ({
             type: 'textarea',
             placeholder: 'Give a short description..',
             required: false,
-            ...(selectedItem ? { defaultValue: selectedItem.description } : {}),
+            fullWidth: true,
         },
         {
             label: 'Remarks',
@@ -90,7 +82,7 @@ export const getInputFields = ({
             type: 'textarea',
             placeholder: 'Give remarks for the item',
             required: false,
-            ...(selectedItem ? { defaultValue: selectedItem.remarks } : {}),
+            fullWidth: true,
         },
         {
             label: 'Initial Cost Per Unit',
@@ -98,7 +90,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter cost per unit',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.initial_item_cost } : {}),
         },
         {
             label: 'Initial Total Cost',
@@ -106,7 +97,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter total cost',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.initial_total_cost } : {}),
         },
         {
             label: 'Minimum Order Quantity',
@@ -114,7 +104,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter minimum order quantity',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.minimum_order_quantity } : {}),
         },
         {
             label: 'Item Category',
@@ -123,7 +112,6 @@ export const getInputFields = ({
             placeholder: 'Select Item Category',
             options: dropdownOptions?.categoryOptions || [],
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.category } : {}),
         },
         {
             label: 'Item Subcategory',
@@ -132,7 +120,6 @@ export const getInputFields = ({
             placeholder: 'Select Item Subcategory',
             options: dropdownOptions?.subCategoryOptions || [],
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.subcategory } : {}),
         },
         {
             label: 'Purchase Price (Exclusive Tax)',
@@ -140,7 +127,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter purchase price',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.purchase_price } : {}),
         },
         {
             label: 'Purchase Price (Inclusive Tax)',
@@ -148,7 +134,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter purchase price',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.purchase_price_tax } : {}),
         },
         {
             label: 'Sale Price (Exclusive Tax)',
@@ -156,7 +141,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter sale price',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.sale_price } : {}),
         },
         {
             label: 'Sale Price (Inclusive Tax)',
@@ -164,7 +148,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter sale price',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.sale_price_tax } : {}),
         },
         {
             label: 'Default Discount %',
@@ -172,7 +155,6 @@ export const getInputFields = ({
             type: 'number',
             placeholder: 'Enter discount %',
             required: true,
-            ...(selectedItem ? { defaultValue: selectedItem.discount_percent } : {}),
         },
         {
             label: 'As of Date',
@@ -180,7 +162,9 @@ export const getInputFields = ({
             type: 'date',
             placeholder: 'Set as of date',
             required: false,
-            defaultValue: new Date(selectedItem?.as_of_date || Date()).toJSON().slice(0, 10),
+            defaultValue: new Date(Date()).toJSON().slice(0, 10),
         },
     ];
 };
+
+export type ActionType = 'category-create' | 'subcategory-create';

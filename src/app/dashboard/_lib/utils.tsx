@@ -94,3 +94,8 @@ export const sidebarItems: SidebarItem[] = [
         link: '/settings',
     },
 ];
+
+export interface GenericItem {
+    id: number | string;
+    [key: string]: any;
+}

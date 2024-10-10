@@ -1,10 +1,14 @@
 'use client';
 
 import Input from '@/app/_components/Input';
+import { InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
-import { importInventoryFromFile } from '../_lib/actions';
+import { GenericItem } from '../../_lib/utils';
 
-interface Props {
+interface ItemFormProps<T extends GenericItem> {
+    fields: InputField[];
+    currentItem: T | null;
+    handleSubmit: (item: T) => Promise<void>;
     closeModal: () => void;
 }
 
@@ -15,15 +19,26 @@ interface FormState {
     success: boolean;
 }
 
-function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
+function ItemForm<T extends GenericItem>({
+    fields,
+    currentItem,
+    handleSubmit,
+    closeModal,
+}: Readonly<ItemFormProps<T>>) {
     const initialState: FormState = {
         errors: null,
         success: false,
     };
 
-    const [importInventoryFormState, formSubmitAction] = useFormState(
+    const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const currentFormState = await importInventoryFromFile(formData);
+            const formObject = {};
+            if (currentItem?.id) formObject.id = currentItem.id;
+            formData.forEach((value, key) => {
+                formObject[key] = value;
+            });
+
+            const currentFormState = await handleSubmit(formObject);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -36,26 +51,14 @@ function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
         initialState
     );
 
-    console.log({ importInventoryFormState });
-
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <div className="overflow-y-auto max-h-[40rem]">
-                <Input
-                    field={{
-                        label: 'Upload file here',
-                        name: 'file',
-                        type: 'multiple-drag-drop-file',
-                        required: true,
-                        accept: {
-                            'text/csv': ['.csv'],
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': [
-                                '.xlsx',
-                            ],
-                            'application/vnd.ms-excel': ['.xls'],
-                        },
-                    }}
-                />
+            <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
+                {fields.map((field) => (
+                    <div key={field.name} className={field.fullWidth ? 'col-span-2' : ''}>
+                        <Input field={field} error={itemFormState.errors?.[field.name]} />
+                    </div>
+                ))}
             </div>
 
             <div className="flex gap-2 justify-end text-center">
@@ -78,4 +81,4 @@ function ImportInventoryFromFile({ closeModal }: Readonly<Props>) {
     );
 }
 
-export default ImportInventoryFromFile;
+export default ItemForm;
