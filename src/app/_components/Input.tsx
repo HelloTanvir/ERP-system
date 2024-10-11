@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { InputProps } from '../_lib/utils';
+import CheckboxInput from './CheckboxInput';
 import DropdownInput from './DropdownInput';
 import MultipleDragDropFile from './MultipleDragDropFile';
 import PhoneNumberInput from './PhoneNumberInput';
@@ -22,6 +23,10 @@ function Input({ field, error }: InputProps) {
         return <MultipleDragDropFile field={field} error={error} />;
     }
 
+    if (field.type === 'checkbox') {
+        return <CheckboxInput field={field} error={error} />;
+    }
+
     return (
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
@@ -35,6 +40,8 @@ function Input({ field, error }: InputProps) {
                 name={field.name}
                 minLength={field.minLength}
                 required={field.required}
+                disabled={field.disabled}
+                defaultValue={field.defaultValue}
                 className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
             />
 

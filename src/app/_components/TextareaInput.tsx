@@ -11,6 +11,8 @@ function TextareaInput({ field, error }: InputProps) {
             <textarea
                 id={field.name}
                 name={field.name}
+                rows={3}
+                defaultValue={field.defaultValue}
                 className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
             />
 

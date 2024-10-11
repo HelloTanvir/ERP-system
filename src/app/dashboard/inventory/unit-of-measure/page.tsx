@@ -1,42 +1,35 @@
-import { LuImport } from 'react-icons/lu';
-import { RiFolderAddLine } from 'react-icons/ri';
-import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
-import AddUnitOFMeasureForm from './_components/AddUnitOfMeasureForm';
+import { Suspense } from 'react';
+import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
+import { createGenericServerActions } from '../../_lib/actions';
+import { getInputFields, MeasurementUnit } from './_lib/utils';
+
+const { createItem, updateItem, deleteItem, getItems } =
+    await createGenericServerActions<MeasurementUnit>({
+        endpoint: `${process.env.API_URL}/inventory/measurement-unit/`,
+        revalidatePath: '/dashboard/inventory/unit-of-measure',
+    });
 
 export default async function UnitOfMeasure() {
+    const measurementUnitItems = await getItems();
+    const itemFields = getInputFields();
+
     return (
-        <CRUDDataTable
-            title="Unit of Measure"
-            columns={['Unit Name', 'Symbol']}
-            rows={[
-                ['Kilogram', 'kg'],
-                ['Litre', 'lt'],
-            ]}
-            width={600}
-            checkbox={false}
-            actionField={false}
-            withImport
-            withImportOptions={{
-                modalOpenerTitle: {
-                    text: 'Import',
-                    icon: <LuImport />,
-                    className:
-                        'btn btn-sm  rounded-md  border-purple-700 text-purple-700 transition-all  duration-500 hover:border-yellow-600 hover:text-yellow-600',
-                },
-                modalTitle: 'Import csv, xls document',
-                modalBody: null,
-            }}
-            withAddNew
-            optionsForAddNew={{
-                modalOpenerTitle: {
-                    text: 'New',
-                    icon: <RiFolderAddLine />,
-                    className:
-                        'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
-                },
-                modalTitle: 'Create Unit of Measure',
-                modalBody: <AddUnitOFMeasureForm />,
-            }}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+            <GenericCRUD
+                pageTitle="Unit of Measure"
+                width={700}
+                tableColumns={['Unit Name', 'Symbol']}
+                tableRows={measurementUnitItems.map((item) => [item.name, item.symbol])}
+                items={measurementUnitItems}
+                fields={itemFields}
+                modalTitles={{
+                    create: 'Create Unit of Measure',
+                    edit: 'Edit Unit of Measure',
+                }}
+                createItem={createItem}
+                updateItem={updateItem}
+                deleteItem={deleteItem}
+            />
+        </Suspense>
     );
 }
