@@ -1,40 +1,38 @@
-import { LuImport } from 'react-icons/lu';
-import { RiFolderAddLine } from 'react-icons/ri';
-import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
-import AddServiceForm from './_components/AddServiceForm';
+import { Suspense } from 'react';
+import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
+import { createGenericServerActions } from '../../_lib/actions';
+import { getUnitOfMeasureDropdownOptions } from './_lib/actions';
+import { getInputFields, IService } from './_lib/utils';
+
+const { createItem, updateItem, deleteItem, getItems } = await createGenericServerActions<IService>(
+    {
+        endpoint: `${process.env.API_URL}/inventory/service/`,
+        revalidatePath: '/dashboard/inventory/service',
+    }
+);
 
 export default async function Service() {
+    const measurementUnitItems = await getItems();
+    const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
+    const itemFields = getInputFields(unitOfMeasureDropdownOptions);
+
     return (
-        <CRUDDataTable
-            title="Services"
-            columns={['Service Name', 'Service Description']}
-            rows={[
-                ['Packaging', 'There will be a short description'],
-                ['Call rate', 'There will be a short description'],
-            ]}
-            width={600}
-            withImport
-            withImportOptions={{
-                modalOpenerTitle: {
-                    text: 'Import',
-                    icon: <LuImport />,
-                    className:
-                        'btn btn-sm  rounded-md  border-purple-700 text-purple-700 transition-all  duration-500 hover:border-yellow-600 hover:text-yellow-600',
-                },
-                modalTitle: 'Import csv, xls document',
-                modalBody: null,
-            }}
-            withAddNew
-            optionsForAddNew={{
-                modalOpenerTitle: {
-                    text: 'New',
-                    icon: <RiFolderAddLine />,
-                    className:
-                        'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
-                },
-                modalTitle: 'Create Service',
-                modalBody: <AddServiceForm />,
-            }}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+            <GenericCRUD
+                pageTitle="Services"
+                width={700}
+                tableColumns={['Name', 'Description']}
+                tableRows={measurementUnitItems.map((item) => [item.name, item.symbol])}
+                items={measurementUnitItems}
+                fields={itemFields}
+                modalTitles={{
+                    create: 'Create service',
+                    edit: 'Edit service',
+                }}
+                createItem={createItem}
+                updateItem={updateItem}
+                deleteItem={deleteItem}
+            />
+        </Suspense>
     );
 }

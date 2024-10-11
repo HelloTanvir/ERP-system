@@ -28,6 +28,7 @@ export interface InputField {
     };
     defaultValue?: unknown;
     disabled?: boolean;
+    fullWidth?: boolean;
 }
 
 export interface InputProps {

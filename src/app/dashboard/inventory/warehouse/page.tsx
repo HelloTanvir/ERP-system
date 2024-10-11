@@ -1,27 +1,31 @@
-import { RiFolderAddLine } from 'react-icons/ri';
-import CRUDDataTable from '../../_components/crud-data-table/CRUDDataTable';
-import AddWarehouseForm from './_components/AddWarehouseForm';
+import { createGenericServerActions } from '../../_lib/actions';
+import { InventoryItem } from '../inventory-item/_lib/utils';
+import TableWrapper from './_components/TableWrapper';
+import { getInputFields, IWarehouse } from './_lib/utils';
+
+const { createItem, updateItem, deleteItem, getItems } =
+    await createGenericServerActions<IWarehouse>({
+        endpoint: `${process.env.API_URL}/inventory/warehouse/`,
+        revalidatePath: '/dashboard/inventory/warehouse',
+    });
+
+const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
+    endpoint: `${process.env.API_URL}/inventory/item/`,
+    revalidatePath: '/dashboard/inventory/inventory-item',
+});
 
 export default async function Warehouse() {
+    const warehouseItems = await getItems();
+    const itemFields = getInputFields();
+
     return (
-        <CRUDDataTable
-            title="Warehouse"
-            columns={['Warehouse Name']}
-            rows={[['Mirpur DOHS'], ['Uttara']]}
-            width={600}
-            checkbox={false}
-            withCheckbox
-            withActionField
-            optionsForAddNew={{
-                modalOpenerTitle: {
-                    text: 'New',
-                    icon: <RiFolderAddLine />,
-                    className:
-                        'btn btn-sm bg-[#682FE6] text-white px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500',
-                },
-                modalTitle: 'Add Warehouse',
-                modalBody: <AddWarehouseForm />,
-            }}
+        <TableWrapper
+            warehouseItems={warehouseItems}
+            itemFields={itemFields}
+            createItem={createItem}
+            updateItem={updateItem}
+            deleteItem={deleteItem}
+            getInventoryItems={getInventoryItems}
         />
     );
 }

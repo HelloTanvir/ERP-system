@@ -1,8 +1,25 @@
-'use server';
+import { DropdownSelectOption } from '@/app/_lib/utils';
+import { cookies } from 'next/headers';
 
-import { revalidatePath } from 'next/cache';
+export async function getUnitOfMeasureDropdownOptions(): Promise<DropdownSelectOption[]> {
+    const cookieStore = cookies();
+    const access_token = cookieStore.get('access-token');
 
-export async function createServiceItem(formData: FormData) {
-    console.log(formData);
-    revalidatePath('/dashboard/inventory/service');
+    const unitOfMeasurementRes = await fetch(`${process.env.API_URL}/inventory/measurement-unit/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token?.value}`,
+        },
+    });
+
+    if (unitOfMeasurementRes.ok) {
+        const data = await unitOfMeasurementRes.json();
+        return (data || []).map((item) => ({
+            label: item.name,
+            value: item.id,
+        }));
+    }
+
+    return [];
 }
