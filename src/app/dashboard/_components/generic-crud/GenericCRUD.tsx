@@ -139,36 +139,38 @@ function GenericCRUD<T extends GenericItem>({
                 </div>
             </div>
 
-            <Modal ref={modalRef}>
-                <div className="mb-6">
-                    <h1 className="text-xl text-purple-700 mb-2">
-                        {currentItem ? modalTitles.edit : modalTitles.create}
-                    </h1>
-                    <hr />
-                </div>
-                {CustomItemForm ? (
-                    <CustomItemForm
-                        currentItem={currentItem}
-                        handleSubmit={handleSubmit}
-                        closeModal={closeModal}
-                        {...customItemFormProps}
-                    />
-                ) : (
-                    <ItemForm
-                        fields={
-                            currentItem
-                                ? fields.map((field) => ({
-                                      ...field,
-                                      defaultValue: currentItem[field.name],
-                                  }))
-                                : fields
-                        }
-                        currentItem={currentItem}
-                        handleSubmit={handleSubmit}
-                        closeModal={closeModal}
-                    />
-                )}
-            </Modal>
+            {(!noAction || !noTableAction) && (
+                <Modal ref={modalRef}>
+                    <div className="mb-6">
+                        <h1 className="text-xl text-purple-700 mb-2">
+                            {currentItem ? modalTitles.edit : modalTitles.create}
+                        </h1>
+                        <hr />
+                    </div>
+                    {CustomItemForm ? (
+                        <CustomItemForm
+                            currentItem={currentItem}
+                            handleSubmit={handleSubmit}
+                            closeModal={closeModal}
+                            {...customItemFormProps}
+                        />
+                    ) : (
+                        <ItemForm
+                            fields={
+                                currentItem
+                                    ? fields.map((field) => ({
+                                          ...field,
+                                          defaultValue: currentItem[field.name],
+                                      }))
+                                    : fields
+                            }
+                            currentItem={currentItem}
+                            handleSubmit={handleSubmit}
+                            closeModal={closeModal}
+                        />
+                    )}
+                </Modal>
+            )}
         </>
     );
 }

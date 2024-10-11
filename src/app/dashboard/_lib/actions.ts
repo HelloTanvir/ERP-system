@@ -106,10 +106,17 @@ export async function createGenericServerActions<T extends { id: number | string
         revalidatePath(path);
     }
 
-    async function getItems(): Promise<T[]> {
+    async function getItems(query?: { [key: string]: string }): Promise<T[]> {
         'use server';
 
-        const response = await fetch(endpoint, {
+        let ep = endpoint;
+        if (query) {
+            ep = `${ep}?${Object.entries(query)
+                .map((e) => `${e[0]}=${e[1]}`)
+                .join('&')}`;
+        }
+
+        const response = await fetch(ep, {
             headers: { Authorization: `Bearer ${access_token?.value}` },
         });
         return response.json();

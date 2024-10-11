@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
-import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
+import { InventoryItem } from '../inventory-item/_lib/utils';
+import TableWrapper from './_components/TableWrapper';
 import { getInputFields, IWarehouse } from './_lib/utils';
 
 const { createItem, updateItem, deleteItem, getItems } =
@@ -9,31 +9,23 @@ const { createItem, updateItem, deleteItem, getItems } =
         revalidatePath: '/dashboard/inventory/warehouse',
     });
 
+const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
+    endpoint: `${process.env.API_URL}/inventory/item/`,
+    revalidatePath: '/dashboard/inventory/inventory-item',
+});
+
 export default async function Warehouse() {
     const warehouseItems = await getItems();
     const itemFields = getInputFields();
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <GenericCRUD
-                pageTitle="Warehouse"
-                width={700}
-                tableColumns={['Name', 'Location', 'Description']}
-                tableRows={warehouseItems.map((item) => [
-                    item.name,
-                    item.location,
-                    item.description,
-                ])}
-                items={warehouseItems}
-                fields={itemFields}
-                modalTitles={{
-                    create: 'Create service',
-                    edit: 'Edit service',
-                }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
-            />
-        </Suspense>
+        <TableWrapper
+            warehouseItems={warehouseItems}
+            itemFields={itemFields}
+            createItem={createItem}
+            updateItem={updateItem}
+            deleteItem={deleteItem}
+            getInventoryItems={getInventoryItems}
+        />
     );
 }

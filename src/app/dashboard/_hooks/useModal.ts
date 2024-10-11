@@ -33,6 +33,7 @@ const useModal = (): {
 
     useEffect(() => {
         if (modalRef?.current) {
+            modalRef.current.style.width = isOpen ? 'auto' : '0';
             modalRef.current.style.height = isOpen ? 'auto' : '0';
         }
     }, [isOpen]);
