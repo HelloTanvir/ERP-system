@@ -2,58 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
-import { ActionType, InventoryCreationDropdownOptions, InventoryItem } from './utils';
-
-// TODO: remove this once done with the dynamic input field fix
-export async function addInventoryItem(
-    formData: FormData
-): Promise<{ errors: Record<string, string> | null; success: boolean }> {
-    const inventoryItem: InventoryItem = {};
-
-    [...formData.entries()].forEach((entry) => {
-        const [key, value] = entry;
-
-        if (!key.includes('$ACTION_ID_') && !['warehouse', 'quantity'].includes(key))
-            inventoryItem[key] = value;
-    });
-
-    const allocations = [];
-    const allocationWarehouses = formData.getAll('warehouse');
-    const allocationQuantities = formData.getAll('quantity');
-    if (
-        allocationWarehouses.length > 0 &&
-        allocationWarehouses.length === allocationQuantities.length
-    ) {
-        for (let i = 0; i < allocationWarehouses.length; i++) {
-            allocations.push({
-                warehouse: allocationWarehouses[i],
-                quantity: allocationQuantities[i],
-            });
-        }
-    }
-
-    if (allocations.length > 0) inventoryItem.allocations = allocations;
-
-    const cookieStore = cookies();
-    const access_token = cookieStore.get('access-token');
-
-    const res = await fetch(`${process.env.API_URL}/inventory/item/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${access_token?.value}`,
-        },
-        body: JSON.stringify(inventoryItem),
-    });
-
-    if (!res.ok) {
-        const errors = await res.json();
-        return { success: false, errors };
-    }
-
-    revalidatePath('/dashboard/inventory/inventory-item');
-    return { success: true, errors: null };
-}
+import { ActionType, InventoryCreationDropdownOptions } from './utils';
 
 export async function importInventoryFromFile(formData: FormData) {
     console.log(formData);

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import AdditionalActions from './_components/AdditionalActions';
+import InventoryItemForm from './_components/InventoryItemForm';
 import { getInventoryItemFormDropdownOptions } from './_lib/actions';
 import { getInputFields, InventoryItem } from './_lib/utils';
 
@@ -33,10 +34,15 @@ export default async function InventoryItem() {
                     ),
                 ])}
                 additionalActions={
-                    <AdditionalActions categoryOptions={itemFormDropdownOptions?.categoryOptions} />
+                    <AdditionalActions categoryOptions={itemFormDropdownOptions.categoryOptions} />
                 }
                 items={inventoryItems}
-                fields={itemFields}
+                fields={[]}
+                CustomItemForm={InventoryItemForm}
+                customItemFormProps={{
+                    fields: itemFields,
+                    warehouseOptions: itemFormDropdownOptions.warehouseOptions,
+                }}
                 modalTitles={{
                     create: 'Create Inventory or Non Inventory Item',
                     edit: 'Edit Inventory or Non Inventory Item',

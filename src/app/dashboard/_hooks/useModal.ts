@@ -6,7 +6,7 @@ const useModal = (): {
     modalRef: MutableRefObject<HTMLDialogElement | null>;
     isOpen: boolean;
     openModal: () => void;
-    closeModal: () => void;
+    closeModal: (cleanUpFn?: () => void) => void;
 } => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -44,8 +44,9 @@ const useModal = (): {
         }
     };
 
-    const closeModal = () => {
+    const closeModal = (cleanUpFn?: () => void) => {
         if (modalRef && typeof modalRef !== 'function' && modalRef.current) {
+            cleanUpFn?.();
             modalRef.current.close();
             setIsOpen(false);
         }

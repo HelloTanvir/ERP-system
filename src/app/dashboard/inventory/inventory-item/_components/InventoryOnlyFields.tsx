@@ -1,69 +1,62 @@
 'use client';
 
-import Input from '@/app/_components/Input';
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+/* eslint-disable jsx-a11y/label-has-associated-control, react/no-array-index-key */
+
+import { DropdownSelectOption } from '@/app/_lib/utils';
 import { useEffect, useState } from 'react';
 import { GoPlus } from 'react-icons/go';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { InventoryItem } from '../_lib/utils';
+import { Allocation, InventoryItem } from '../_lib/utils';
 
 interface Props {
     warehouseOptions: DropdownSelectOption[];
-    selectedItem?: InventoryItem;
+    selectedItem?: InventoryItem | null;
     errors?: Record<string, string> | null;
 }
 
-const getFieldRow = (
-    warehouseOptions: DropdownSelectOption[],
-    defaultValues?: [any, number]
-): InputField[] => [
-    {
-        label: 'Warehouse',
-        name: 'warehouse',
-        type: 'dropdown',
-        placeholder: 'Select Warehouse to Store',
-        options: warehouseOptions,
-        required: true,
-        ...(defaultValues?.[0] ? { defaultValue: defaultValues[0] } : {}),
-    },
-    {
-        label: 'Quantity on Warehouse',
-        name: 'quantity',
-        type: 'number',
-        placeholder: 'Enter quantity on warehouse',
-        required: true,
-        ...(defaultValues?.[1] ? { defaultValue: defaultValues[1] } : {}),
-    },
-];
-
 function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonly<Props>) {
-    const [checked, setChecked] = useState<boolean>(false);
-    const [fieldRows, setFieldRows] = useState<InputField[][]>([getFieldRow(warehouseOptions)]);
+    const [isInventoryItem, setIsInventoryItem] = useState(false);
+    const [initialQuantity, setInitialQuantity] = useState(
+        selectedItem?.quantity_on_warehouse || 0
+    );
+    const [allocations, setAllocations] = useState<Allocation[]>(
+        selectedItem?.allocations?.length > 0
+            ? selectedItem?.allocations
+            : [{ warehouse: 0, quantity: 0 }]
+    );
 
     useEffect(() => {
         if (selectedItem?.allocations?.length > 0) {
-            setChecked(true);
-
-            setFieldRows(
-                selectedItem.allocations.map((allocation) =>
-                    getFieldRow(warehouseOptions, [allocation.warehouse, allocation.quantity])
-                )
-            );
+            setIsInventoryItem(true);
+            setInitialQuantity(selectedItem.quantity_on_warehouse);
+            setAllocations(selectedItem.allocations);
         }
-    }, [selectedItem?.allocations, warehouseOptions]);
 
-    const handleAddMoreRow = () => {
-        setFieldRows((prev) => [...prev, getFieldRow(warehouseOptions)]);
+        return () => {
+            setIsInventoryItem(false);
+            setInitialQuantity(0);
+            setAllocations([{ warehouse: 0, quantity: 0 }]);
+        };
+    }, [selectedItem]);
+
+    const handleAddAllocation = () => {
+        setAllocations([...allocations, { warehouse: 0, quantity: 0 }]);
     };
 
-    const handleRemoveRow = (rowIndex: number) => {
-        setFieldRows((prev) => [...prev].filter((_, index) => index !== rowIndex));
+    const handleRemoveAllocation = (index: number) => {
+        const newAllocations = allocations.filter((_, i) => i !== index);
+        setAllocations(newAllocations);
+    };
+
+    const handleAllocationChange = (index: number, field: keyof Allocation, value: number) => {
+        const newAllocations = [...allocations];
+        newAllocations[index][field] = value;
+        setAllocations(newAllocations);
     };
 
     return (
         <>
             <div className="col-span-2 flex items-center gap-2">
-                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label className="font-medium text-gray-600" htmlFor="is_inventory_item">
                     Is the item an inventory item?
                 </label>
@@ -73,66 +66,117 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
                     type="checkbox"
                     name="is_inventory_item"
                     required={false}
-                    value={checked}
-                    onChange={(e) => setChecked(e.target.checked)}
+                    checked={isInventoryItem}
+                    onChange={(e) => setIsInventoryItem(e.target.checked)}
                 />
             </div>
 
-            {checked && (
+            {isInventoryItem && (
                 <>
                     <div className="col-span-2">
                         <div className="w-1/2">
-                            <Input
-                                field={{
-                                    label: 'Initial Quantity on Hand',
-                                    name: 'quantity_on_warehouse',
-                                    type: 'number',
-                                    placeholder: 'Enter initial quantity',
-                                    required: true,
-                                    ...(selectedItem
-                                        ? { defaultValue: selectedItem.quantity_on_warehouse }
-                                        : {}),
-                                }}
-                                error={errors?.quantity_on_warehouse}
+                            <label
+                                className="font-medium text-gray-600"
+                                htmlFor="quantity_on_warehouse"
+                            >
+                                Initial Quantity on Hand
+                            </label>
+
+                            <input
+                                id="quantity_on_warehouse"
+                                placeholder="Enter initial quantity"
+                                type="number"
+                                name="quantity_on_warehouse"
+                                required
+                                value={initialQuantity}
+                                onChange={(e) => setInitialQuantity(Number(e.target.value))}
+                                className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
                             />
+
+                            {errors?.allocations && (
+                                <p className="text-red-400 italic font-semibold text-xs mx-2 mt-1">
+                                    {errors.allocations}
+                                </p>
+                            )}
                         </div>
                     </div>
 
-                    {fieldRows?.map((row, rowIndex) => (
+                    {allocations.map((allocation, index) => (
                         <div
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={`inventory_only_field-${rowIndex}`}
+                            key={`inventory_only_field-allocations-${index}`}
                             className="col-span-2 flex gap-x-5 items-center"
                         >
-                            {row?.map((field, fieldIndex) => (
-                                <div
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    key={`inventory_only_field-${field.name}-${rowIndex}-${fieldIndex}`}
-                                    className="flex-1"
+                            <div className="flex-1">
+                                <label
+                                    className="font-medium text-gray-600"
+                                    htmlFor={`warehouse-${index}`}
                                 >
-                                    <Input field={field} error="" />
-                                </div>
-                            ))}
+                                    Warehouse
+                                </label>
 
-                            <button
-                                type="button"
-                                className="mt-5"
-                                onClick={() => handleRemoveRow(rowIndex)}
-                            >
-                                <TiDeleteOutline size={24} color="#e95a5a" />
-                            </button>
+                                <select
+                                    id={`warehouse-${index}`}
+                                    name="warehouse"
+                                    value={allocation.warehouse}
+                                    onChange={(e) =>
+                                        handleAllocationChange(
+                                            index,
+                                            'warehouse',
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                    className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
+                                >
+                                    <option value="">Select a warehouse</option>
+                                    {warehouseOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="flex-1">
+                                <label
+                                    htmlFor={`quantity-${index}`}
+                                    className="font-medium text-gray-600"
+                                >
+                                    Quantity on Warehouse
+                                </label>
+                                <input
+                                    type="number"
+                                    id={`quantity-${index}`}
+                                    name="quantity"
+                                    value={allocation.quantity}
+                                    onChange={(e) =>
+                                        handleAllocationChange(
+                                            index,
+                                            'quantity',
+                                            Number(e.target.value)
+                                        )
+                                    }
+                                    className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
+                                />
+                            </div>
+                            {index > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveAllocation(index)}
+                                    className="mt-5 mr-1 p-1 rounded-btn backdrop-blur-sm bg-black/10 hover:bg-black/30 duration-75"
+                                >
+                                    <TiDeleteOutline size={18} color="#e95a5a" />
+                                </button>
+                            )}
                         </div>
                     ))}
 
-                    <div className="col-span-2">
-                        <button
-                            type="button"
-                            className="flex items-center gap-2 text-sm rounded-btn-radius px-2 py-1 border border-primary bg-primary bg-opacity-15 hover:bg-opacity-30 duration-75"
-                            onClick={handleAddMoreRow}
-                        >
-                            <GoPlus /> Allocate more
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        onClick={handleAddAllocation}
+                        className="w-max flex items-center gap-2 text-sm rounded-btn-radius px-2 py-1 border border-primary bg-primary bg-opacity-15 hover:bg-opacity-30 duration-75"
+                    >
+                        <GoPlus /> Allocate more
+                    </button>
                 </>
             )}
         </>

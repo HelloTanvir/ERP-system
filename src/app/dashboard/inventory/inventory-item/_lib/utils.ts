@@ -7,7 +7,7 @@ export interface InventoryCreationDropdownOptions {
     warehouseOptions: DropdownSelectOption[];
 }
 
-interface Allocation {
+export interface Allocation {
     warehouse: number;
     quantity: number;
 }
@@ -99,13 +99,6 @@ export const getInputFields = (
             required: true,
         },
         {
-            label: 'Minimum Order Quantity',
-            name: 'minimum_order_quantity',
-            type: 'number',
-            placeholder: 'Enter minimum order quantity',
-            required: true,
-        },
-        {
             label: 'Item Category',
             name: 'category',
             type: 'dropdown',
@@ -154,6 +147,13 @@ export const getInputFields = (
             name: 'discount_percent',
             type: 'number',
             placeholder: 'Enter discount %',
+            required: true,
+        },
+        {
+            label: 'Minimum Order Quantity',
+            name: 'minimum_order_quantity',
+            type: 'number',
+            placeholder: 'Enter minimum order quantity',
             required: true,
         },
         {
