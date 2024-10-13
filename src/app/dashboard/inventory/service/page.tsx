@@ -13,7 +13,6 @@ const { createItem, updateItem, deleteItem, getItems } = await createGenericServ
 
 export default async function Service() {
     const serviceItems = await getItems();
-    console.log({ serviceItems });
 
     const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
     const itemFields = getInputFields(unitOfMeasureDropdownOptions);
