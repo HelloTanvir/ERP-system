@@ -1,7 +1,7 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+import { DropdownSelectOption, FormState, InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
 import { InventoryItem } from '../_lib/utils';
 import InventoryOnlyFields from './InventoryOnlyFields';
@@ -17,13 +17,6 @@ interface ItemFormProps {
         };
     }>;
     closeModal: () => void;
-}
-
-interface FormState {
-    errors: {
-        [key: string]: string;
-    } | null;
-    success: boolean;
 }
 
 function InventoryItemForm({

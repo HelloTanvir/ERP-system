@@ -1,13 +1,11 @@
 'use server';
 
+import { FormState } from '@/app/_lib/utils';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AuthPath, formatTokenResponse, getFormFields, PageType, TokenResponse } from './utils';
 
-export async function authFormSubmit(
-    page: PageType,
-    formData: FormData
-): Promise<{ errors: Record<string, string> | null; success: boolean }> {
+export async function authFormSubmit(page: PageType, formData: FormData): Promise<FormState> {
     const rawFormData = getFormFields(page).map((field) => {
         if (field.type === 'tel') {
             const countryCode = formData.get('countryCode');
