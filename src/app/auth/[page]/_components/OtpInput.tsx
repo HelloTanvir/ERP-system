@@ -15,7 +15,7 @@ const formatTime = (time: number) => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
-function OtpInput({ field, error, timeLeft }: OtpInputProps) {
+function OtpInput({ field, error, timeLeft }: Readonly<OtpInputProps>) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
     const inputRefs = useRef<HTMLInputElement[]>([]);
 
@@ -94,4 +94,4 @@ function OtpInput({ field, error, timeLeft }: OtpInputProps) {
     );
 }
 
-export default OtpInput as FC<InputProps>;
+export default OtpInput as FC<OtpInputProps>;
