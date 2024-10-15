@@ -47,7 +47,7 @@ const useModal = (): {
 
     const closeModal = (cleanUpFn?: () => void) => {
         if (modalRef && typeof modalRef !== 'function' && modalRef.current) {
-            cleanUpFn?.();
+            if (cleanUpFn && typeof cleanUpFn === 'function') cleanUpFn();
             modalRef.current.close();
             setIsOpen(false);
         }

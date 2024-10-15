@@ -12,7 +12,8 @@ const { createItem, updateItem, deleteItem, getItems } = await createGenericServ
 );
 
 export default async function Service() {
-    const measurementUnitItems = await getItems();
+    const serviceItems = await getItems();
+
     const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
     const itemFields = getInputFields(unitOfMeasureDropdownOptions);
 
@@ -22,8 +23,8 @@ export default async function Service() {
                 pageTitle="Services"
                 width={700}
                 tableColumns={['Name', 'Description']}
-                tableRows={measurementUnitItems.map((item) => [item.name, item.symbol])}
-                items={measurementUnitItems}
+                tableRows={serviceItems.map((item) => [item.name, item.description])}
+                items={serviceItems}
                 fields={itemFields}
                 modalTitles={{
                     create: 'Create service',

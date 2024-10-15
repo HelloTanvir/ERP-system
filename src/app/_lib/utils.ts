@@ -26,7 +26,7 @@ export interface InputField {
         // for file input
         [key: string]: string[];
     };
-    defaultValue?: unknown;
+    defaultValue?: any;
     disabled?: boolean;
     fullWidth?: boolean;
 }
