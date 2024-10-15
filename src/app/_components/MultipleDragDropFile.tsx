@@ -59,6 +59,8 @@ function MultipleDragDropFile({ field, error }: Readonly<InputProps>) {
                     id={field.name}
                     name={field.name}
                     required={field.required}
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     value={files}
                 />
 
