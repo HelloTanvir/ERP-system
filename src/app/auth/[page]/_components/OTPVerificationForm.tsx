@@ -34,11 +34,11 @@ function OTPVerificationForm() {
         async (prevState: FormState, formData: FormData) => {
             const currentFormState = await authFormSubmit(page, formData);
 
-            if (currentFormState.error) {
-                return { error: currentFormState.error, success: false };
+            if (currentFormState.errors) {
+                return { errors: currentFormState.errors, success: false };
             }
 
-            return { success: currentFormState.success, error: null };
+            return { success: currentFormState.success, errors: null };
         },
         initialFormState
     );
@@ -68,7 +68,7 @@ function OTPVerificationForm() {
             {authFormState.error?.global && (
                 <div className="rounded-md py-3 px-5 bg-red-100 border border-red-500 w-full mt-3">
                     <p className="text-red-500 font-semibold text-sm">
-                        {authFormState.error.global}
+                        {authFormState.errors.global}
                     </p>
                 </div>
             )}
@@ -78,7 +78,7 @@ function OTPVerificationForm() {
                     <OtpInput
                         key={field.name}
                         field={field}
-                        error={authFormState.error?.[field.name]}
+                        error={authFormState.errors?.[field.name]}
                         timeLeft={timeLeft}
                     />
                 ))}
