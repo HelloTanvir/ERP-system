@@ -20,13 +20,13 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
         selectedItem?.quantity_on_warehouse || 0
     );
     const [allocations, setAllocations] = useState<Allocation[]>(
-        selectedItem?.allocations?.length > 0
+        selectedItem?.allocations?.length
             ? selectedItem?.allocations
             : [{ warehouse: 0, quantity: 0 }]
     );
 
     useEffect(() => {
-        if (selectedItem?.allocations?.length > 0) {
+        if (selectedItem?.allocations?.length) {
             setIsInventoryItem(true);
             setInitialQuantity(selectedItem.quantity_on_warehouse);
             setAllocations(selectedItem.allocations);

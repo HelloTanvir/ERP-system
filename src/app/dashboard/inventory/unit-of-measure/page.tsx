@@ -3,13 +3,13 @@ import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { getInputFields, MeasurementUnit } from './_lib/utils';
 
-const { createItem, updateItem, deleteItem, getItems } =
-    await createGenericServerActions<MeasurementUnit>({
-        endpoint: `${process.env.API_URL}/inventory/measurement-unit/`,
-        revalidatePath: '/dashboard/inventory/unit-of-measure',
-    });
-
 export default async function UnitOfMeasure() {
+    const { createItem, updateItem, deleteItem, getItems } =
+        await createGenericServerActions<MeasurementUnit>({
+            endpoint: `${process.env.API_URL}/inventory/measurement-unit/`,
+            revalidatePath: '/dashboard/inventory/unit-of-measure',
+        });
+
     const measurementUnitItems = await getItems();
     const itemFields = getInputFields();
 

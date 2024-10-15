@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { InputProps } from '../../../_lib/utils';
 import { OTP_LENGTH } from '../_lib/utils';
 
@@ -15,9 +15,9 @@ const formatTime = (time: number) => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
-function OtpInput({ field, error, timeLeft }: OtpInputProps) {
+function OtpInput({ field, error, timeLeft }: Readonly<OtpInputProps>) {
     const [otp, setOtp] = useState<string[]>(new Array(OTP_LENGTH).fill(''));
-    const inputRefs = useRef<HTMLInputElement[]>([]);
+    const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
         inputRefs.current?.[0]?.focus();
@@ -33,11 +33,11 @@ function OtpInput({ field, error, timeLeft }: OtpInputProps) {
         setOtp(newOtp);
 
         if (value && index < OTP_LENGTH - 1) {
-            inputRefs.current[index + 1].focus();
+            inputRefs.current[index + 1]?.focus();
         }
     };
 
-    const handleKeyDown = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
         if (e.key === 'Backspace') {
             setOtp((prev) => {
                 const newOtp = [...prev];
@@ -45,7 +45,7 @@ function OtpInput({ field, error, timeLeft }: OtpInputProps) {
                 return newOtp;
             });
 
-            if (index > 0) inputRefs.current[index - 1].focus();
+            if (index > 0) inputRefs.current[index - 1]?.focus();
         }
     };
 
@@ -69,6 +69,8 @@ function OtpInput({ field, error, timeLeft }: OtpInputProps) {
                         value={otp[index]}
                         onChange={(e) => handleChange(e, index)}
                         onKeyDown={(e) => handleKeyDown(e, index)}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         ref={(el) => (inputRefs.current[index] = el)}
                         disabled={timeLeft <= 0}
                     />
@@ -94,4 +96,4 @@ function OtpInput({ field, error, timeLeft }: OtpInputProps) {
     );
 }
 
-export default OtpInput as FC<InputProps>;
+export default OtpInput as FC<OtpInputProps>;

@@ -4,15 +4,15 @@ import { createGenericServerActions } from '../../_lib/actions';
 import AdditionalActions from './_components/AdditionalActions';
 import InventoryItemForm from './_components/InventoryItemForm';
 import { getInventoryItemFormDropdownOptions } from './_lib/actions';
-import { getInputFields, InventoryItem } from './_lib/utils';
-
-const { createItem, updateItem, deleteItem, getItems } =
-    await createGenericServerActions<InventoryItem>({
-        endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/inventory-item',
-    });
+import { getInputFields, InventoryItem as IInventoryItem } from './_lib/utils';
 
 export default async function InventoryItem() {
+    const { createItem, updateItem, deleteItem, getItems } =
+        await createGenericServerActions<IInventoryItem>({
+            endpoint: `${process.env.API_URL}/inventory/item/`,
+            revalidatePath: '/dashboard/inventory/inventory-item',
+        });
+
     const inventoryItems = await getItems();
     const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
     const itemFields = getInputFields(itemFormDropdownOptions);

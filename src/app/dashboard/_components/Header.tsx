@@ -20,7 +20,7 @@ function Header() {
                 {sidebarItems
                     .filter((item) => !!item.subItems)
                     .map((item) => {
-                        if (item.subItems[0]?.link) {
+                        if (item.subItems?.[0]?.link) {
                             return (
                                 <li key={item.label}>
                                     <Link href={item.subItems[0].link}>

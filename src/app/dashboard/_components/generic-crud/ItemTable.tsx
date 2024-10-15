@@ -1,11 +1,12 @@
 'use client';
 
+import { ReactNode } from 'react';
 import { GenericItem } from '../../_lib/utils';
 
 interface ItemTableProps<T extends GenericItem> {
     items: T[];
     tableColumns: string[];
-    tableRows: string[][];
+    tableRows: ReactNode[][];
     noTableAction?: boolean;
     handleEditItem: (item: T) => void;
     handleDeleteItem: (formData: FormData) => Promise<void>;
@@ -44,8 +45,12 @@ function ItemTable<T extends GenericItem>({
                 {tableRows.map((row, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <tr key={`generic-item-table-row-${index}`}>
-                        {row.map((entry) => (
-                            <td key={entry} className="border border-gray-300 border-l-0">
+                        {row.map((entry, idx) => (
+                            <td
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={`generic-item-table-row-${index}-col-${idx}`}
+                                className="border border-gray-300 border-l-0"
+                            >
                                 {entry}
                             </td>
                         ))}

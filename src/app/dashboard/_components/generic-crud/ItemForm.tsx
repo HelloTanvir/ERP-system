@@ -8,7 +8,7 @@ import { GenericItem } from '../../_lib/utils';
 interface ItemFormProps<T extends GenericItem> {
     fields: InputField[];
     currentItem: T | null;
-    handleSubmit: (item: T) => Promise<void>;
+    handleSubmit: (item: T) => Promise<FormState>;
     closeModal: () => void;
 }
 
@@ -25,13 +25,15 @@ function ItemForm<T extends GenericItem>({
 
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const formObject = {};
-            if (currentItem?.id) formObject.id = currentItem.id;
+            const formObject: {
+                [key: string]: FormDataEntryValue;
+            } = {};
+            if (currentItem?.id) formObject.id = currentItem.id as FormDataEntryValue;
             formData.forEach((value, key) => {
                 formObject[key] = value;
             });
 
-            const currentFormState = await handleSubmit(formObject);
+            const currentFormState = await handleSubmit(formObject as unknown as T);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };

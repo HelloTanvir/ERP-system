@@ -19,7 +19,7 @@ export async function signOut() {
             Authorization: `Bearer ${accessToken?.value}`,
         },
         body: JSON.stringify({
-            refresh_token: refreshToken.value,
+            refresh_token: refreshToken?.value ?? '',
         }),
     });
 
@@ -46,7 +46,7 @@ export async function createGenericServerActions<T extends { id: number | string
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }> {
         'use server';
 
@@ -72,7 +72,7 @@ export async function createGenericServerActions<T extends { id: number | string
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }> {
         'use server';
 

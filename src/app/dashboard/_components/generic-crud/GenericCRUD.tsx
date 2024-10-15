@@ -1,7 +1,7 @@
 'use client';
 
-import { InputField } from '@/app/_lib/utils';
-import { ReactNode, useState } from 'react';
+import { FormState, InputField } from '@/app/_lib/utils';
+import { ElementType, ReactNode, useState } from 'react';
 import { LuPlus } from 'react-icons/lu';
 import useModal from '../../_hooks/useModal';
 import { GenericItem } from '../../_lib/utils';
@@ -18,8 +18,8 @@ interface GenericCRUDProps<T extends GenericItem> {
         create: string;
         edit: string;
     };
-    CustomItemForm?: ReactNode;
-    customItemFormProps: {
+    CustomItemForm?: ElementType;
+    customItemFormProps?: {
         [key: string]: any;
     };
     tableColumns: string[];
@@ -31,13 +31,13 @@ interface GenericCRUDProps<T extends GenericItem> {
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }>;
     updateItem: (item: T) => Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }>;
     deleteItem: (id: T['id']) => Promise<void>;
 }
@@ -79,7 +79,7 @@ function GenericCRUD<T extends GenericItem>({
     };
 
     const handleDeleteItem = async (formData: FormData) => {
-        const id: T['id'] = formData.get('id');
+        const id: T['id'] = formData.get('id') as unknown as string;
 
         // eslint-disable-next-line no-alert, no-restricted-globals
         if (confirm('Are you sure you want to delete this item?')) {
@@ -87,13 +87,13 @@ function GenericCRUD<T extends GenericItem>({
         }
     };
 
-    const handleSubmit = async (item: T) => {
+    const handleSubmit = async (item: T): Promise<FormState> => {
         let formState:
             | {
                   success: boolean;
                   errors: {
                       [key: string]: string;
-                  };
+                  } | null;
               }
             | undefined;
 

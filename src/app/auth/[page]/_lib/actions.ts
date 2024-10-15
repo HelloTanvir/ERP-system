@@ -26,7 +26,7 @@ export async function authFormSubmit(page: PageType, formData: FormData): Promis
     });
 
     if (page === 'login') {
-        rawFormData.push({ remember: formData.get('remember') === 'on' });
+        rawFormData.push({ remember: formData.get('remember') === 'on' ? 'true' : 'false' });
     }
 
     const tokenRes = await fetch(`${process.env.API_URL}/account/${AuthPath[page]}`, {

@@ -3,18 +3,18 @@ import { InventoryItem } from '../inventory-item/_lib/utils';
 import TableWrapper from './_components/TableWrapper';
 import { getInputFields, IWarehouse } from './_lib/utils';
 
-const { createItem, updateItem, deleteItem, getItems } =
-    await createGenericServerActions<IWarehouse>({
-        endpoint: `${process.env.API_URL}/inventory/warehouse/`,
-        revalidatePath: '/dashboard/inventory/warehouse',
+export default async function Warehouse() {
+    const { createItem, updateItem, deleteItem, getItems } =
+        await createGenericServerActions<IWarehouse>({
+            endpoint: `${process.env.API_URL}/inventory/warehouse/`,
+            revalidatePath: '/dashboard/inventory/warehouse',
+        });
+
+    const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
+        endpoint: `${process.env.API_URL}/inventory/item/`,
+        revalidatePath: '/dashboard/inventory/inventory-item',
     });
 
-const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
-    endpoint: `${process.env.API_URL}/inventory/item/`,
-    revalidatePath: '/dashboard/inventory/inventory-item',
-});
-
-export default async function Warehouse() {
     const warehouseItems = await getItems();
     const itemFields = getInputFields();
 
