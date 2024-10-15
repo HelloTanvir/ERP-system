@@ -1,7 +1,7 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { InputField } from '@/app/_lib/utils';
+import { FormState, InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
 import { GenericItem } from '../../_lib/utils';
 
@@ -10,13 +10,6 @@ interface ItemFormProps<T extends GenericItem> {
     currentItem: T | null;
     handleSubmit: (item: T) => Promise<void>;
     closeModal: () => void;
-}
-
-interface FormState {
-    errors: {
-        [key: string]: string;
-    } | null;
-    success: boolean;
 }
 
 function ItemForm<T extends GenericItem>({

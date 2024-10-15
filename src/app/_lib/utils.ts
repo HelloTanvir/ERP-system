@@ -40,3 +40,8 @@ export interface DropdownSelectOption {
     label: string;
     value: string;
 }
+
+export interface FormState {
+    errors: Record<string, string> | null;
+    success: boolean;
+}

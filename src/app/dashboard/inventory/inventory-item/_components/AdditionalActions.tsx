@@ -1,7 +1,7 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+import { DropdownSelectOption, FormState, InputField } from '@/app/_lib/utils';
 import Modal from '@/app/dashboard/_components/Modal';
 import useModal from '@/app/dashboard/_hooks/useModal';
 import { useState } from 'react';
@@ -12,13 +12,6 @@ import { ActionType } from '../_lib/utils';
 
 interface Props {
     categoryOptions: DropdownSelectOption;
-}
-
-interface FormState {
-    errors: {
-        [key: string]: string;
-    } | null;
-    success: boolean;
 }
 
 enum MODAL_TITLES {

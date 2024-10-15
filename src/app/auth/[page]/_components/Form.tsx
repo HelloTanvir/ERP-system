@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import Input from '@/app/_components/Input';
+import { FormState } from '@/app/_lib/utils';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { authFormSubmit } from '../_lib/actions';
@@ -11,13 +12,6 @@ import Button from './Button';
 
 interface Props {
     page: PageType;
-}
-
-interface FormState {
-    errors: {
-        [key: string]: string;
-    } | null;
-    success: boolean;
 }
 
 function Form({ page }: Readonly<Props>) {

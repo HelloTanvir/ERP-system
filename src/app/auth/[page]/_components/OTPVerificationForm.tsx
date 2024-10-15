@@ -1,5 +1,6 @@
 'use client';
 
+import { FormState } from '@/app/_lib/utils';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
@@ -8,19 +9,12 @@ import { ACTION_BUTTON_LABEL, getFormFields, OTP_RESEND_TIME } from '../_lib/uti
 import Button from './Button';
 import OtpInput from './OtpInput';
 
-interface FormState {
-    error: {
-        [key: string]: string;
-    } | null;
-    success: boolean;
-}
-
 function OTPVerificationForm() {
     const page = 'otp-verification';
     const [timeLeft, setTimeLeft] = useState(OTP_RESEND_TIME);
 
     const initialFormState: FormState = {
-        error: null,
+        errors: null,
         success: false,
     };
 
@@ -65,7 +59,7 @@ function OTPVerificationForm() {
 
     return (
         <>
-            {authFormState.error?.global && (
+            {authFormState.errors?.global && (
                 <div className="rounded-md py-3 px-5 bg-red-100 border border-red-500 w-full mt-3">
                     <p className="text-red-500 font-semibold text-sm">
                         {authFormState.errors.global}
