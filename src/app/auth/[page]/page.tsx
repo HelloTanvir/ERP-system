@@ -4,12 +4,14 @@ import Form from './_components/Form';
 import OTPVerificationForm from './_components/OTPVerificationForm';
 import { getFormTitle, PageType } from './_lib/utils';
 
-function Auth({ params }) {
-    const {
-        page,
-    }: {
+function Auth({
+    params,
+}: Readonly<{
+    params: {
         page: PageType;
-    } = params;
+    };
+}>) {
+    const { page } = params;
 
     const validPages: PageType[] = [
         'login',

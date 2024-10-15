@@ -30,21 +30,23 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
 
     if (categoryRes.ok) {
         const data = await categoryRes.json();
-        dropdownOptions.categoryOptions = (data || []).map((item) => {
-            if (item.subcategories?.length > 0) {
-                dropdownOptions.subCategoryOptions.push(
-                    ...item.subcategories.map((subCategory) => ({
-                        label: subCategory.name,
-                        value: subCategory.id,
-                    }))
-                );
-            }
+        dropdownOptions.categoryOptions = (data || []).map(
+            (item: { id: string; name: string; subcategories: { id: string; name: string }[] }) => {
+                if (item.subcategories?.length > 0) {
+                    dropdownOptions.subCategoryOptions.push(
+                        ...item.subcategories.map((subCategory) => ({
+                            label: subCategory.name,
+                            value: subCategory.id,
+                        }))
+                    );
+                }
 
-            return {
-                label: item.name,
-                value: item.id,
-            };
-        });
+                return {
+                    label: item.name,
+                    value: item.id,
+                };
+            }
+        );
     }
 
     const unitOfMeasurementRes = await fetch(`${process.env.API_URL}/inventory/measurement-unit/`, {
@@ -57,10 +59,12 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
 
     if (unitOfMeasurementRes.ok) {
         const data = await unitOfMeasurementRes.json();
-        dropdownOptions.unitOfMeasureOptions = (data || []).map((item) => ({
-            label: item.name,
-            value: item.id,
-        }));
+        dropdownOptions.unitOfMeasureOptions = (data || []).map(
+            (item: { id: string; name: string }) => ({
+                label: item.name,
+                value: item.id,
+            })
+        );
     }
 
     const warehouseRes = await fetch(`${process.env.API_URL}/inventory/warehouse/`, {
@@ -73,10 +77,12 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
 
     if (warehouseRes.ok) {
         const data = await warehouseRes.json();
-        dropdownOptions.warehouseOptions = (data || []).map((item) => ({
-            label: item.name,
-            value: item.id,
-        }));
+        dropdownOptions.warehouseOptions = (data || []).map(
+            (item: { id: string; name: string }) => ({
+                label: item.name,
+                value: item.id,
+            })
+        );
     }
 
     return dropdownOptions;
@@ -90,10 +96,11 @@ export async function createCategoryOrSubCategory(actionType: ActionType, formDa
         name: string;
         category?: string;
     } = {
-        name: formData.get('name'),
+        name: formData.get('name') as unknown as string,
     };
 
-    if (actionType === 'subcategory-create') body.category = formData.get('category');
+    if (actionType === 'subcategory-create')
+        body.category = formData.get('category') as unknown as string;
 
     const res = await fetch(
         `${process.env.API_URL}/inventory/${actionType === 'category-create' ? 'category' : 'sub-category'}/`,

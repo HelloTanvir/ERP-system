@@ -11,7 +11,7 @@ import { createCategoryOrSubCategory } from '../_lib/actions';
 import { ActionType } from '../_lib/utils';
 
 interface Props {
-    categoryOptions: DropdownSelectOption;
+    categoryOptions: DropdownSelectOption[];
 }
 
 enum MODAL_TITLES {
@@ -120,7 +120,7 @@ function AdditionalActions({ categoryOptions }: Readonly<Props>) {
                     <div className="flex gap-2 justify-end text-center">
                         <button
                             type="button"
-                            onClick={closeModal}
+                            onClick={() => closeModal()}
                             className="btn btn-sm transition duration-500 text-purple-600 hover:bg-purple-500 hover:text-white hover:purple-cyan-300 btn-outline font-bold  px-6 rounded-md"
                         >
                             Cancel

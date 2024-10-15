@@ -15,7 +15,7 @@ export async function getUnitOfMeasureDropdownOptions(): Promise<DropdownSelectO
 
     if (unitOfMeasurementRes.ok) {
         const data = await unitOfMeasurementRes.json();
-        return (data || []).map((item) => ({
+        return (data || []).map((item: { id: string; name: string }) => ({
             label: item.name,
             value: item.id,
         }));

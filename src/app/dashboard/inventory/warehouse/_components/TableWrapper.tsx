@@ -13,13 +13,13 @@ interface Props {
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }>;
     updateItem: (item: IWarehouse) => Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
-        };
+        } | null;
     }>;
     deleteItem: (id: IWarehouse['id']) => Promise<void>;
     getInventoryItems: (query?: { [key: string]: string }) => Promise<InventoryItem[]>;
@@ -29,11 +29,11 @@ function ItemName({
     item,
     currentItem,
     setCurrentItem,
-}: {
+}: Readonly<{
     item: IWarehouse;
     currentItem: IWarehouse | null;
     setCurrentItem: Dispatch<SetStateAction<IWarehouse | null>>;
-}) {
+}>) {
     return (
         <button
             type="button"
@@ -52,7 +52,7 @@ function TableWrapper({
     updateItem,
     deleteItem,
     getInventoryItems,
-}: Props) {
+}: Readonly<Props>) {
     const [currentItem, setCurrentItem] = useState<IWarehouse | null>(null);
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
 
@@ -77,6 +77,7 @@ function TableWrapper({
                     tableColumns={['Name', 'Location', 'Description']}
                     tableRows={warehouseItems.map((item) => [
                         <ItemName
+                            key={item.id}
                             item={item}
                             currentItem={currentItem}
                             setCurrentItem={setCurrentItem}
@@ -98,6 +99,8 @@ function TableWrapper({
 
             {currentItem && (
                 <Suspense fallback={<div>Loading...</div>}>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
                     <GenericCRUD
                         pageTitle="Inventory Item"
                         width={800}

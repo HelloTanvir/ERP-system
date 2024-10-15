@@ -4,14 +4,13 @@ import { createGenericServerActions } from '../../_lib/actions';
 import { getUnitOfMeasureDropdownOptions } from './_lib/actions';
 import { getInputFields, IService } from './_lib/utils';
 
-const { createItem, updateItem, deleteItem, getItems } = await createGenericServerActions<IService>(
-    {
-        endpoint: `${process.env.API_URL}/inventory/service/`,
-        revalidatePath: '/dashboard/inventory/service',
-    }
-);
-
 export default async function Service() {
+    const { createItem, updateItem, deleteItem, getItems } =
+        await createGenericServerActions<IService>({
+            endpoint: `${process.env.API_URL}/inventory/service/`,
+            revalidatePath: '/dashboard/inventory/service',
+        });
+
     const serviceItems = await getItems();
 
     const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();

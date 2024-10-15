@@ -12,7 +12,8 @@ export interface InputField {
         | 'textarea'
         | 'date'
         | 'file'
-        | 'multiple-drag-drop-file';
+        | 'multiple-drag-drop-file'
+        | 'otp';
     placeholder: string;
     options?: {
         // for dropdown option input
