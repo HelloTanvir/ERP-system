@@ -33,6 +33,7 @@ function Sidebar() {
             <ProSidebar
                 collapsed={collapsed}
                 className="h-full p-5"
+                width="350px"
                 collapsedWidth="100px"
                 rootStyles={{
                     backgroundColor: '#FCFDFE',

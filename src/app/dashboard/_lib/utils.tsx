@@ -2,14 +2,16 @@ import { ReactNode } from 'react';
 import {
     accountsIcons,
     dashboardIcons,
+    injectionModuleIcons,
     inventoryIcons,
-    manufacturingIcons,
+    purchaseIcons,
+    salesIcons,
     settingsIcon,
 } from './icons';
 
 export interface SidebarItem {
     label: string;
-    icon: ReactNode;
+    icon?: ReactNode;
     link?: string;
     subItems?: SidebarItem[];
 }
@@ -21,70 +23,90 @@ export const sidebarItems: SidebarItem[] = [
         link: '/dashboard',
     },
     {
-        label: 'Accounts',
+        label: 'Accounts Module',
         icon: accountsIcons.root,
         subItems: [
+            { label: 'Expense Entry', link: '/dashboard/accounts/expense-entry' },
+            { label: 'Income Entry', link: '/dashboard/accounts/income-entry' },
+            { label: 'Journal Entry', link: '/dashboard/accounts/journal-entry' },
+            { label: 'Banking', link: '/dashboard/accounts/banking' },
+            { label: 'Budgeting', link: '/dashboard/accounts/budgeting' },
+            { label: 'Costing', link: '/dashboard/accounts/costing' },
+            { label: 'Workflow Automation', link: '/dashboard/accounts/workflow-automation' },
+            { label: 'Cheque Management', link: '/dashboard/accounts/cheque-management' },
+            { label: 'Report', link: '/dashboard/accounts/report' },
+        ],
+    },
+    {
+        label: 'Sales Module',
+        icon: salesIcons.root,
+        subItems: [
+            { label: 'Dashboard/Workflow Notifications', link: '/dashboard/sales/dashboard' },
+            { label: 'Delivery Challan (DCN)', link: '/dashboard/sales/delivery-challan' },
+            { label: 'Sales/Invoice/Bill', link: '/dashboard/sales/invoice-bill' },
+            { label: 'Receive Payment', link: '/dashboard/sales/receive-payment' },
+            { label: 'Sales Return Challan (SRN)', link: '/dashboard/sales/sales-return-challan' },
+            { label: 'Inventory Asset Debit', link: '/dashboard/sales/inventory-asset-debit' },
+            { label: 'Sales Return Bill', link: '/dashboard/sales/sales-return-bill' },
+            { label: 'Report', link: '/dashboard/sales/report' },
+        ],
+    },
+    {
+        label: 'Purchase Module',
+        icon: purchaseIcons.root,
+        subItems: [
+            { label: 'Purchase Requisition', link: '/dashboard/purchase/purchase-requisition' },
+            { label: 'Purchase Order', link: '/dashboard/purchase/purchase-order' },
             {
-                label: 'Customer/Debtors',
-                icon: accountsIcons.customerDebtors,
-                link: '/dashboard/accounts/customer-debtors',
+                label: 'Receive Inventory without Bill',
+                link: '/dashboard/purchase/receive-inventory-without-bill',
+            },
+            { label: 'Purchase Journal', link: '/dashboard/purchase/purchase-journal' },
+            { label: 'Payment to Supplier', link: '/dashboard/purchase/payment-to-supplier' },
+            {
+                label: 'Purchase Return without value',
+                link: '/dashboard/purchase/purchase-return-no-value',
             },
             {
-                label: 'Suppliers/Creditors',
-                icon: accountsIcons.suppliersCreditors,
-                link: '/dashboard/accounts/suppliers-creditors',
+                label: 'Purchase Return Journal',
+                link: '/dashboard/purchase/purchase-return-journal',
             },
             {
-                label: 'All Accounts',
-                icon: accountsIcons.allAccounts,
-                link: '/dashboard/accounts/all-accounts',
+                label: 'Inventory Requisition (Raw Material)',
+                link: '/dashboard/purchase/inventory-requisition-raw-material',
             },
         ],
     },
     {
-        label: 'Inventory',
+        label: 'Inventory Module',
         icon: inventoryIcons.root,
         subItems: [
+            { label: 'Inventory Item', link: '/dashboard/inventory/inventory-item' },
+            { label: 'Unit of Measure', link: '/dashboard/inventory/unit-of-measure' },
+            { label: 'Service', link: '/dashboard/inventory/service' },
+            { label: 'Warehouse', link: '/dashboard/inventory/warehouse' },
             {
-                label: 'Inventory Item',
-                icon: inventoryIcons.inventoryItem,
-                link: '/dashboard/inventory/inventory-item',
-            },
-            {
-                label: 'Unit of Measure',
-                icon: inventoryIcons.unitOfMeasure,
-                link: '/dashboard/inventory/unit-of-measure',
-            },
-            {
-                label: 'Service',
-                icon: inventoryIcons.service,
-                link: '/dashboard/inventory/service',
-            },
-            {
-                label: 'Warehouse',
-                icon: inventoryIcons.warehouse,
-                link: '/dashboard/inventory/warehouse',
+                label: 'Transaction',
+                subItems: [
+                    { label: 'Inventory Transfer', link: '/dashboard/inventory/transfer' },
+                    { label: 'Inventory Adjustment', link: '/dashboard/inventory/adjustment' },
+                    {
+                        label: 'Manufacturing Journal',
+                        link: '/dashboard/inventory/manufacturing-journal',
+                    },
+                ],
             },
         ],
     },
     {
-        label: 'Manufacturing',
-        icon: manufacturingIcons.root,
+        label: 'Injection Module',
+        icon: injectionModuleIcons.root,
         subItems: [
+            { label: 'Register Mold', link: '/dashboard/injection/register-mold' },
+            { label: 'Input Production', link: '/dashboard/injection/input-production' },
             {
-                label: 'Bill of Materials',
-                icon: manufacturingIcons.billOfMaterials,
-                link: '/dashboard/manufacturing/bill-of-materials',
-            },
-            {
-                label: 'Manufacturing Journals',
-                icon: manufacturingIcons.manufacturingJournals,
-                link: '/dashboard/manufacturing/manufacturing-journals',
-            },
-            {
-                label: 'Manufacturing Templates',
-                icon: manufacturingIcons.manufacturingTemplates,
-                link: '/dashboard/manufacturing/manufacturing-templates',
+                label: 'Input Recycle Production',
+                link: '/dashboard/injection/input-recycle-production',
             },
         ],
     },
