@@ -88,11 +88,17 @@ export const sidebarItems: SidebarItem[] = [
             {
                 label: 'Transaction',
                 subItems: [
-                    { label: 'Inventory Transfer', link: '/dashboard/inventory/transfer' },
-                    { label: 'Inventory Adjustment', link: '/dashboard/inventory/adjustment' },
+                    {
+                        label: 'Inventory Transfer',
+                        link: '/dashboard/inventory/transaction/transfer',
+                    },
+                    {
+                        label: 'Inventory Adjustment',
+                        link: '/dashboard/inventory/transaction/adjustment',
+                    },
                     {
                         label: 'Manufacturing Journal',
-                        link: '/dashboard/inventory/manufacturing-journal',
+                        link: '/dashboard/inventory/transaction/manufacturing-journal',
                     },
                 ],
             },
