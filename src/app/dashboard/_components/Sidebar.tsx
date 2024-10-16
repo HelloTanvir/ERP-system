@@ -12,12 +12,55 @@ import {
     SubMenu,
 } from 'react-pro-sidebar';
 import { collapseButtonSvg } from '../_lib/icons';
-import { sidebarItems } from '../_lib/utils';
+import { SidebarItem, sidebarItems } from '../_lib/utils';
 import LogoutButton from './LogoutButton';
 import SearchField from './SearchField';
 
-function Sidebar() {
+function MenuItemOrSubmenu({ item }: Readonly<{ item: SidebarItem }>) {
     const pathname = usePathname();
+
+    if (item.subItems) {
+        return (
+            <SubMenu
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                defaultOpen
+                component="div"
+                className={!item.icon ? 'text-xs pl-8' : ''}
+            >
+                {item.subItems.map((subItem) => (
+                    <MenuItemOrSubmenu key={subItem.label} item={subItem} />
+                ))}
+            </SubMenu>
+        );
+    }
+
+    let menuItemClassName: string = 'text-xs pl-8';
+    if (item.icon) menuItemClassName = 'text-sm mt-5';
+
+    if (item.link)
+        return (
+            <Link href={item.link} key={item.label}>
+                <MenuItem
+                    icon={item.icon}
+                    className={menuItemClassName}
+                    component="div"
+                    active={pathname === item.link}
+                >
+                    {item.label}
+                </MenuItem>
+            </Link>
+        );
+
+    return (
+        <MenuItem key={item.label} icon={item.icon} className={menuItemClassName} component="div">
+            {item.label}
+        </MenuItem>
+    );
+}
+
+function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
@@ -33,6 +76,7 @@ function Sidebar() {
             <ProSidebar
                 collapsed={collapsed}
                 className="h-full p-5"
+                width="350px"
                 collapsedWidth="100px"
                 rootStyles={{
                     backgroundColor: '#FCFDFE',
@@ -59,7 +103,7 @@ function Sidebar() {
 
                 <Menu className="flex-1 mt-5 bg-[#FCFDFE]">
                     <Menu>
-                        {sidebarItems.map((item) => {
+                        {/* {sidebarItems.map((item) => {
                             if (item.subItems) {
                                 return (
                                     <SubMenu
@@ -127,7 +171,10 @@ function Sidebar() {
                                     {item.label}
                                 </MenuItem>
                             );
-                        })}
+                        })} */}
+                        {sidebarItems.map((item) => (
+                            <MenuItemOrSubmenu key={item.label} item={item} />
+                        ))}
                     </Menu>
                 </Menu>
 
