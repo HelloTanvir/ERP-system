@@ -1,5 +1,6 @@
 'use server';
 
+import { ListResponse } from '@/app/_lib/utils';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { ActionType, InventoryCreationDropdownOptions } from './utils';
@@ -29,24 +30,27 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
     });
 
     if (categoryRes.ok) {
-        const data = await categoryRes.json();
-        dropdownOptions.categoryOptions = (data || []).map(
-            (item: { id: string; name: string; subcategories: { id: string; name: string }[] }) => {
-                if (item.subcategories?.length > 0) {
-                    dropdownOptions.subCategoryOptions.push(
-                        ...item.subcategories.map((subCategory) => ({
-                            label: subCategory.name,
-                            value: subCategory.id,
-                        }))
-                    );
-                }
+        const data: ListResponse<{
+            id: string;
+            name: string;
+            subcategories: { id: string; name: string }[];
+        }> = await categoryRes.json();
 
-                return {
-                    label: item.name,
-                    value: item.id,
-                };
+        dropdownOptions.categoryOptions = data?.results?.map((item) => {
+            if (item.subcategories?.length > 0) {
+                dropdownOptions.subCategoryOptions.push(
+                    ...item.subcategories.map((subCategory) => ({
+                        label: subCategory.name,
+                        value: subCategory.id,
+                    }))
+                );
             }
-        );
+
+            return {
+                label: item.name,
+                value: item.id,
+            };
+        });
     }
 
     const unitOfMeasurementRes = await fetch(`${process.env.API_URL}/inventory/measurement-unit/`, {
@@ -58,13 +62,15 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
     });
 
     if (unitOfMeasurementRes.ok) {
-        const data = await unitOfMeasurementRes.json();
-        dropdownOptions.unitOfMeasureOptions = (data || []).map(
-            (item: { id: string; name: string }) => ({
-                label: item.name,
-                value: item.id,
-            })
-        );
+        const data: ListResponse<{
+            id: string;
+            name: string;
+        }> = await unitOfMeasurementRes.json();
+
+        dropdownOptions.unitOfMeasureOptions = data?.results?.map((item) => ({
+            label: item.name,
+            value: item.id,
+        }));
     }
 
     const warehouseRes = await fetch(`${process.env.API_URL}/inventory/warehouse/`, {
@@ -76,13 +82,14 @@ export async function getInventoryItemFormDropdownOptions(): Promise<InventoryCr
     });
 
     if (warehouseRes.ok) {
-        const data = await warehouseRes.json();
-        dropdownOptions.warehouseOptions = (data || []).map(
-            (item: { id: string; name: string }) => ({
-                label: item.name,
-                value: item.id,
-            })
-        );
+        const data: ListResponse<{
+            id: string;
+            name: string;
+        }> = await warehouseRes.json();
+        dropdownOptions.warehouseOptions = data?.results?.map((item) => ({
+            label: item.name,
+            value: item.id,
+        }));
     }
 
     return dropdownOptions;

@@ -10,7 +10,7 @@ export default async function UnitOfMeasure() {
             revalidatePath: '/dashboard/inventory/unit-of-measure',
         });
 
-    const measurementUnitItems = await getItems();
+    const { results: measurementUnitItems } = await getItems();
     const itemFields = getInputFields();
 
     return (

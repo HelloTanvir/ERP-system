@@ -1,4 +1,4 @@
-import { DropdownSelectOption } from '@/app/_lib/utils';
+import { DropdownSelectOption, ListResponse } from '@/app/_lib/utils';
 import { cookies } from 'next/headers';
 
 export async function getUnitOfMeasureDropdownOptions(): Promise<DropdownSelectOption[]> {
@@ -14,8 +14,11 @@ export async function getUnitOfMeasureDropdownOptions(): Promise<DropdownSelectO
     });
 
     if (unitOfMeasurementRes.ok) {
-        const data = await unitOfMeasurementRes.json();
-        return (data || []).map((item: { id: string; name: string }) => ({
+        const data: ListResponse<{
+            id: string;
+            name: string;
+        }> = await unitOfMeasurementRes.json();
+        return (data || [])?.results?.map((item: { id: string; name: string }) => ({
             label: item.name,
             value: item.id,
         }));

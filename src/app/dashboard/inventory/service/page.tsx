@@ -11,7 +11,7 @@ export default async function Service() {
             revalidatePath: '/dashboard/inventory/service',
         });
 
-    const serviceItems = await getItems();
+    const { results: serviceItems } = await getItems();
 
     const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
     const itemFields = getInputFields(unitOfMeasureDropdownOptions);

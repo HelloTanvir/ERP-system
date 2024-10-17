@@ -15,7 +15,7 @@ export default async function Warehouse() {
         revalidatePath: '/dashboard/inventory/inventory-item',
     });
 
-    const warehouseItems = await getItems();
+    const { results: warehouseItems } = await getItems();
     const itemFields = getInputFields();
 
     return (
