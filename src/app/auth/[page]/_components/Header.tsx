@@ -114,7 +114,7 @@ function Header() {
                     <div className="">
                         <Link
                             href={HeaderLinks.LOGIN}
-                            className={`py-1 px-6 text-lg font-bold btn  btn-outline  ${pathname === HeaderLinks.LOGIN ? 'bg-primary text-white' : 'bg-white text-primary'} rounded-btn-radius`}
+                            className={`py-1 px-6 text-lg font-bold btn  btn-outline  ${pathname === HeaderLinks.LOGIN ? 'bg-principal text-white' : 'bg-white text-principal'} rounded-btn-radius`}
                         >
                             Sign in
                         </Link>

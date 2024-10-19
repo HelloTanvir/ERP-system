@@ -1,6 +1,6 @@
 'use client';
 
-import { InputField } from '@/app/_lib/utils';
+import { InputField, ListResponse } from '@/app/_lib/utils';
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
@@ -22,7 +22,7 @@ interface Props {
         } | null;
     }>;
     deleteItem: (id: IWarehouse['id']) => Promise<void>;
-    getInventoryItems: (query?: { [key: string]: string }) => Promise<InventoryItem[]>;
+    getInventoryItems: (query?: { [key: string]: string }) => Promise<ListResponse<InventoryItem>>;
 }
 
 function ItemName({
@@ -62,7 +62,7 @@ function TableWrapper({
                 const filteredInventoryItems = await getInventoryItems({
                     warehouse: currentItem?.name,
                 });
-                setInventoryItems(filteredInventoryItems);
+                setInventoryItems(filteredInventoryItems?.results || []);
             }
         };
         fetchInventoryItems();

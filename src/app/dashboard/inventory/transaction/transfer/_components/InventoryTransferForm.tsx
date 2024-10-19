@@ -1,16 +1,24 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { DropdownSelectOption, FormState, InputField } from '@/app/_lib/utils';
+import { FormState, InputField, ListResponse } from '@/app/_lib/utils';
+import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
-import { Allocation, InventoryItem } from '../_lib/utils';
-import InventoryOnlyFields from './InventoryOnlyFields';
+import { InventoryItem } from '../../../inventory-item/_lib/utils';
+import { IInventoryTransfer, IInventoryTransferItem } from '../_lib/utils';
+import InventoryItemsSelect from './InventoryItemsSelect';
 
 interface ItemFormProps {
     fields: InputField[];
-    warehouseOptions: DropdownSelectOption[];
-    currentItem: InventoryItem | null;
-    handleSubmit: (item: InventoryItem) => Promise<{
+    getInventoryItems: (
+        query?:
+            | {
+                  [key: string]: string;
+              }
+            | undefined
+    ) => Promise<ListResponse<InventoryItem>>;
+    currentItem: IInventoryTransfer | null;
+    handleSubmit: (item: IInventoryTransfer) => Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
@@ -19,13 +27,24 @@ interface ItemFormProps {
     closeModal: () => void;
 }
 
-function InventoryItemForm({
+function InventoryTransferForm({
     fields,
-    warehouseOptions,
+    getInventoryItems,
     currentItem,
     handleSubmit,
     closeModal,
 }: Readonly<ItemFormProps>) {
+    const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+
+    useEffect(() => {
+        const fetchInventoryItems = async () => {
+            const { results } = await getInventoryItems();
+            setInventoryItems(results);
+        };
+
+        fetchInventoryItems();
+    }, [getInventoryItems]);
+
     const initialState: FormState = {
         errors: null,
         success: false,
@@ -33,40 +52,35 @@ function InventoryItemForm({
 
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const inventoryItem = {} as InventoryItem;
-            if (currentItem?.id) inventoryItem.id = currentItem.id;
+            const inventoryTransfer = {} as IInventoryTransfer;
+            if (currentItem?.id) inventoryTransfer.id = currentItem.id;
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             [...formData.entries()].forEach((entry) => {
                 const [key, value] = entry;
 
-                if (!key.includes('$ACTION_ID_') && !['warehouse', 'quantity'].includes(key))
+                if (!key.includes('$ACTION_ID_') && !['item_id', 'item_quantity'].includes(key))
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    inventoryItem[key] = value;
+                    inventoryTransfer[key] = value;
             });
 
-            const allocations: Allocation[] = [];
-            const allocationWarehouses = formData.getAll('warehouse');
-            const allocationQuantities = formData.getAll('quantity');
-            if (
-                allocationWarehouses.length > 0 &&
-                allocationWarehouses.length === allocationQuantities.length
-            ) {
-                for (let i = 0; i < allocationWarehouses.length; i++) {
-                    allocations.push({
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        warehouse: allocationWarehouses[i] as unknown as number,
-                        quantity: allocationQuantities[i] as unknown as number,
-                    });
+            const items: IInventoryTransferItem[] = [];
+            const itemIds = formData.getAll('item_id');
+            const itemQuantities = formData.getAll('item_quantity');
+            if (itemIds.length > 0 && itemIds.length === itemQuantities.length) {
+                for (let i = 0; i < itemIds.length; i++) {
+                    items.push({
+                        id: itemIds[i] as unknown as number,
+                        quantity: itemQuantities[i] as unknown as number,
+                    } as IInventoryTransferItem);
                 }
             }
 
-            if (allocations.length > 0) inventoryItem.allocations = allocations;
+            if (items.length > 0) inventoryTransfer.items = items;
 
-            const currentFormState = await handleSubmit(inventoryItem);
+            const currentFormState = await handleSubmit(inventoryTransfer);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -87,10 +101,10 @@ function InventoryItemForm({
                         <Input
                             field={{
                                 ...field,
-                                ...(currentItem?.[field.name as keyof InventoryItem]
+                                ...(currentItem?.[field.name as keyof IInventoryTransfer]
                                     ? {
                                           defaultValue:
-                                              currentItem[field.name as keyof InventoryItem],
+                                              currentItem[field.name as keyof IInventoryTransfer],
                                       }
                                     : {}),
                             }}
@@ -98,11 +112,10 @@ function InventoryItemForm({
                         />
                     </div>
                 ))}
-                <InventoryOnlyFields
-                    warehouseOptions={warehouseOptions}
-                    selectedItem={currentItem}
-                    errors={itemFormState.errors}
-                />
+
+                <div className="col-span-2">
+                    <InventoryItemsSelect inventoryItems={inventoryItems} />
+                </div>
             </div>
 
             <div className="flex gap-2 justify-end text-center">
@@ -125,4 +138,4 @@ function InventoryItemForm({
     );
 }
 
-export default InventoryItemForm;
+export default InventoryTransferForm;

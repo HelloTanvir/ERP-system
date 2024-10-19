@@ -29,7 +29,7 @@ function Auth({
     return (
         <div className="relative mx-auto w-full max-w-xl lg:my-20 my-10 bg-form rounded-form-radius shadow-2xl py-14 px-16">
             <p
-                className={`w-full text-4xl font-medium leading-snug font-serif text-primary mb-2 ${page === 'otp-verification' ? 'text-center' : ''}`}
+                className={`w-full text-4xl font-medium leading-snug font-serif text-principal mb-2 ${page === 'otp-verification' ? 'text-center' : ''}`}
             >
                 {getFormTitle(page)}
             </p>

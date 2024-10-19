@@ -8,7 +8,10 @@ export interface InventoryCreationDropdownOptions {
 }
 
 export interface Allocation {
-    warehouse: number;
+    warehouse: {
+        id: number;
+        name: string;
+    };
     quantity: number;
 }
 

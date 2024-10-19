@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
+import UnitOfMeasureForm from './_components/UnitOfMeasureForm';
 import { getInputFields, MeasurementUnit } from './_lib/utils';
 
 export default async function UnitOfMeasure() {
@@ -10,7 +11,7 @@ export default async function UnitOfMeasure() {
             revalidatePath: '/dashboard/inventory/unit-of-measure',
         });
 
-    const measurementUnitItems = await getItems();
+    const { results: measurementUnitItems } = await getItems();
     const itemFields = getInputFields();
 
     return (
@@ -21,7 +22,11 @@ export default async function UnitOfMeasure() {
                 tableColumns={['Unit Name', 'Symbol']}
                 tableRows={measurementUnitItems.map((item) => [item.name, item.symbol])}
                 items={measurementUnitItems}
-                fields={itemFields}
+                fields={[]}
+                CustomItemForm={UnitOfMeasureForm}
+                customItemFormProps={{
+                    fields: itemFields,
+                }}
                 modalTitles={{
                     create: 'Create Unit of Measure',
                     edit: 'Edit Unit of Measure',

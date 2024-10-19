@@ -1,5 +1,6 @@
 'use server';
 
+import { ListResponse } from '@/app/_lib/utils';
 import { AuthPath } from '@/app/auth/[page]/_lib/utils';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -106,7 +107,7 @@ export async function createGenericServerActions<T extends { id: number | string
         revalidatePath(path);
     }
 
-    async function getItems(query?: { [key: string]: string }): Promise<T[]> {
+    async function getItems(query?: { [key: string]: string }): Promise<ListResponse<T>> {
         'use server';
 
         let ep = endpoint;
@@ -119,7 +120,14 @@ export async function createGenericServerActions<T extends { id: number | string
         const response = await fetch(ep, {
             headers: { Authorization: `Bearer ${access_token?.value}` },
         });
-        return response.json();
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch items');
+        }
+
+        const data: ListResponse<T> = await response.json();
+
+        return data;
     }
 
     return { createItem, updateItem, deleteItem, getItems };

@@ -13,7 +13,8 @@ export default async function InventoryItem() {
             revalidatePath: '/dashboard/inventory/inventory-item',
         });
 
-    const inventoryItems = await getItems();
+    const { results: inventoryItems } = await getItems();
+
     const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
     const itemFields = getInputFields(itemFormDropdownOptions);
 
