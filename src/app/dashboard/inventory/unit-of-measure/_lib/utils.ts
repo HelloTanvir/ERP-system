@@ -4,6 +4,9 @@ export interface MeasurementUnit {
     id: string;
     name: string;
     symbol: string;
+    is_compound: boolean;
+    conversion_rate: number;
+    parent_unit: number;
 }
 
 export const getInputFields = (): InputField[] => {
