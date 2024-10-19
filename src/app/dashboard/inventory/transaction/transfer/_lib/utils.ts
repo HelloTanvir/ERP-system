@@ -19,27 +19,10 @@ export interface IInventoryTransfer {
     narration: string;
     total_value: number;
     destination_warehouse: number; // Warehouse ID
-    status: string;
+    status: 'todo' | 'pending' | 'completed';
 }
 
 export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputField[] => {
-    /*
-
-    {
-  "items": [
-        {
-        "quantity": 0,
-        "rate_per_unit": 0,
-        "item": 0,
-        "source_warehouse": 0
-        }
-    ],
-    "voucher_date": "2024-10-17",
-    "narration": "string",
-    "destination_warehouse": 0
-    }
-
-    */
     return [
         {
             label: 'Destination Warehouse',
