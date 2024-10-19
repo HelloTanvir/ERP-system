@@ -2,50 +2,48 @@ import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
 import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
-import InventoryTransferForm from './_components/InventoryTransferForm';
+import InventoryAdjustmentForm from './_components/InventoryAdjustmentForm';
 import Report from './_components/Report';
-import { getWarehouseDropdownOptions } from './_lib/actions';
-import { getInputFields, IInventoryTransfer } from './_lib/utils';
+import { getInputFields, IInventoryAdjustment } from './_lib/utils';
 
-export default async function InventoryTransfer() {
+export default async function InventoryAdjustment() {
     const { createItem, updateItem, deleteItem, getItems } =
-        await createGenericServerActions<IInventoryTransfer>({
-            endpoint: `${process.env.API_URL}/inventory/stock-transfer/`,
-            revalidatePath: '/dashboard/inventory/transaction/transfer',
+        await createGenericServerActions<IInventoryAdjustment>({
+            endpoint: `${process.env.API_URL}/inventory/stock-adjustment/`,
+            revalidatePath: '/dashboard/inventory/transaction/adjustment',
         });
 
     const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
         endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/transaction/transfer',
+        revalidatePath: '/dashboard/inventory/transaction/adjustment',
     });
 
-    const { results: inventoryTransferItems } = await getItems();
-    const warehouseOptions = await getWarehouseDropdownOptions();
-    const itemFields = getInputFields(warehouseOptions);
+    const { results: inventoryAdjustmentItems } = await getItems();
+    const itemFields = getInputFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
-                pageTitle="Inventory Transfer"
-                tableColumns={['Voucher No.', 'Voucher Date', 'Total Value', 'Narration', 'Status']}
-                tableRows={inventoryTransferItems.map((item) => [
+                pageTitle="Inventory Adjustment"
+                tableColumns={['Voucher No.', 'Voucher Date', 'Type', 'Narration', 'Status']}
+                tableRows={inventoryAdjustmentItems.map((item) => [
                     item.voucher_no,
                     item.voucher_date,
-                    item.total_value,
+                    item.type,
                     item.narration,
                     item.status,
                 ])}
                 additionalActions={<Report />}
-                items={inventoryTransferItems}
+                items={inventoryAdjustmentItems}
                 fields={[]}
-                CustomItemForm={InventoryTransferForm}
+                CustomItemForm={InventoryAdjustmentForm}
                 customItemFormProps={{
                     fields: itemFields,
                     getInventoryItems,
                 }}
                 modalTitles={{
-                    create: 'Inventory Items Transfer',
-                    edit: 'Edit Inventory Items Transfer',
+                    create: 'Inventory Items Adjustment',
+                    edit: 'Edit Inventory Items Adjustment',
                 }}
                 createItem={createItem}
                 updateItem={updateItem}
