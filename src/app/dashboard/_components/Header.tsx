@@ -25,7 +25,7 @@ function Header() {
                                 <li key={item.label}>
                                     <Link href={item.subItems[0].link}>
                                         <span
-                                            className={`${pathname.includes(item.label.toLowerCase()) ? 'text-primary border-b border-primary' : ''}`}
+                                            className={`${pathname.includes(item.label.toLowerCase()) ? 'text-principal border-b border-principal' : ''}`}
                                         >
                                             {item.label}
                                         </span>
@@ -37,7 +37,7 @@ function Header() {
                         return (
                             <li key={item.label}>
                                 <span
-                                    className={`${pathname.includes(item.label.toLowerCase()) ? 'text-primary border-b border-primary' : ''}`}
+                                    className={`${pathname.includes(item.label.toLowerCase()) ? 'text-principal border-b border-principal' : ''}`}
                                 >
                                     {item.label}
                                 </span>

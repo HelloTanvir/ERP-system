@@ -14,6 +14,7 @@ export default async function InventoryItem() {
         });
 
     const { results: inventoryItems } = await getItems();
+
     const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
     const itemFields = getInputFields(itemFormDropdownOptions);
 

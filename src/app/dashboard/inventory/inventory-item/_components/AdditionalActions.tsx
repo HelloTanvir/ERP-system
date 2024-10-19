@@ -88,18 +88,18 @@ function AdditionalActions({ categoryOptions }: Readonly<Props>) {
         <>
             <button
                 type="button"
-                className="btn btn-sm border border-[#682FE6] rounded-btn text-primary px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
+                className="btn btn-sm border border-[#682FE6] rounded-btn text-principal px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
                 onClick={handleCreateCategory}
             >
-                <LuPlus className="text-primary" /> Create Category
+                <LuPlus className="text-principal" /> Create Category
             </button>
 
             <button
                 type="button"
-                className="btn btn-sm border border-[#682FE6] rounded-btn text-primary px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
+                className="btn btn-sm border border-[#682FE6] rounded-btn text-principal px-5 hover:border-purple-700 hover:text-purple-700 transition-all  duration-500"
                 onClick={handleCreateSubCategory}
             >
-                <LuPlus className="text-primary" /> Create Subcategory
+                <LuPlus className="text-principal" /> Create Subcategory
             </button>
 
             <Modal ref={modalRef} maxWidth={400}>

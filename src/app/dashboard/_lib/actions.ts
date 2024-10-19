@@ -125,12 +125,7 @@ export async function createGenericServerActions<T extends { id: number | string
             throw new Error('Failed to fetch items');
         }
 
-        const data: {
-            results: T[];
-            count: number;
-            next: string | null;
-            previous: string | null;
-        } = await response.json();
+        const data: ListResponse<T> = await response.json();
 
         return data;
     }

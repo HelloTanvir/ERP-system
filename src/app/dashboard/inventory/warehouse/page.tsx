@@ -12,7 +12,7 @@ export default async function Warehouse() {
 
     const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
         endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/inventory-item',
+        revalidatePath: '/dashboard/inventory/warehouse',
     });
 
     const { results: warehouseItems } = await getItems();

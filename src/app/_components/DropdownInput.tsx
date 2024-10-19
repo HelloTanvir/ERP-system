@@ -12,7 +12,8 @@ function DropdownInput({ field, error }: InputProps) {
                 id={field.name}
                 name={field.name}
                 defaultValue={field.defaultValue}
-                className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
+                disabled={field.disabled}
+                className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
             >
                 {field.options?.map((option) => (
                     <option key={option.label} value={option.value}>

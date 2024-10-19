@@ -22,7 +22,15 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
     const [allocations, setAllocations] = useState<Allocation[]>(
         selectedItem?.allocations?.length
             ? selectedItem?.allocations
-            : [{ warehouse: 0, quantity: 0 }]
+            : [
+                  {
+                      warehouse: {
+                          id: 0,
+                          name: '',
+                      },
+                      quantity: 0,
+                  },
+              ]
     );
 
     useEffect(() => {
@@ -35,12 +43,29 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
         return () => {
             setIsInventoryItem(false);
             setInitialQuantity(0);
-            setAllocations([{ warehouse: 0, quantity: 0 }]);
+            setAllocations([
+                {
+                    warehouse: {
+                        id: 0,
+                        name: '',
+                    },
+                    quantity: 0,
+                },
+            ]);
         };
     }, [selectedItem]);
 
     const handleAddAllocation = () => {
-        setAllocations([...allocations, { warehouse: 0, quantity: 0 }]);
+        setAllocations([
+            ...allocations,
+            {
+                warehouse: {
+                    id: 0,
+                    name: '',
+                },
+                quantity: 0,
+            },
+        ]);
     };
 
     const handleRemoveAllocation = (index: number) => {
@@ -50,7 +75,19 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
 
     const handleAllocationChange = (index: number, field: keyof Allocation, value: number) => {
         const newAllocations = [...allocations];
-        newAllocations[index][field] = value;
+
+        if (field === 'warehouse') {
+            const warehouse = warehouseOptions.find(
+                (option) => option.value?.toString() === value?.toString()
+            )!;
+            newAllocations[index][field] = {
+                id: parseInt(warehouse.value, 10),
+                name: warehouse.label,
+            };
+        } else {
+            newAllocations[index][field] = value;
+        }
+
         setAllocations(newAllocations);
     };
 
@@ -117,7 +154,7 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
                                 <select
                                     id={`warehouse-${index}`}
                                     name="warehouse"
-                                    value={allocation.warehouse}
+                                    value={allocation.warehouse?.id}
                                     onChange={(e) =>
                                         handleAllocationChange(
                                             index,
@@ -173,7 +210,7 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
                     <button
                         type="button"
                         onClick={handleAddAllocation}
-                        className="w-max flex items-center gap-2 text-sm rounded-btn-radius px-2 py-1 border border-primary bg-primary bg-opacity-15 hover:bg-opacity-30 duration-75"
+                        className="w-max flex items-center gap-2 text-sm rounded-btn-radius px-2 py-1 border border-principal bg-principal bg-opacity-15 hover:bg-opacity-30 duration-75"
                     >
                         <GoPlus /> Allocate more
                     </button>
