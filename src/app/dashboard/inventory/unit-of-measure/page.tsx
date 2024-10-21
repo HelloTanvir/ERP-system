@@ -19,21 +19,24 @@ export default async function UnitOfMeasure() {
             <GenericCRUD
                 pageTitle="Unit of Measure"
                 width={700}
-                tableColumns={['Unit Name', 'Symbol']}
-                tableRows={measurementUnitItems.map((item) => [item.name, item.symbol])}
-                items={measurementUnitItems}
-                fields={[]}
-                CustomItemForm={UnitOfMeasureForm}
-                customItemFormProps={{
-                    fields: itemFields,
+                tableConfig={{
+                    tableColumns: ['Unit Name', 'Symbol'],
+                    tableRows: measurementUnitItems.map((item) => [item.name, item.symbol]),
+                    items: measurementUnitItems,
+                    updateItem,
+                    deleteItem,
+                }}
+                formConfig={{
+                    createItem,
+                    CustomItemForm: UnitOfMeasureForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                    },
                 }}
                 modalTitles={{
                     create: 'Create Unit of Measure',
                     edit: 'Edit Unit of Measure',
                 }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
             />
         </Suspense>
     );

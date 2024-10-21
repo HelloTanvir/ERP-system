@@ -27,29 +27,38 @@ export default async function InventoryTransfer() {
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Transfer"
-                tableColumns={['Voucher No.', 'Voucher Date', 'Total Value', 'Narration', 'Status']}
-                tableRows={inventoryTransferItems.map((item) => [
-                    item.voucher_no,
-                    item.voucher_date,
-                    item.total_value,
-                    item.narration,
-                    item.status,
-                ])}
-                additionalActions={<Report />}
-                items={inventoryTransferItems}
-                fields={[]}
-                CustomItemForm={InventoryTransferForm}
-                customItemFormProps={{
-                    fields: itemFields,
-                    getInventoryItems,
+                tableConfig={{
+                    tableColumns: [
+                        'Voucher No.',
+                        'Voucher Date',
+                        'Total Value',
+                        'Narration',
+                        'Status',
+                    ],
+                    tableRows: inventoryTransferItems.map((item) => [
+                        item.voucher_no,
+                        item.voucher_date,
+                        item.total_value,
+                        item.narration,
+                        item.status,
+                    ]),
+                    items: inventoryTransferItems,
+                    updateItem,
+                    deleteItem,
+                }}
+                formConfig={{
+                    createItem,
+                    additionalActions: <Report />,
+                    CustomItemForm: InventoryTransferForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                        getInventoryItems,
+                    },
                 }}
                 modalTitles={{
                     create: 'Inventory Items Transfer',
                     edit: 'Edit Inventory Items Transfer',
                 }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
             />
         </Suspense>
     );
