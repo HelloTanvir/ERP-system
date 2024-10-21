@@ -127,3 +127,9 @@ export interface GenericItem {
     id: number | string;
     [key: string]: any;
 }
+
+export interface SearchParams {
+    page?: string;
+}
+
+export const ITEMS_PER_PAGE = 20;

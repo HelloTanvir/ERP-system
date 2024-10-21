@@ -8,6 +8,7 @@ import { GenericItem } from '../../_lib/utils';
 import Modal from '../Modal';
 import ItemForm from './ItemForm';
 import ItemTable from './ItemTable';
+import Pagination from './Pagination';
 
 type FormConfig<T extends GenericItem> =
     | { noAction: true }
@@ -31,6 +32,7 @@ type TableConfig<T extends GenericItem> = {
     tableColumns: string[];
     tableRows: ReactNode[][];
     items: T[];
+    totalItemsCount: number;
 } & (
     | { noTableAction: true }
     | {
@@ -135,6 +137,8 @@ function GenericCRUD<T extends GenericItem>({
                         handleDeleteItem={handleDeleteItem}
                     />
                 </div>
+
+                <Pagination totalItemsCount={tableConfig.totalItemsCount} />
             </div>
 
             {(!formConfig.noAction || !tableConfig.noTableAction) && (
