@@ -1,19 +1,25 @@
 import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
+import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
 import AdditionalActions from './_components/AdditionalActions';
 import InventoryItemForm from './_components/InventoryItemForm';
 import { getInventoryItemFormDropdownOptions } from './_lib/actions';
 import { getInputFields, InventoryItem as IInventoryItem } from './_lib/utils';
 
-export default async function InventoryItem() {
+export default async function InventoryItem({ searchParams }: { searchParams?: SearchParams }) {
+    const currentPage = Number(searchParams?.page) || 1;
+
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryItem>({
             endpoint: `${process.env.API_URL}/inventory/item/`,
             revalidatePath: '/dashboard/inventory/inventory-item',
         });
 
-    const { results: inventoryItems } = await getItems();
+    const { results: inventoryItems, count } = await getItems({
+        page: currentPage,
+        records: ITEMS_PER_PAGE,
+    });
 
     const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
     const itemFields = getInputFields(itemFormDropdownOptions);
@@ -42,6 +48,7 @@ export default async function InventoryItem() {
                         ),
                     ]),
                     items: inventoryItems,
+                    totalItemsCount: count,
                     updateItem,
                     deleteItem,
                 }}
