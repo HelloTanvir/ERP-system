@@ -22,35 +22,46 @@ export default async function InventoryItem() {
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Item"
-                tableColumns={['Name', 'Units left', 'Code/SKU', 'Description', 'Active/Inactive']}
-                tableRows={inventoryItems.map((item) => [
-                    item.name,
-                    item.quantity_on_warehouse,
-                    item.code,
-                    item.description,
-                    item.quantity_on_warehouse > 0 ? (
-                        <span className="text-[#038F65]">True</span>
-                    ) : (
-                        <span className="text-[#E9000E]">False</span>
+                tableConfig={{
+                    tableColumns: [
+                        'Name',
+                        'Units left',
+                        'Code/SKU',
+                        'Description',
+                        'Active/Inactive',
+                    ],
+                    tableRows: inventoryItems.map((item) => [
+                        item.name,
+                        item.quantity_on_warehouse,
+                        item.code,
+                        item.description,
+                        item.quantity_on_warehouse > 0 ? (
+                            <span className="text-[#038F65]">True</span>
+                        ) : (
+                            <span className="text-[#E9000E]">False</span>
+                        ),
+                    ]),
+                    items: inventoryItems,
+                    updateItem,
+                    deleteItem,
+                }}
+                formConfig={{
+                    createItem,
+                    CustomItemForm: InventoryItemForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                        warehouseOptions: itemFormDropdownOptions.warehouseOptions,
+                    },
+                    additionalActions: (
+                        <AdditionalActions
+                            categoryOptions={itemFormDropdownOptions.categoryOptions}
+                        />
                     ),
-                ])}
-                additionalActions={
-                    <AdditionalActions categoryOptions={itemFormDropdownOptions.categoryOptions} />
-                }
-                items={inventoryItems}
-                fields={[]}
-                CustomItemForm={InventoryItemForm}
-                customItemFormProps={{
-                    fields: itemFields,
-                    warehouseOptions: itemFormDropdownOptions.warehouseOptions,
                 }}
                 modalTitles={{
                     create: 'Create Inventory or Non Inventory Item',
                     edit: 'Edit Inventory or Non Inventory Item',
                 }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
             />
         </Suspense>
     );

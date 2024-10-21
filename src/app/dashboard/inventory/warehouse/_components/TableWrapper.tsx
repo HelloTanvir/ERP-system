@@ -74,57 +74,63 @@ function TableWrapper({
                 <GenericCRUD
                     pageTitle="Warehouse"
                     width={700}
-                    tableColumns={['Name', 'Location', 'Description']}
-                    tableRows={warehouseItems.map((item) => [
-                        <ItemName
-                            key={item.id}
-                            item={item}
-                            currentItem={currentItem}
-                            setCurrentItem={setCurrentItem}
-                        />,
-                        item.location,
-                        item.description,
-                    ])}
-                    items={warehouseItems}
-                    fields={itemFields}
+                    tableConfig={{
+                        tableColumns: ['Name', 'Location', 'Description'],
+                        tableRows: warehouseItems.map((item) => [
+                            <ItemName
+                                key={item.id}
+                                item={item}
+                                currentItem={currentItem}
+                                setCurrentItem={setCurrentItem}
+                            />,
+                            item.location,
+                            item.description,
+                        ]),
+                        items: warehouseItems,
+                        updateItem,
+                        deleteItem,
+                    }}
+                    formConfig={{
+                        createItem,
+                        fields: itemFields,
+                    }}
                     modalTitles={{
                         create: 'Create service',
                         edit: 'Edit service',
                     }}
-                    createItem={createItem}
-                    updateItem={updateItem}
-                    deleteItem={deleteItem}
                 />
             </Suspense>
 
             {currentItem && (
                 <Suspense fallback={<div>Loading...</div>}>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
                     <GenericCRUD
                         pageTitle="Inventory Item"
                         width={800}
-                        tableColumns={[
-                            'Name',
-                            'Units left',
-                            'Code/SKU',
-                            'Description',
-                            'Active/Inactive',
-                        ]}
-                        tableRows={inventoryItems.map((item) => [
-                            item.name,
-                            item.quantity_on_warehouse,
-                            item.code,
-                            item.description,
-                            item.quantity_on_warehouse > 0 ? (
-                                <span className="text-[#038F65]">True</span>
-                            ) : (
-                                <span className="text-[#E9000E]">False</span>
-                            ),
-                        ])}
-                        noAction
-                        noTableAction
-                        items={inventoryItems}
+                        tableConfig={{
+                            tableColumns: [
+                                'Name',
+                                'Units left',
+                                'Code/SKU',
+                                'Description',
+                                'Active/Inactive',
+                            ],
+                            tableRows: inventoryItems.map((item) => [
+                                item.name,
+                                item.quantity_on_warehouse,
+                                item.code,
+                                item.description,
+                                item.quantity_on_warehouse > 0 ? (
+                                    <span className="text-[#038F65]">True</span>
+                                ) : (
+                                    <span className="text-[#E9000E]">False</span>
+                                ),
+                            ]),
+                            items: inventoryItems,
+                            noTableAction: true,
+                        }}
+                        formConfig={{
+                            noAction: true,
+                        }}
                     />
                 </Suspense>
             )}
