@@ -8,6 +8,7 @@ import { IWarehouse } from '../_lib/utils';
 
 interface Props {
     warehouseItems: IWarehouse[];
+    totalWarehouseItems: number;
     itemFields: InputField[];
     createItem: (item: Omit<IWarehouse, 'id'>) => Promise<{
         success: boolean;
@@ -47,6 +48,7 @@ function ItemName({
 
 function TableWrapper({
     warehouseItems,
+    totalWarehouseItems,
     itemFields,
     createItem,
     updateItem,
@@ -55,6 +57,7 @@ function TableWrapper({
 }: Readonly<Props>) {
     const [currentItem, setCurrentItem] = useState<IWarehouse | null>(null);
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+    const [totalInventoryItems, setTotalInventoryItems] = useState<number>(0);
 
     useEffect(() => {
         const fetchInventoryItems = async () => {
@@ -63,6 +66,7 @@ function TableWrapper({
                     warehouse: currentItem?.name,
                 });
                 setInventoryItems(filteredInventoryItems?.results || []);
+                setTotalInventoryItems(filteredInventoryItems?.count || 0);
             }
         };
         fetchInventoryItems();
@@ -87,6 +91,7 @@ function TableWrapper({
                             item.description,
                         ]),
                         items: warehouseItems,
+                        totalItemsCount: totalWarehouseItems,
                         updateItem,
                         deleteItem,
                     }}
@@ -126,6 +131,7 @@ function TableWrapper({
                                 ),
                             ]),
                             items: inventoryItems,
+                            totalItemsCount: totalInventoryItems,
                             noTableAction: true,
                         }}
                         formConfig={{

@@ -1,5 +1,6 @@
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
+import { ITEMS_PER_PAGE, SearchParams } from '@/app/dashboard/_lib/utils';
 import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryTransferForm from './_components/InventoryTransferForm';
@@ -7,7 +8,9 @@ import Report from './_components/Report';
 import { getWarehouseDropdownOptions } from './_lib/actions';
 import { getInputFields, IInventoryTransfer } from './_lib/utils';
 
-export default async function InventoryTransfer() {
+export default async function InventoryTransfer({ searchParams }: { searchParams?: SearchParams }) {
+    const currentPage = Number(searchParams?.page) || 1;
+
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryTransfer>({
             endpoint: `${process.env.API_URL}/inventory/stock-transfer/`,
@@ -19,7 +22,10 @@ export default async function InventoryTransfer() {
         revalidatePath: '/dashboard/inventory/transaction/transfer',
     });
 
-    const { results: inventoryTransferItems } = await getItems();
+    const { results: inventoryTransferItems, count } = await getItems({
+        page: currentPage,
+        records: ITEMS_PER_PAGE,
+    });
     const warehouseOptions = await getWarehouseDropdownOptions();
     const itemFields = getInputFields(warehouseOptions);
 
@@ -43,6 +49,7 @@ export default async function InventoryTransfer() {
                         item.status,
                     ]),
                     items: inventoryTransferItems,
+                    totalItemsCount: count,
                     updateItem,
                     deleteItem,
                 }}

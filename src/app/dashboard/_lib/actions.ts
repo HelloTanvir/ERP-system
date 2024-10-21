@@ -107,7 +107,7 @@ export async function createGenericServerActions<T extends { id: number | string
         revalidatePath(path);
     }
 
-    async function getItems(query?: { [key: string]: string }): Promise<ListResponse<T>> {
+    async function getItems(query?: { [key: string]: string | number }): Promise<ListResponse<T>> {
         'use server';
 
         let ep = endpoint;

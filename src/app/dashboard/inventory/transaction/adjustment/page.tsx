@@ -1,12 +1,19 @@
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
+import { ITEMS_PER_PAGE, SearchParams } from '@/app/dashboard/_lib/utils';
 import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryAdjustmentForm from './_components/InventoryAdjustmentForm';
 import Report from './_components/Report';
 import { getInputFields, IInventoryAdjustment } from './_lib/utils';
 
-export default async function InventoryAdjustment() {
+export default async function InventoryAdjustment({
+    searchParams,
+}: {
+    searchParams?: SearchParams;
+}) {
+    const currentPage = Number(searchParams?.page) || 1;
+
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryAdjustment>({
             endpoint: `${process.env.API_URL}/inventory/stock-adjustment/`,
@@ -18,7 +25,10 @@ export default async function InventoryAdjustment() {
         revalidatePath: '/dashboard/inventory/transaction/adjustment',
     });
 
-    const { results: inventoryAdjustmentItems } = await getItems();
+    const { results: inventoryAdjustmentItems, count } = await getItems({
+        page: currentPage,
+        records: ITEMS_PER_PAGE,
+    });
     const itemFields = getInputFields();
 
     return (
@@ -35,6 +45,7 @@ export default async function InventoryAdjustment() {
                         item.status,
                     ]),
                     items: inventoryAdjustmentItems,
+                    totalItemsCount: count,
                     updateItem,
                     deleteItem,
                 }}

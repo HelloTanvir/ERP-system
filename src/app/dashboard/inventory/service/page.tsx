@@ -1,17 +1,23 @@
 import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
+import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
 import { getUnitOfMeasureDropdownOptions } from './_lib/actions';
 import { getInputFields, IService } from './_lib/utils';
 
-export default async function Service() {
+export default async function Service({ searchParams }: { searchParams?: SearchParams }) {
+    const currentPage = Number(searchParams?.page) || 1;
+
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IService>({
             endpoint: `${process.env.API_URL}/inventory/service/`,
             revalidatePath: '/dashboard/inventory/service',
         });
 
-    const { results: serviceItems } = await getItems();
+    const { results: serviceItems, count } = await getItems({
+        page: currentPage,
+        records: ITEMS_PER_PAGE,
+    });
 
     const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
     const itemFields = getInputFields(unitOfMeasureDropdownOptions);
@@ -25,6 +31,7 @@ export default async function Service() {
                     tableColumns: ['Name', 'Description'],
                     tableRows: serviceItems.map((item) => [item.name, item.description]),
                     items: serviceItems,
+                    totalItemsCount: count,
                     updateItem,
                     deleteItem,
                 }}
