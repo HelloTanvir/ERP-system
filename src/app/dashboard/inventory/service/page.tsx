@@ -21,17 +21,21 @@ export default async function Service() {
             <GenericCRUD
                 pageTitle="Services"
                 width={700}
-                tableColumns={['Name', 'Description']}
-                tableRows={serviceItems.map((item) => [item.name, item.description])}
-                items={serviceItems}
-                fields={itemFields}
+                tableConfig={{
+                    tableColumns: ['Name', 'Description'],
+                    tableRows: serviceItems.map((item) => [item.name, item.description]),
+                    items: serviceItems,
+                    updateItem,
+                    deleteItem,
+                }}
+                formConfig={{
+                    createItem,
+                    fields: itemFields,
+                }}
                 modalTitles={{
                     create: 'Create service',
                     edit: 'Edit service',
                 }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
             />
         </Suspense>
     );

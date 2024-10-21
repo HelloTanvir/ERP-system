@@ -25,29 +25,32 @@ export default async function InventoryAdjustment() {
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Adjustment"
-                tableColumns={['Voucher No.', 'Voucher Date', 'Type', 'Narration', 'Status']}
-                tableRows={inventoryAdjustmentItems.map((item) => [
-                    item.voucher_no,
-                    item.voucher_date,
-                    item.type,
-                    item.narration,
-                    item.status,
-                ])}
-                additionalActions={<Report />}
-                items={inventoryAdjustmentItems}
-                fields={[]}
-                CustomItemForm={InventoryAdjustmentForm}
-                customItemFormProps={{
-                    fields: itemFields,
-                    getInventoryItems,
+                tableConfig={{
+                    tableColumns: ['Voucher No.', 'Voucher Date', 'Type', 'Narration', 'Status'],
+                    tableRows: inventoryAdjustmentItems.map((item) => [
+                        item.voucher_no,
+                        item.voucher_date,
+                        item.type,
+                        item.narration,
+                        item.status,
+                    ]),
+                    items: inventoryAdjustmentItems,
+                    updateItem,
+                    deleteItem,
+                }}
+                formConfig={{
+                    createItem,
+                    additionalActions: <Report />,
+                    CustomItemForm: InventoryAdjustmentForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                        getInventoryItems,
+                    },
                 }}
                 modalTitles={{
                     create: 'Inventory Items Adjustment',
                     edit: 'Edit Inventory Items Adjustment',
                 }}
-                createItem={createItem}
-                updateItem={updateItem}
-                deleteItem={deleteItem}
             />
         </Suspense>
     );
