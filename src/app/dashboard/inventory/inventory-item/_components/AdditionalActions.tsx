@@ -1,7 +1,7 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { DropdownSelectOption, FormState, InputField } from '@/app/_lib/utils';
+import { FormState, InputField } from '@/app/_lib/utils';
 import Modal from '@/app/dashboard/_components/Modal';
 import useModal from '@/app/dashboard/_hooks/useModal';
 import { useState } from 'react';
@@ -10,16 +10,12 @@ import { LuPlus } from 'react-icons/lu';
 import { createCategoryOrSubCategory } from '../_lib/actions';
 import { ActionType } from '../_lib/utils';
 
-interface Props {
-    categoryOptions: DropdownSelectOption[];
-}
-
 enum MODAL_TITLES {
     'category-create' = 'Create Item Category',
     'subcategory-create' = 'Create Item Subcategory',
 }
 
-function AdditionalActions({ categoryOptions }: Readonly<Props>) {
+function AdditionalActions() {
     const { modalRef, openModal, closeModal } = useModal();
     const [actionType, setActionType] = useState<ActionType>('category-create');
     const fields: {
@@ -41,7 +37,8 @@ function AdditionalActions({ categoryOptions }: Readonly<Props>) {
                 name: 'category',
                 type: 'dropdown',
                 placeholder: 'Select Item Category',
-                options: categoryOptions || [],
+                optionsGetUrl: 'inventory/category/',
+                optionsFilterQuery: 'name__icontains',
                 required: true,
             },
             {

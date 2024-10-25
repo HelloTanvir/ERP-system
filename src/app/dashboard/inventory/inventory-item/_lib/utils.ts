@@ -1,23 +1,14 @@
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
-
-export interface InventoryCreationDropdownOptions {
-    unitOfMeasureOptions: DropdownSelectOption[];
-    categoryOptions: DropdownSelectOption[];
-    subCategoryOptions: DropdownSelectOption[];
-    warehouseOptions: DropdownSelectOption[];
-}
+import { InputField, NestedItem } from '@/app/_lib/utils';
 
 export interface Allocation {
-    warehouse: {
-        id: number;
-        name: string;
-    };
+    warehouse: NestedItem;
     quantity: number;
 }
 
 export interface InventoryItem {
     id: number;
     name: string;
+    is_inventory_item: boolean;
     allocations?: Allocation[];
     code: string;
     barcode: string;
@@ -33,14 +24,12 @@ export interface InventoryItem {
     sale_price_tax: number;
     discount_percent: number;
     measure_unit: null | number;
-    category: null | number;
-    subcategory: null | number;
+    category: null | NestedItem;
+    subcategory: null | NestedItem;
     as_of_date: string | Date;
 }
 
-export const getInputFields = (
-    dropdownOptions?: InventoryCreationDropdownOptions
-): InputField[] => {
+export const getInputFields = (): InputField[] => {
     return [
         {
             label: 'Name',
@@ -68,7 +57,10 @@ export const getInputFields = (
             name: 'measure_unit',
             type: 'dropdown',
             placeholder: 'Select Unit of Measure',
-            options: dropdownOptions?.unitOfMeasureOptions || [],
+            creatable: true,
+            optionsGetUrl: 'inventory/measurement-unit/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/inventory/unit-of-measure',
             required: true,
         },
         {
@@ -99,22 +91,6 @@ export const getInputFields = (
             name: 'initial_total_cost',
             type: 'number',
             placeholder: 'Enter total cost',
-            required: true,
-        },
-        {
-            label: 'Item Category',
-            name: 'category',
-            type: 'dropdown',
-            placeholder: 'Select Item Category',
-            options: dropdownOptions?.categoryOptions || [],
-            required: true,
-        },
-        {
-            label: 'Item Subcategory',
-            name: 'subcategory',
-            type: 'dropdown',
-            placeholder: 'Select Item Subcategory',
-            options: dropdownOptions?.subCategoryOptions || [],
             required: true,
         },
         {
