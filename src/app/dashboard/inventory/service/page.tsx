@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
-import { getUnitOfMeasureDropdownOptions } from './_lib/actions';
 import { getInputFields, IService } from './_lib/utils';
 
 export default async function Service({ searchParams }: { searchParams?: SearchParams }) {
@@ -19,8 +18,7 @@ export default async function Service({ searchParams }: { searchParams?: SearchP
         records: ITEMS_PER_PAGE,
     });
 
-    const unitOfMeasureDropdownOptions = await getUnitOfMeasureDropdownOptions();
-    const itemFields = getInputFields(unitOfMeasureDropdownOptions);
+    const itemFields = getInputFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>

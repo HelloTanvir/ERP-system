@@ -23,7 +23,7 @@ export interface InventoryItem {
     sale_price: number;
     sale_price_tax: number;
     discount_percent: number;
-    measure_unit: null | number;
+    measure_unit: null | NestedItem;
     category: null | NestedItem;
     subcategory: null | NestedItem;
     as_of_date: string | Date;

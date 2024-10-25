@@ -1,13 +1,13 @@
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+import { InputField, NestedItem } from '@/app/_lib/utils';
 
 export interface IService {
     id: string;
     name: string;
     description: string;
-    measure_unit: string;
+    measure_unit: NestedItem;
 }
 
-export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputField[] => {
+export const getInputFields = (): InputField[] => {
     return [
         {
             label: 'Name',
@@ -21,7 +21,10 @@ export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputF
             name: 'measure_unit',
             type: 'dropdown',
             placeholder: 'Select Unit of Measure',
-            options: dropdownOptions || [],
+            creatable: true,
+            optionsGetUrl: 'inventory/measurement-unit/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/inventory/unit-of-measure',
             required: true,
         },
         {
