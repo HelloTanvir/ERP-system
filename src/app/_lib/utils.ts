@@ -1,3 +1,8 @@
+export interface DropdownSelectOption {
+    label: string;
+    value: string;
+}
+
 export interface InputField {
     label: string;
     name: string;
@@ -15,11 +20,11 @@ export interface InputField {
         | 'multiple-drag-drop-file'
         | 'otp';
     placeholder: string;
-    options?: {
-        // for dropdown option input
-        label: string;
-        value: string;
-    }[];
+    optionsGetUrl?: string; // for dropdown option input
+    optionsFilterQuery?: string; // for dropdown option input
+    options?: DropdownSelectOption[]; // for dropdown option input
+    creatable?: boolean; // for dropdown option input
+    redirectURLOnCreate?: string; // for dropdown option input
     minLength?: number;
     maxLength?: number;
     required?: boolean;
@@ -37,11 +42,6 @@ export interface InputProps {
     error?: string;
 }
 
-export interface DropdownSelectOption {
-    label: string;
-    value: string;
-}
-
 export interface FormState {
     errors: Record<string, string> | null;
     success: boolean;
@@ -53,3 +53,13 @@ export interface ListResponse<T> {
     previous: string | null;
     results: T[];
 }
+
+export interface NestedItem {
+    id: number;
+    name: string;
+}
+
+export const formatNestedItemToDropdownOption = (item: NestedItem): DropdownSelectOption => ({
+    label: item?.name,
+    value: item?.id?.toString(),
+});

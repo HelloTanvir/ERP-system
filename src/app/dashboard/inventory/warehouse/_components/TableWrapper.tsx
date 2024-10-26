@@ -4,10 +4,11 @@ import { InputField, ListResponse } from '@/app/_lib/utils';
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
-import { IWarehouse } from '../_lib/utils';
+import { getSearchFields, IWarehouse } from '../_lib/utils';
 
 interface Props {
     warehouseItems: IWarehouse[];
+    totalWarehouseItems: number;
     itemFields: InputField[];
     createItem: (item: Omit<IWarehouse, 'id'>) => Promise<{
         success: boolean;
@@ -47,14 +48,18 @@ function ItemName({
 
 function TableWrapper({
     warehouseItems,
+    totalWarehouseItems,
     itemFields,
     createItem,
     updateItem,
     deleteItem,
     getInventoryItems,
 }: Readonly<Props>) {
+    const searchFields = getSearchFields();
+
     const [currentItem, setCurrentItem] = useState<IWarehouse | null>(null);
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+    const [totalInventoryItems, setTotalInventoryItems] = useState<number>(0);
 
     useEffect(() => {
         const fetchInventoryItems = async () => {
@@ -63,6 +68,7 @@ function TableWrapper({
                     warehouse: currentItem?.name,
                 });
                 setInventoryItems(filteredInventoryItems?.results || []);
+                setTotalInventoryItems(filteredInventoryItems?.count || 0);
             }
         };
         fetchInventoryItems();
@@ -74,6 +80,9 @@ function TableWrapper({
                 <GenericCRUD
                     pageTitle="Warehouse"
                     width={700}
+                    searchConfig={{
+                        fields: searchFields,
+                    }}
                     tableConfig={{
                         tableColumns: ['Name', 'Location', 'Description'],
                         tableRows: warehouseItems.map((item) => [
@@ -87,6 +96,7 @@ function TableWrapper({
                             item.description,
                         ]),
                         items: warehouseItems,
+                        totalItemsCount: totalWarehouseItems,
                         updateItem,
                         deleteItem,
                     }}
@@ -106,6 +116,9 @@ function TableWrapper({
                     <GenericCRUD
                         pageTitle="Inventory Item"
                         width={800}
+                        searchConfig={{
+                            withoutSearch: true,
+                        }}
                         tableConfig={{
                             tableColumns: [
                                 'Name',
@@ -126,6 +139,7 @@ function TableWrapper({
                                 ),
                             ]),
                             items: inventoryItems,
+                            totalItemsCount: totalInventoryItems,
                             noTableAction: true,
                         }}
                         formConfig={{

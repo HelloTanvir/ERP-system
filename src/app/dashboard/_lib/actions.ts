@@ -5,6 +5,7 @@ import { AuthPath } from '@/app/auth/[page]/_lib/utils';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { SearchParams } from './utils';
 
 export async function signOut() {
     'use server';
@@ -107,7 +108,7 @@ export async function createGenericServerActions<T extends { id: number | string
         revalidatePath(path);
     }
 
-    async function getItems(query?: { [key: string]: string }): Promise<ListResponse<T>> {
+    async function getItems(query?: SearchParams): Promise<ListResponse<T>> {
         'use server';
 
         let ep = endpoint;

@@ -1,26 +1,30 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
 
-export interface IInventoryTransferItem {
+export interface MManufacturingJournalItem {
     id: number;
     quantity: number;
     rate_per_unit: number;
     amount: number;
-    item: number; // Item ID
-    source_warehouse: number; // Warehouse ID
+    manufacture: number;
+    item: number;
+    source_warehouse: number;
 }
 
-export interface IInventoryTransfer {
+export interface MManufacturingJournal {
     id: number;
-    items: IInventoryTransferItem[];
+    manufactured_items: MManufacturingJournalItem[];
+    consumed_items: MManufacturingJournalItem[];
     voucher_no: string;
     voucher_date: string;
     created_at: string;
     updated_at: string;
     narration: string;
+    multiplier: number;
     total_value: number;
-    destination_warehouse: number; // Warehouse ID
     status: 'todo' | 'pending' | 'completed';
+    is_template: boolean;
+    is_active: boolean;
 }
 
 export const getInputFields = (): InputField[] => {
@@ -28,12 +32,19 @@ export const getInputFields = (): InputField[] => {
         {
             label: 'Destination Warehouse',
             name: 'destination_warehouse',
-            type: 'dropdown',
+            type: 'text',
             placeholder: 'Select Destination Warehouse',
+            required: true,
+        },
+        {
+            label: 'Manufactured Items',
+            name: 'manufactured_items',
+            type: 'dropdown',
+            placeholder: 'Select Destination',
             creatable: true,
-            optionsGetUrl: 'inventory/warehouse/',
-            optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/inventory/warehouse',
+            optionsGetUrl: 'inventory/item/',
+            optionsFilterQuery: 'name__name__icontains',
+            redirectURLOnCreate: '/dashboard/inventory/inventory-item',
             required: true,
         },
         {
@@ -50,10 +61,8 @@ export const getInputFields = (): InputField[] => {
 export const getSearchFields = (): SearchField[] => {
     return [
         {
-            type: 'dropdown',
-            name: 'status',
-            options: ['todo', 'pending', 'completed'],
-            label: 'Status',
+            type: 'text',
+            name: 'name__name__icontains',
         },
     ];
 };

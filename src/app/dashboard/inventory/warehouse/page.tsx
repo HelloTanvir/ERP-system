@@ -1,9 +1,10 @@
 import { createGenericServerActions } from '../../_lib/actions';
+import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
 import { InventoryItem } from '../inventory-item/_lib/utils';
 import TableWrapper from './_components/TableWrapper';
 import { getInputFields, IWarehouse } from './_lib/utils';
 
-export default async function Warehouse() {
+export default async function Warehouse({ searchParams }: { searchParams?: SearchParams }) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IWarehouse>({
             endpoint: `${process.env.API_URL}/inventory/warehouse/`,
@@ -15,12 +16,18 @@ export default async function Warehouse() {
         revalidatePath: '/dashboard/inventory/warehouse',
     });
 
-    const { results: warehouseItems } = await getItems();
+    const { results: warehouseItems, count } = await getItems({
+        ...searchParams,
+        page: searchParams?.page || '1',
+        records: ITEMS_PER_PAGE,
+    });
+
     const itemFields = getInputFields();
 
     return (
         <TableWrapper
             warehouseItems={warehouseItems}
+            totalWarehouseItems={count}
             itemFields={itemFields}
             createItem={createItem}
             updateItem={updateItem}

@@ -1,4 +1,5 @@
 import { InputField } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface IWarehouse {
     id: string;
@@ -30,6 +31,15 @@ export const getInputFields = (): InputField[] => {
             placeholder: 'Give a short description..',
             required: false,
             fullWidth: true,
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'text',
+            name: 'name__icontains',
         },
     ];
 };

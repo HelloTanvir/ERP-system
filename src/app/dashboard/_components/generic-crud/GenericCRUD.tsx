@@ -4,11 +4,21 @@ import { FormState, InputField } from '@/app/_lib/utils';
 import { ElementType, ReactNode, useState } from 'react';
 import { LuPlus } from 'react-icons/lu';
 import useModal from '../../_hooks/useModal';
-import { GenericItem } from '../../_lib/utils';
+import { GenericItem, SearchField } from '../../_lib/utils';
 import Modal from '../Modal';
 import ItemForm from './ItemForm';
 import ItemTable from './ItemTable';
 import Pagination from './Pagination';
+import SearchInTable from './SearchInTable';
+
+type SearchConfig =
+    | {
+          withoutSearch: true;
+      }
+    | {
+          withoutSearch?: false;
+          fields: SearchField[];
+      };
 
 type FormConfig<T extends GenericItem> =
     | { noAction: true }
@@ -50,6 +60,7 @@ interface ModalTitles {
 interface GenericCRUDProps<T extends GenericItem> {
     pageTitle: string;
     width?: number;
+    searchConfig?: SearchConfig;
     tableConfig: TableConfig<T>;
     formConfig: FormConfig<T>;
     modalTitles?: ModalTitles;
@@ -58,6 +69,7 @@ interface GenericCRUDProps<T extends GenericItem> {
 function GenericCRUD<T extends GenericItem>({
     pageTitle,
     width,
+    searchConfig,
     tableConfig,
     formConfig,
     modalTitles,
@@ -126,6 +138,8 @@ function GenericCRUD<T extends GenericItem>({
                         </div>
                     )}
                 </div>
+
+                {!searchConfig?.withoutSearch && <SearchInTable fields={searchConfig?.fields} />}
 
                 <div className="overflow-x-auto">
                     <ItemTable

@@ -4,12 +4,9 @@ import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
 import AdditionalActions from './_components/AdditionalActions';
 import InventoryItemForm from './_components/InventoryItemForm';
-import { getInventoryItemFormDropdownOptions } from './_lib/actions';
-import { getInputFields, InventoryItem as IInventoryItem } from './_lib/utils';
+import { getInputFields, getSearchFields, InventoryItem as IInventoryItem } from './_lib/utils';
 
 export default async function InventoryItem({ searchParams }: { searchParams?: SearchParams }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryItem>({
             endpoint: `${process.env.API_URL}/inventory/item/`,
@@ -17,17 +14,21 @@ export default async function InventoryItem({ searchParams }: { searchParams?: S
         });
 
     const { results: inventoryItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
 
-    const itemFormDropdownOptions = await getInventoryItemFormDropdownOptions();
-    const itemFields = getInputFields(itemFormDropdownOptions);
+    const itemFields = getInputFields();
+    const searchFields = getSearchFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Item"
+                searchConfig={{
+                    fields: searchFields,
+                }}
                 tableConfig={{
                     tableColumns: [
                         'Name',
@@ -57,13 +58,8 @@ export default async function InventoryItem({ searchParams }: { searchParams?: S
                     CustomItemForm: InventoryItemForm,
                     customItemFormProps: {
                         fields: itemFields,
-                        warehouseOptions: itemFormDropdownOptions.warehouseOptions,
                     },
-                    additionalActions: (
-                        <AdditionalActions
-                            categoryOptions={itemFormDropdownOptions.categoryOptions}
-                        />
-                    ),
+                    additionalActions: <AdditionalActions />,
                 }}
                 modalTitles={{
                     create: 'Create Inventory or Non Inventory Item',

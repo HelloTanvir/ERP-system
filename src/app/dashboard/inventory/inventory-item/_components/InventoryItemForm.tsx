@@ -1,14 +1,14 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { DropdownSelectOption, FormState, InputField } from '@/app/_lib/utils';
+import { FormState, InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
 import { Allocation, InventoryItem } from '../_lib/utils';
+import CategoryAndSubCategorySelect from './CategoryAndSubCategorySelect';
 import InventoryOnlyFields from './InventoryOnlyFields';
 
 interface ItemFormProps {
     fields: InputField[];
-    warehouseOptions: DropdownSelectOption[];
     currentItem: InventoryItem | null;
     handleSubmit: (item: InventoryItem) => Promise<{
         success: boolean;
@@ -21,7 +21,6 @@ interface ItemFormProps {
 
 function InventoryItemForm({
     fields,
-    warehouseOptions,
     currentItem,
     handleSubmit,
     closeModal,
@@ -47,24 +46,31 @@ function InventoryItemForm({
                     inventoryItem[key] = value;
             });
 
-            const allocations: Allocation[] = [];
-            const allocationWarehouses = formData.getAll('warehouse');
-            const allocationQuantities = formData.getAll('quantity');
-            if (
-                allocationWarehouses.length > 0 &&
-                allocationWarehouses.length === allocationQuantities.length
-            ) {
-                for (let i = 0; i < allocationWarehouses.length; i++) {
-                    allocations.push({
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        warehouse: allocationWarehouses[i] as unknown as number,
-                        quantity: allocationQuantities[i] as unknown as number,
-                    });
+            inventoryItem.is_inventory_item = !!inventoryItem.is_inventory_item;
+
+            if (inventoryItem.is_inventory_item) {
+                const allocations: Allocation[] = [];
+                const allocationWarehouses = formData.getAll('warehouse');
+                const allocationQuantities = formData.getAll('quantity');
+                if (
+                    allocationWarehouses.length > 0 &&
+                    allocationWarehouses.length === allocationQuantities.length
+                ) {
+                    for (let i = 0; i < allocationWarehouses.length; i++) {
+                        allocations.push({
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            warehouse: allocationWarehouses[i] as unknown as number,
+                            quantity: allocationQuantities[i] as unknown as number,
+                        });
+                    }
                 }
+
+                if (allocations.length > 0) inventoryItem.allocations = allocations;
             }
 
-            if (allocations.length > 0) inventoryItem.allocations = allocations;
+            console.log({ inventoryItem });
+            return { success: true, errors: null };
 
             const currentFormState = await handleSubmit(inventoryItem);
 
@@ -98,11 +104,8 @@ function InventoryItemForm({
                         />
                     </div>
                 ))}
-                <InventoryOnlyFields
-                    warehouseOptions={warehouseOptions}
-                    selectedItem={currentItem}
-                    errors={itemFormState.errors}
-                />
+                <CategoryAndSubCategorySelect selectedItem={currentItem} />
+                <InventoryOnlyFields selectedItem={currentItem} errors={itemFormState.errors} />
             </div>
 
             <div className="flex gap-2 justify-end text-center">
