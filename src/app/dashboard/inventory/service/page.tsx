@@ -2,11 +2,9 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
-import { getInputFields, IService } from './_lib/utils';
+import { getInputFields, getSearchFields, IService } from './_lib/utils';
 
 export default async function Service({ searchParams }: { searchParams?: SearchParams }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IService>({
             endpoint: `${process.env.API_URL}/inventory/service/`,
@@ -14,17 +12,22 @@ export default async function Service({ searchParams }: { searchParams?: SearchP
         });
 
     const { results: serviceItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
 
     const itemFields = getInputFields();
+    const searchFields = getSearchFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Services"
                 width={700}
+                searchConfig={{
+                    fields: searchFields,
+                }}
                 tableConfig={{
                     tableColumns: ['Name', 'Description'],
                     tableRows: serviceItems.map((item) => [item.name, item.description]),

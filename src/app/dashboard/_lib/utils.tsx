@@ -16,6 +16,13 @@ export interface SidebarItem {
     subItems?: SidebarItem[];
 }
 
+export interface SearchField {
+    type: 'text' | 'dropdown' | 'date';
+    name: string;
+    label?: string;
+    options?: string[];
+}
+
 export const sidebarItems: SidebarItem[] = [
     {
         label: 'Dashboard',
@@ -129,7 +136,7 @@ export interface GenericItem {
 }
 
 export interface SearchParams {
-    page?: string;
+    [key: string]: string;
 }
 
 export const ITEMS_PER_PAGE = 20;

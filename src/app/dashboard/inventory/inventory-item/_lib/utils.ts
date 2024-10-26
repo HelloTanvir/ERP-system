@@ -1,4 +1,5 @@
 import { InputField, NestedItem } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface Allocation {
     warehouse: NestedItem;
@@ -142,6 +143,15 @@ export const getInputFields = (): InputField[] => {
             placeholder: 'Set as of date',
             required: false,
             defaultValue: new Date(Date()).toJSON().slice(0, 10),
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'text',
+            name: 'name__name__icontains',
         },
     ];
 };

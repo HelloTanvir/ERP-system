@@ -4,7 +4,7 @@ import { InputField, ListResponse } from '@/app/_lib/utils';
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
-import { IWarehouse } from '../_lib/utils';
+import { getSearchFields, IWarehouse } from '../_lib/utils';
 
 interface Props {
     warehouseItems: IWarehouse[];
@@ -55,6 +55,8 @@ function TableWrapper({
     deleteItem,
     getInventoryItems,
 }: Readonly<Props>) {
+    const searchFields = getSearchFields();
+
     const [currentItem, setCurrentItem] = useState<IWarehouse | null>(null);
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
     const [totalInventoryItems, setTotalInventoryItems] = useState<number>(0);
@@ -78,6 +80,9 @@ function TableWrapper({
                 <GenericCRUD
                     pageTitle="Warehouse"
                     width={700}
+                    searchConfig={{
+                        fields: searchFields,
+                    }}
                     tableConfig={{
                         tableColumns: ['Name', 'Location', 'Description'],
                         tableRows: warehouseItems.map((item) => [
@@ -111,6 +116,7 @@ function TableWrapper({
                     <GenericCRUD
                         pageTitle="Inventory Item"
                         width={800}
+                        withoutSearch
                         tableConfig={{
                             tableColumns: [
                                 'Name',

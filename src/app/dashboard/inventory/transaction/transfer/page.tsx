@@ -5,12 +5,9 @@ import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryTransferForm from './_components/InventoryTransferForm';
 import Report from './_components/Report';
-import { getWarehouseDropdownOptions } from './_lib/actions';
-import { getInputFields, IInventoryTransfer } from './_lib/utils';
+import { getInputFields, getSearchFields, IInventoryTransfer } from './_lib/utils';
 
 export default async function InventoryTransfer({ searchParams }: { searchParams?: SearchParams }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryTransfer>({
             endpoint: `${process.env.API_URL}/inventory/stock-transfer/`,
@@ -23,16 +20,21 @@ export default async function InventoryTransfer({ searchParams }: { searchParams
     });
 
     const { results: inventoryTransferItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
-    const warehouseOptions = await getWarehouseDropdownOptions();
-    const itemFields = getInputFields(warehouseOptions);
+
+    const itemFields = getInputFields();
+    const searchFields = getSearchFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Transfer"
+                searchConfig={{
+                    fields: searchFields,
+                }}
                 tableConfig={{
                     tableColumns: [
                         'Voucher No.',

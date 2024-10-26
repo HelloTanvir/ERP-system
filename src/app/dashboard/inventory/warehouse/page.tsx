@@ -5,8 +5,6 @@ import TableWrapper from './_components/TableWrapper';
 import { getInputFields, IWarehouse } from './_lib/utils';
 
 export default async function Warehouse({ searchParams }: { searchParams?: SearchParams }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IWarehouse>({
             endpoint: `${process.env.API_URL}/inventory/warehouse/`,
@@ -19,9 +17,11 @@ export default async function Warehouse({ searchParams }: { searchParams?: Searc
     });
 
     const { results: warehouseItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
+
     const itemFields = getInputFields();
 
     return (
