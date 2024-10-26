@@ -10,7 +10,7 @@ interface Props {
 }
 
 function Pagination({ totalItemsCount }: Props) {
-    const totalPages = Math.ceil(totalItemsCount / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(totalItemsCount / Number(ITEMS_PER_PAGE));
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -31,11 +31,11 @@ function Pagination({ totalItemsCount }: Props) {
                     <p className="text-sm text-gray-700">
                         Showing{' '}
                         <span className="font-medium">
-                            {(currentPage - 1) * ITEMS_PER_PAGE + 1}
+                            {(currentPage - 1) * Number(ITEMS_PER_PAGE) + 1}
                         </span>{' '}
                         to{' '}
                         <span className="font-medium">
-                            {Math.min(currentPage * ITEMS_PER_PAGE, totalItemsCount)}
+                            {Math.min(currentPage * Number(ITEMS_PER_PAGE), totalItemsCount)}
                         </span>{' '}
                         of <span className="font-medium">{totalItemsCount}</span> results
                     </p>

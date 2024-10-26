@@ -55,11 +55,11 @@ export interface ListResponse<T> {
 }
 
 export interface NestedItem {
-    id: string;
+    id: number;
     name: string;
 }
 
 export const formatNestedItemToDropdownOption = (item: NestedItem): DropdownSelectOption => ({
     label: item?.name,
-    value: item?.id,
+    value: item?.id?.toString(),
 });

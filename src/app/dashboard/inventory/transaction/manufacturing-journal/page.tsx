@@ -5,16 +5,13 @@ import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryTransferForm from '../transfer/_components/InventoryTransferForm';
 import Report from '../transfer/_components/Report';
-import { getManufacturedItemsDropdownOptions } from './_lib/actions';
-import { getInputFields, MManufacturingJournal } from './_lib/utils';
+import { getInputFields, getSearchFields, MManufacturingJournal } from './_lib/utils';
 
 export default async function ManufacturingJournal({
     searchParams,
 }: {
     searchParams?: SearchParams;
 }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<MManufacturingJournal>({
             endpoint: `${process.env.API_URL}/manufacturing/manufacture/`,
@@ -27,19 +24,23 @@ export default async function ManufacturingJournal({
     });
 
     const { results: manufacturingJournalItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
 
     console.log(manufacturingJournalItems);
 
-    const manufacturedItemsOptions = await getManufacturedItemsDropdownOptions();
-    const itemFields = getInputFields(manufacturedItemsOptions);
+    const itemFields = getInputFields();
+    const searchFields = getSearchFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Manufacturing Journal"
+                searchConfig={{
+                    fields: searchFields,
+                }}
                 tableConfig={{
                     tableColumns: ['Date', 'Accounts', 'Description', 'Amount', 'Status'],
                     tableRows: manufacturingJournalItems.map((item) => [

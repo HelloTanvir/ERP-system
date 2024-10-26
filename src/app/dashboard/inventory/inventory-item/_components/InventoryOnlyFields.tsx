@@ -23,7 +23,7 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
     const [allocations, setAllocations] = useState<Allocation[]>(
         selectedItem?.allocations?.length
             ? selectedItem?.allocations
-            : [
+            : ([
                   {
                       warehouse: {
                           id: 0,
@@ -31,7 +31,7 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
                       },
                       quantity: 0,
                   },
-              ]
+              ] as unknown as Allocation[])
     );
 
     useEffect(() => {
@@ -52,7 +52,7 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
                     },
                     quantity: 0,
                 },
-            ]);
+            ] as unknown as Allocation[]);
         };
     }, [selectedItem]);
 
@@ -65,7 +65,7 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
                     name: '',
                 },
                 quantity: 0,
-            },
+            } as unknown as Allocation,
         ]);
     };
 
@@ -83,7 +83,7 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
 
         if (fieldName === 'warehouse') {
             newAllocations[index][fieldName] = {
-                id: parseInt(field.value, 10),
+                id: field.value,
                 name: field.label,
             };
         } else {
@@ -169,6 +169,8 @@ function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
                                     }
                                     cacheOptions
                                     defaultOptions
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
                                     loadOptions={(inputValue) =>
                                         getPromiseOptionsForDropdown(inputValue, {
                                             optionsGetUrl: 'inventory/warehouse/',

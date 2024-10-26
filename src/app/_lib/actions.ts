@@ -11,7 +11,7 @@ export const getPromiseOptionsForDropdown = (inputValue: string, field: InputFie
     if (!field.optionsGetUrl) {
         return new Promise<DropdownSelectOption[]>((resolve) => {
             resolve(
-                field.options?.filter((option) =>
+                (field.options || []).filter((option) =>
                     option.label?.toLowerCase()?.includes(inputValue.toLowerCase())
                 )
             );

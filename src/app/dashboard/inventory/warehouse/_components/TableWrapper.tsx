@@ -116,7 +116,9 @@ function TableWrapper({
                     <GenericCRUD
                         pageTitle="Inventory Item"
                         width={800}
-                        withoutSearch
+                        searchConfig={{
+                            withoutSearch: true,
+                        }}
                         tableConfig={{
                             tableColumns: [
                                 'Name',

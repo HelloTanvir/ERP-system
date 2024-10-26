@@ -7,6 +7,7 @@ import {
     DropdownSelectOption,
     formatNestedItemToDropdownOption,
     InputField,
+    NestedItem,
 } from '@/app/_lib/utils';
 import { useEffect, useState } from 'react';
 import AsyncSelect from 'react-select/async';
@@ -59,7 +60,9 @@ function CategoryAndSubCategorySelect({ selectedItem }: Props) {
                     name="subcategory"
                     cacheOptions
                     defaultOptions
-                    defaultValue={formatNestedItemToDropdownOption(selectedItem?.subcategory)}
+                    defaultValue={formatNestedItemToDropdownOption(
+                        selectedItem?.subcategory ?? ({} as NestedItem)
+                    )}
                     isDisabled={!selectedCategory}
                     loadOptions={(inputValue) =>
                         getPromiseOptionsForDropdown(inputValue, {

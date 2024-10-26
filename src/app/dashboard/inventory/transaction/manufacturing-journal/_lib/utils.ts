@@ -1,4 +1,5 @@
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+import { InputField } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface MManufacturingJournalItem {
     id: number;
@@ -26,7 +27,7 @@ export interface MManufacturingJournal {
     is_active: boolean;
 }
 
-export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputField[] => {
+export const getInputFields = (): InputField[] => {
     return [
         {
             label: 'Destination Warehouse',
@@ -40,7 +41,10 @@ export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputF
             name: 'manufactured_items',
             type: 'dropdown',
             placeholder: 'Select Destination',
-            options: dropdownOptions || [],
+            creatable: true,
+            optionsGetUrl: 'inventory/item/',
+            optionsFilterQuery: 'name__name__icontains',
+            redirectURLOnCreate: '/dashboard/inventory/inventory-item',
             required: true,
         },
         {
@@ -50,6 +54,15 @@ export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputF
             placeholder: 'Give a narration for the transfer',
             required: false,
             fullWidth: true,
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'text',
+            name: 'name__name__icontains',
         },
     ];
 };
