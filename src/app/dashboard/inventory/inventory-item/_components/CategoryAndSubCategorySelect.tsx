@@ -21,7 +21,7 @@ function CategoryAndSubCategorySelect({ selectedItem }: Props) {
 
     useEffect(() => {
         if (selectedItem?.category) {
-            setSelectedCategory(selectedItem.category);
+            setSelectedCategory(formatNestedItemToDropdownOption(selectedItem.category));
         }
     }, [selectedItem?.category]);
 
@@ -36,7 +36,7 @@ function CategoryAndSubCategorySelect({ selectedItem }: Props) {
                     name="category"
                     cacheOptions
                     defaultOptions
-                    defaultValue={formatNestedItemToDropdownOption(selectedItem?.category)}
+                    value={selectedCategory}
                     loadOptions={(inputValue) =>
                         getPromiseOptionsForDropdown(inputValue, {
                             optionsGetUrl: 'inventory/category/',

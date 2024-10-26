@@ -2,9 +2,17 @@ import { FC } from 'react';
 import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import { getPromiseOptionsForDropdown, redirectTo } from '../_lib/actions';
-import { formatNestedItemToDropdownOption, InputProps } from '../_lib/utils';
+import { InputProps } from '../_lib/utils';
 
 function DropdownInput({ field, error }: Readonly<InputProps>) {
+    let defaultValue;
+    if (field.defaultValue) {
+        defaultValue = {
+            label: field.defaultValue?.label || field.defaultValue?.name,
+            value: field.defaultValue?.value || field.defaultValue?.id,
+        };
+    }
+
     return (
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
@@ -15,7 +23,7 @@ function DropdownInput({ field, error }: Readonly<InputProps>) {
                 <AsyncCreatableSelect
                     id={field.name}
                     name={field.name}
-                    defaultValue={formatNestedItemToDropdownOption(field.defaultValue)}
+                    defaultValue={defaultValue}
                     isDisabled={field.disabled}
                     cacheOptions
                     defaultOptions
@@ -28,7 +36,7 @@ function DropdownInput({ field, error }: Readonly<InputProps>) {
                 <AsyncSelect
                     id={field.name}
                     name={field.name}
-                    defaultValue={formatNestedItemToDropdownOption(field.defaultValue)}
+                    defaultValue={defaultValue}
                     isDisabled={field.disabled}
                     cacheOptions
                     defaultOptions
