@@ -1,4 +1,5 @@
 import { InputField } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface IInventoryAdjustmentItem {
     id: number;
@@ -51,6 +52,23 @@ export const getInputFields = (): InputField[] => {
                 },
             ],
             required: true,
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'dropdown',
+            name: 'status',
+            options: ['todo', 'pending', 'completed'],
+            label: 'Status',
+        },
+        {
+            type: 'dropdown',
+            name: 'type',
+            options: ['add', 'reduce', 'manual'],
+            label: 'Type',
         },
     ];
 };

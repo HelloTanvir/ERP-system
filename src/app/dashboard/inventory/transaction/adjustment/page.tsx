@@ -5,15 +5,13 @@ import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryAdjustmentForm from './_components/InventoryAdjustmentForm';
 import Report from './_components/Report';
-import { getInputFields, IInventoryAdjustment } from './_lib/utils';
+import { getInputFields, getSearchFields, IInventoryAdjustment } from './_lib/utils';
 
 export default async function InventoryAdjustment({
     searchParams,
 }: {
     searchParams?: SearchParams;
 }) {
-    const currentPage = Number(searchParams?.page) || 1;
-
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInventoryAdjustment>({
             endpoint: `${process.env.API_URL}/inventory/stock-adjustment/`,
@@ -26,15 +24,21 @@ export default async function InventoryAdjustment({
     });
 
     const { results: inventoryAdjustmentItems, count } = await getItems({
-        page: currentPage,
+        ...searchParams,
+        page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
+
     const itemFields = getInputFields();
+    const searchFields = getSearchFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
                 pageTitle="Inventory Adjustment"
+                searchConfig={{
+                    fields: searchFields,
+                }}
                 tableConfig={{
                     tableColumns: ['Voucher No.', 'Voucher Date', 'Type', 'Narration', 'Status'],
                     tableRows: inventoryAdjustmentItems.map((item) => [

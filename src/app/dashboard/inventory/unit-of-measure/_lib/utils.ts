@@ -1,4 +1,5 @@
 import { InputField } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface MeasurementUnit {
     id: string;
@@ -24,6 +25,15 @@ export const getInputFields = (): InputField[] => {
             type: 'text',
             placeholder: 'Enter symbol',
             required: true,
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'text',
+            name: 'name__icontains',
         },
     ];
 };

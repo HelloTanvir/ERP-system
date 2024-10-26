@@ -1,4 +1,5 @@
-import { DropdownSelectOption, InputField } from '@/app/_lib/utils';
+import { InputField } from '@/app/_lib/utils';
+import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface IInventoryTransferItem {
     id: number;
@@ -22,14 +23,17 @@ export interface IInventoryTransfer {
     status: 'todo' | 'pending' | 'completed';
 }
 
-export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputField[] => {
+export const getInputFields = (): InputField[] => {
     return [
         {
             label: 'Destination Warehouse',
             name: 'destination_warehouse',
             type: 'dropdown',
             placeholder: 'Select Destination Warehouse',
-            options: dropdownOptions || [],
+            creatable: true,
+            optionsGetUrl: 'inventory/warehouse/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/inventory/warehouse',
             required: true,
         },
         {
@@ -39,6 +43,17 @@ export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputF
             placeholder: 'Give a narration for the transfer',
             required: false,
             fullWidth: true,
+        },
+    ];
+};
+
+export const getSearchFields = (): SearchField[] => {
+    return [
+        {
+            type: 'dropdown',
+            name: 'status',
+            options: ['todo', 'pending', 'completed'],
+            label: 'Status',
         },
     ];
 };

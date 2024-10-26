@@ -2,19 +2,20 @@
 
 /* eslint-disable jsx-a11y/label-has-associated-control, react/no-array-index-key */
 
-import { DropdownSelectOption } from '@/app/_lib/utils';
+import { getPromiseOptionsForDropdown } from '@/app/_lib/actions';
+import { InputField } from '@/app/_lib/utils';
 import { useEffect, useState } from 'react';
 import { GoPlus } from 'react-icons/go';
 import { TiDeleteOutline } from 'react-icons/ti';
+import AsyncSelect from 'react-select/async';
 import { Allocation, InventoryItem } from '../_lib/utils';
 
 interface Props {
-    warehouseOptions: DropdownSelectOption[];
     selectedItem?: InventoryItem | null;
     errors?: Record<string, string> | null;
 }
 
-function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonly<Props>) {
+function InventoryOnlyFields({ selectedItem, errors }: Readonly<Props>) {
     const [isInventoryItem, setIsInventoryItem] = useState(false);
     const [initialQuantity, setInitialQuantity] = useState(
         selectedItem?.quantity_on_warehouse || 0
@@ -73,19 +74,20 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
         setAllocations(newAllocations);
     };
 
-    const handleAllocationChange = (index: number, field: keyof Allocation, value: number) => {
+    const handleAllocationChange = (
+        index: number,
+        fieldName: keyof Allocation,
+        field: { value: number; label: string }
+    ) => {
         const newAllocations = [...allocations];
 
-        if (field === 'warehouse') {
-            const warehouse = warehouseOptions.find(
-                (option) => option.value?.toString() === value?.toString()
-            )!;
-            newAllocations[index][field] = {
-                id: parseInt(warehouse.value, 10),
-                name: warehouse.label,
+        if (fieldName === 'warehouse') {
+            newAllocations[index][fieldName] = {
+                id: parseInt(field.value, 10),
+                name: field.label,
             };
         } else {
-            newAllocations[index][field] = value;
+            newAllocations[index][fieldName] = field.value;
         }
 
         setAllocations(newAllocations);
@@ -151,26 +153,29 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
                                     Warehouse
                                 </label>
 
-                                <select
+                                <AsyncSelect
                                     id={`warehouse-${index}`}
                                     name="warehouse"
-                                    value={allocation.warehouse?.id}
+                                    value={{
+                                        value: allocation.warehouse.id,
+                                        label: allocation.warehouse.name,
+                                    }}
                                     onChange={(e) =>
                                         handleAllocationChange(
                                             index,
                                             'warehouse',
-                                            Number(e.target.value)
+                                            e as { value: number; label: string }
                                         )
                                     }
-                                    className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
-                                >
-                                    <option value="">Select a warehouse</option>
-                                    {warehouseOptions.map((option) => (
-                                        <option key={option.value} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    ))}
-                                </select>
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={(inputValue) =>
+                                        getPromiseOptionsForDropdown(inputValue, {
+                                            optionsGetUrl: 'inventory/warehouse/',
+                                            optionsFilterQuery: 'name__icontains',
+                                        } as InputField)
+                                    }
+                                />
                             </div>
 
                             <div className="flex-1">
@@ -186,11 +191,10 @@ function InventoryOnlyFields({ warehouseOptions, selectedItem, errors }: Readonl
                                     name="quantity"
                                     value={allocation.quantity}
                                     onChange={(e) =>
-                                        handleAllocationChange(
-                                            index,
-                                            'quantity',
-                                            Number(e.target.value)
-                                        )
+                                        handleAllocationChange(index, 'quantity', {
+                                            value: Number(e.target.value),
+                                            label: 'quantity',
+                                        })
                                     }
                                     className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
                                 />
