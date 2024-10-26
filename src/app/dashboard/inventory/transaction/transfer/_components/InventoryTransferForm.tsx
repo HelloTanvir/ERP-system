@@ -5,8 +5,8 @@ import { FormState, InputField, ListResponse } from '@/app/_lib/utils';
 import { useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { InventoryItem } from '../../../inventory-item/_lib/utils';
+import InventoryItemsSelect from '../../_components/InventoryItemsSelect';
 import { IInventoryTransfer, IInventoryTransferItem } from '../_lib/utils';
-import InventoryItemsSelect from './InventoryItemsSelect';
 
 interface ItemFormProps {
     fields: InputField[];
