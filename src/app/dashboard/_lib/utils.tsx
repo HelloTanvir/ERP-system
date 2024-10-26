@@ -108,11 +108,28 @@ export const sidebarItems: SidebarItem[] = [
         label: 'Injection Module',
         icon: injectionModuleIcons.root,
         subItems: [
-            { label: 'Register Mold', link: '/dashboard/injection/register-mold' },
+            { label: 'Mold Register', link: '/dashboard/injection/mold-register' },
+            { label: 'Mold Time Sheet', link: '/dashboard/injection/mold-time-sheet' },
+            {
+                label: 'Non Production Time Record',
+                link: '/dashboard/injection/non-production-time-record',
+            },
+            {
+                label: 'Schedule',
+                link: '/dashboard/injection/schedule',
+            },
             { label: 'Input Production', link: '/dashboard/injection/input-production' },
             {
                 label: 'Input Recycle Production',
                 link: '/dashboard/injection/input-recycle-production',
+            },
+            {
+                label: 'Machine',
+                link: '/dashboard/injection/machine',
+            },
+            {
+                label: 'Shift',
+                link: '/dashboard/injection/shift',
             },
         ],
     },

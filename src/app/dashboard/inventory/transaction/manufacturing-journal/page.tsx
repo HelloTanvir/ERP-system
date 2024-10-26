@@ -1,52 +1,40 @@
 import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
-import { SearchParams } from '@/app/dashboard/_lib/utils';
+import { ITEMS_PER_PAGE, SearchParams } from '@/app/dashboard/_lib/utils';
 import { Suspense } from 'react';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryTransferForm from '../transfer/_components/InventoryTransferForm';
 import Report from '../transfer/_components/Report';
-import { getWarehouseDropdownOptions } from '../transfer/_lib/actions';
+import { getManufacturedItemsDropdownOptions } from './_lib/actions';
 import { getInputFields, MManufacturingJournal } from './_lib/utils';
 
-export default async function InventoryTransfer({ searchParams }: { searchParams?: SearchParams }) {
+export default async function ManufacturingJournal({
+    searchParams,
+}: {
+    searchParams?: SearchParams;
+}) {
     const currentPage = Number(searchParams?.page) || 1;
 
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<MManufacturingJournal>({
-            endpoint: `${process.env.API_URL}/inventory/stock-transfer/`,
-            revalidatePath: '/dashboard/inventory/transaction/transfer',
+            endpoint: `${process.env.API_URL}/manufacturing/manufacture/`,
+            revalidatePath: '/dashboard/inventory/transaction/manufacturing-journal',
         });
 
     const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
         endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/transaction/transfer',
+        revalidatePath: '/dashboard/inventory/transaction/manufacturing-journal',
     });
 
-    // const { results: manufacturingJournalItems, count } = await getItems({
-    //     page: currentPage,
-    //     records: ITEMS_PER_PAGE,
-    // });
-    const count = 10;
+    const { results: manufacturingJournalItems, count } = await getItems({
+        page: currentPage,
+        records: ITEMS_PER_PAGE,
+    });
 
-    // dummy info
-    const manufacturingJournalItems = [
-        {
-            date: '20-09-24',
-            accounts: 'Muhammad',
-            description: 'Nice phone',
-            amount: 2000,
-            status: 'available',
-        },
-        {
-            date: '28-12-24',
-            accounts: 'Tanvir',
-            description: 'Awesome I phone',
-            amount: 5000,
-            status: 'unavailable',
-        },
-    ];
-    const warehouseOptions = await getWarehouseDropdownOptions();
-    const itemFields = getInputFields(warehouseOptions);
+    console.log(manufacturingJournalItems);
+
+    const manufacturedItemsOptions = await getManufacturedItemsDropdownOptions();
+    const itemFields = getInputFields(manufacturedItemsOptions);
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
@@ -55,10 +43,10 @@ export default async function InventoryTransfer({ searchParams }: { searchParams
                 tableConfig={{
                     tableColumns: ['Date', 'Accounts', 'Description', 'Amount', 'Status'],
                     tableRows: manufacturingJournalItems.map((item) => [
-                        item.date,
-                        item.accounts,
-                        item.description,
-                        item.amount,
+                        item.voucher_date,
+                        '',
+                        item.narration,
+                        item.total_value,
                         item.status,
                     ]),
                     items: manufacturingJournalItems,

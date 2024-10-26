@@ -5,20 +5,25 @@ export interface MManufacturingJournalItem {
     quantity: number;
     rate_per_unit: number;
     amount: number;
-    item: number; // Item ID
-    source_warehouse: number; // Warehouse ID
+    manufacture: number;
+    item: number;
+    source_warehouse: number;
 }
 
 export interface MManufacturingJournal {
     id: number;
-    items: MManufacturingJournalItem[];
+    manufactured_items: MManufacturingJournalItem[];
+    consumed_items: MManufacturingJournalItem[];
     voucher_no: string;
-    date: string;
+    voucher_date: string;
     created_at: string;
     updated_at: string;
+    narration: string;
+    multiplier: number;
     total_value: number;
-    destination_warehouse: number; // Warehouse ID
     status: 'todo' | 'pending' | 'completed';
+    is_template: boolean;
+    is_active: boolean;
 }
 
 export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputField[] => {
@@ -26,8 +31,15 @@ export const getInputFields = (dropdownOptions?: DropdownSelectOption[]): InputF
         {
             label: 'Destination Warehouse',
             name: 'destination_warehouse',
-            type: 'dropdown',
+            type: 'text',
             placeholder: 'Select Destination Warehouse',
+            required: true,
+        },
+        {
+            label: 'Manufactured Items',
+            name: 'manufactured_items',
+            type: 'dropdown',
+            placeholder: 'Select Destination',
             options: dropdownOptions || [],
             required: true,
         },
