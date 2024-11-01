@@ -41,7 +41,7 @@ function SearchInTable({ fields }: Props) {
             params.delete(name);
         }
         router.replace(`${pathname}?${params.toString()}`);
-    }, 300);
+    }, 500);
 
     return (
         <div className="ml-5 flex gap-5">

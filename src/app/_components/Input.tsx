@@ -31,6 +31,7 @@ function Input({ field, error }: InputProps) {
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
                 {field.label}
+                {/* {field.labelPara && <p className="text-[10px]">{field?.labelPara}</p>} */}
             </label>
 
             <input

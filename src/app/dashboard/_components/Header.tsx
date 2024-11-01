@@ -9,14 +9,14 @@ function Header() {
     const pathname = usePathname();
 
     return (
-        <div className="flex flex-col gap-5 px-10 pt-5 pb-[2px] border-b border-[#C9CDD3] shadow-md">
+        <div className="flex flex-col gap-5 px-10 py-5 border-b border-[#C9CDD3] shadow-md">
             <div className="flex gap-7 items-center justify-end">
                 {notificationIcon}
                 <Link href="/settings">{settingsIcon}</Link>
                 <Link href="/profile">{userIcon}</Link>
             </div>
 
-            <ul className="flex gap-12 px-1 hover-effect hover-blue hover-underline-blue font-medium text-sm">
+            <ul className="flex gap-12 px-1 hover-effect hover-blue hover-underline-blue font-semibold">
                 {sidebarItems
                     .filter((item) => !!item.subItems)
                     .map((item) => {

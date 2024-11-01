@@ -61,8 +61,10 @@ export const getInputFields = (): InputField[] => {
 export const getSearchFields = (): SearchField[] => {
     return [
         {
-            type: 'text',
-            name: 'name__name__icontains',
+            type: 'dropdown',
+            name: 'status',
+            options: ['todo', 'pending', 'completed'],
+            label: 'Status',
         },
     ];
 };
