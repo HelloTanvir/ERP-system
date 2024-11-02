@@ -1,7 +1,7 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
 
-export interface MManufacturingJournalItem {
+export interface ManufacturingJournalItem {
     id: number;
     quantity: number;
     rate_per_unit: number;
@@ -11,10 +11,10 @@ export interface MManufacturingJournalItem {
     source_warehouse: number;
 }
 
-export interface MManufacturingJournal {
+export interface IManufacturingJournal {
     id: number;
-    manufactured_items: MManufacturingJournalItem[];
-    consumed_items: MManufacturingJournalItem[];
+    manufactured_items: ManufacturingJournalItem[];
+    consumed_items: ManufacturingJournalItem[];
     voucher_no: string;
     voucher_date: string;
     created_at: string;
@@ -27,32 +27,37 @@ export interface MManufacturingJournal {
     is_active: boolean;
 }
 
-export const getInputFields = (): InputField[] => {
+export const getManufacturingTemplateInputFields = (): InputField[] => {
     return [
-        {
-            label: 'Destination Warehouse',
-            name: 'destination_warehouse',
-            type: 'text',
-            placeholder: 'Select Destination Warehouse',
-            required: true,
-        },
-        {
-            label: 'Manufactured Items',
-            name: 'manufactured_items',
-            type: 'dropdown',
-            placeholder: 'Select Destination',
-            creatable: true,
-            optionsGetUrl: 'inventory/item/',
-            optionsFilterQuery: 'name__name__icontains',
-            redirectURLOnCreate: '/dashboard/inventory/inventory-item',
-            required: true,
-        },
         {
             label: 'Narration',
             name: 'narration',
             type: 'textarea',
-            placeholder: 'Give a narration for the transfer',
+            placeholder: 'Give a narration for the template',
             required: false,
+            fullWidth: true,
+        },
+    ];
+};
+
+export const getBillOfMaterialInputFields = (): InputField[] => {
+    return [
+        {
+            label: 'Narration',
+            name: 'narration',
+            type: 'textarea',
+            placeholder: 'Give a narration for the template',
+            required: false,
+            fullWidth: true,
+        },
+        {
+            label: 'Select Template',
+            name: 'template',
+            type: 'dropdown',
+            placeholder: 'Select Template',
+            optionsGetUrl: 'manufacturing/manufacture/',
+            optionsFilterQuery: 'name__name__icontains',
+            required: true,
             fullWidth: true,
         },
     ];
@@ -61,8 +66,10 @@ export const getInputFields = (): InputField[] => {
 export const getSearchFields = (): SearchField[] => {
     return [
         {
-            type: 'text',
-            name: 'name__name__icontains',
+            type: 'dropdown',
+            name: 'status',
+            options: ['todo', 'pending', 'completed'],
+            label: 'Status',
         },
     ];
 };

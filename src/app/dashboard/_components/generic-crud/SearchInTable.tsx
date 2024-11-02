@@ -41,18 +41,18 @@ function SearchInTable({ fields }: Props) {
             params.delete(name);
         }
         router.replace(`${pathname}?${params.toString()}`);
-    }, 300);
+    }, 500);
 
     return (
         <div className="ml-5 flex gap-5">
             {fields?.map((field) => {
                 if (field.type === 'dropdown') {
                     return (
-                        <div className="flex flex-col gap-1">
+                        <div key={field.name} className="flex flex-col gap-1">
                             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                             <label className="text-[#5E697A] text-sm">{field.label}</label>
                             <Select
-                                className="basic-single"
+                                className="basic-single w-[200px]"
                                 classNamePrefix="select"
                                 name={field.name}
                                 options={field.options?.map((option) => ({
@@ -68,7 +68,10 @@ function SearchInTable({ fields }: Props) {
                 }
 
                 return (
-                    <div className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px]">
+                    <div
+                        key={field.name}
+                        className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px]"
+                    >
                         {icon}
                         <input
                             key={field.name}

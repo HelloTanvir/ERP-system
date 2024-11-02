@@ -2,7 +2,6 @@ import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '@/app/dashboard/_lib/utils';
 import { Suspense } from 'react';
-import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryAdjustmentForm from './_components/InventoryAdjustmentForm';
 import Report from './_components/Report';
 import { getInputFields, getSearchFields, IInventoryAdjustment } from './_lib/utils';
@@ -17,11 +16,6 @@ export default async function InventoryAdjustment({
             endpoint: `${process.env.API_URL}/inventory/stock-adjustment/`,
             revalidatePath: '/dashboard/inventory/transaction/adjustment',
         });
-
-    const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
-        endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/transaction/adjustment',
-    });
 
     const { results: inventoryAdjustmentItems, count } = await getItems({
         ...searchParams,
@@ -59,7 +53,6 @@ export default async function InventoryAdjustment({
                     CustomItemForm: InventoryAdjustmentForm,
                     customItemFormProps: {
                         fields: itemFields,
-                        getInventoryItems,
                     },
                 }}
                 modalTitles={{

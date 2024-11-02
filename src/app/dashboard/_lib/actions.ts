@@ -99,12 +99,14 @@ export async function createGenericServerActions<T extends { id: number | string
     async function deleteItem(id: T['id']): Promise<void> {
         'use server';
 
-        await fetch(`${endpoint}${id}/`, {
+        const res = await fetch(`${endpoint}${id}/`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${access_token?.value}`,
             },
         });
+        // const data = await res.json();
+        console.log(res);
         revalidatePath(path);
     }
 

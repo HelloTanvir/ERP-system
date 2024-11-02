@@ -1,22 +1,13 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import { FormState, InputField, ListResponse } from '@/app/_lib/utils';
-import { useEffect, useState } from 'react';
+import { FormState, InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
-import { InventoryItem } from '../../../inventory-item/_lib/utils';
-import InventoryItemsSelect from '../../transfer/_components/InventoryItemsSelect';
+import InventoryItemsSelect from '../../_components/InventoryItemsSelect';
 import { IInventoryAdjustment, IInventoryAdjustmentItem } from '../_lib/utils';
 
 interface ItemFormProps {
     fields: InputField[];
-    getInventoryItems: (
-        query?:
-            | {
-                  [key: string]: string;
-              }
-            | undefined
-    ) => Promise<ListResponse<InventoryItem>>;
     currentItem: IInventoryAdjustment | null;
     handleSubmit: (item: IInventoryAdjustment) => Promise<{
         success: boolean;
@@ -29,22 +20,10 @@ interface ItemFormProps {
 
 function InventoryAdjustmentForm({
     fields,
-    getInventoryItems,
     currentItem,
     handleSubmit,
     closeModal,
 }: Readonly<ItemFormProps>) {
-    const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
-
-    useEffect(() => {
-        const fetchInventoryItems = async () => {
-            const { results } = await getInventoryItems();
-            setInventoryItems(results);
-        };
-
-        fetchInventoryItems();
-    }, [getInventoryItems]);
-
     const initialState: FormState = {
         errors: null,
         success: false,
@@ -114,7 +93,7 @@ function InventoryAdjustmentForm({
                 ))}
 
                 <div className="col-span-2">
-                    <InventoryItemsSelect inventoryItems={inventoryItems} />
+                    <InventoryItemsSelect />
                 </div>
             </div>
 

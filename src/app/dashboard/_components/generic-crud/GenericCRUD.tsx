@@ -25,6 +25,7 @@ type FormConfig<T extends GenericItem> =
     | ({ noAction?: false } & {
           createItem: (item: Omit<T, 'id'>) => Promise<FormState>;
           additionalActions?: ReactNode;
+          maxWidth?: number;
       } & (
               | {
                     fields: InputField[];
@@ -156,7 +157,7 @@ function GenericCRUD<T extends GenericItem>({
             </div>
 
             {(!formConfig.noAction || !tableConfig.noTableAction) && (
-                <Modal ref={modalRef}>
+                <Modal ref={modalRef} maxWidth={!formConfig.noAction && formConfig.maxWidth}>
                     <div className="mb-6">
                         <h1 className="text-xl text-purple-700 mb-2">
                             {currentItem ? modalTitles?.edit : modalTitles?.create}
