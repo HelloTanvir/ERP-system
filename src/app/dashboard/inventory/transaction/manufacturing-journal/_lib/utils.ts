@@ -55,7 +55,7 @@ export const getBillOfMaterialInputFields = (): InputField[] => {
             name: 'template',
             type: 'dropdown',
             placeholder: 'Select Template',
-            optionsGetUrl: 'manufacturing/manufacture/',
+            optionsGetUrl: 'manufacturing/manufacture/?is_template=true',
             optionsFilterQuery: 'name__name__icontains',
             required: true,
             fullWidth: true,
