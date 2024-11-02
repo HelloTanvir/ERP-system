@@ -44,7 +44,8 @@ function MoldRegisterForm({
             });
 
             // Store table row data in the moldRegister object
-            moldRegister.items = tableRows;
+            moldRegister.cavity = tableRows;
+            console.log(moldRegister);
 
             const currentFormState = await handleSubmit(moldRegister);
 
@@ -115,7 +116,12 @@ function MoldRegisterForm({
                         <Input
                             field={{
                                 ...field,
-                                placeholder: field.label, // Placeholder only
+                                ...(currentItem?.[field.name as keyof IMoldRegister]
+                                    ? {
+                                          defaultValue:
+                                              currentItem[field.name as keyof IMoldRegister],
+                                      }
+                                    : {}),
                             }}
                             error={itemFormState.errors?.[field.name]}
                         />
@@ -181,7 +187,7 @@ function MoldRegisterForm({
                                         className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
                                     />
                                 </td>
-                                <td className="border border-gray-300 border-l-0">
+                                <td className="border w-[150px] border-gray-300 border-l-0">
                                     <AsyncSelect
                                         cacheOptions
                                         defaultOptions
