@@ -4,13 +4,18 @@ import Input from '@/app/_components/Input';
 import { getPromiseOptionsForDropdown } from '@/app/_lib/actions';
 import { InputField } from '@/app/_lib/utils';
 import { useCallback, useState } from 'react';
+import { TiDeleteOutline } from 'react-icons/ti';
 import AsyncSelect from 'react-select/async';
 import { InventoryItem } from '../../inventory-item/_lib/utils';
 import { getInventoryItem } from '../_lib/actions';
 
-const columnNames = ['Name', 'Source Warehouse', 'Quantity', 'Rate/Unit', 'Amount'];
+const columnNames = ['Name', 'Source Warehouse', 'Quantity', 'Rate/Unit', 'Amount', '']; // last column is for remove button
 
-function InventoryItemsSelect() {
+interface Props {
+    title?: string;
+}
+
+function InventoryItemsSelect({ title = 'Select Inventory Item' }: Props) {
     const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
 
     const handleItemSelect = useCallback(async (itemId?: number) => {
@@ -30,9 +35,23 @@ function InventoryItemsSelect() {
         }
     }, []);
 
+    const handleQuantityChange = useCallback((itemId: number, quantity: number) => {
+        setInventoryItems((prevItems) => {
+            const newItems = [...prevItems];
+            const itemIndex = newItems.findIndex((i) => i.id === itemId);
+
+            if (itemIndex !== -1) {
+                newItems[itemIndex].initial_total_cost =
+                    quantity * newItems[itemIndex].initial_item_cost;
+            }
+
+            return newItems;
+        });
+    }, []);
+
     return (
         <div className="flex flex-col gap-2">
-            <span className="text-gray-600 -mb-1">Select Inventory Item</span>
+            <span className="text-gray-600 -mb-1">{title}</span>
             <AsyncSelect
                 className="w-[300px]"
                 cacheOptions
@@ -86,23 +105,40 @@ function InventoryItemsSelect() {
                             </td>
 
                             <td className="border border-gray-300 border-l-0">
-                                <Input
-                                    field={{
-                                        type: 'number',
-                                        label: '',
-                                        name: 'item_quantity',
-                                        placeholder: item.quantity_on_warehouse?.toString(),
-                                    }}
-                                    error=""
-                                />
+                                <div>
+                                    <input
+                                        type="number"
+                                        name="item_quantity"
+                                        required
+                                        defaultValue={item.quantity_on_warehouse}
+                                        onChange={(e) =>
+                                            handleQuantityChange(item.id, Number(e.target.value))
+                                        }
+                                        className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
+                                    />
+                                </div>
                             </td>
 
                             <td className="border border-gray-300 border-l-0">
                                 {item.initial_item_cost}
                             </td>
 
-                            <td className="border border-gray-300 border-l-0 border-r-0">
+                            <td className="border border-gray-300 border-l-0">
                                 {item.initial_total_cost}
+                            </td>
+
+                            <td className="border border-gray-300 border-l-0 border-r-0">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setInventoryItems((prevItems) =>
+                                            prevItems.filter((i) => i.id !== item.id)
+                                        )
+                                    }
+                                    className="p-1 rounded-btn backdrop-blur-sm bg-black/10 hover:bg-black/30 duration-75"
+                                >
+                                    <TiDeleteOutline size={18} color="#e95a5a" />
+                                </button>
                             </td>
                         </tr>
                     ))}

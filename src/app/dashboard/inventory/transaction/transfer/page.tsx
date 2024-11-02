@@ -2,7 +2,6 @@ import GenericCRUD from '@/app/dashboard/_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '@/app/dashboard/_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '@/app/dashboard/_lib/utils';
 import { Suspense } from 'react';
-import { InventoryItem } from '../../inventory-item/_lib/utils';
 import InventoryTransferForm from './_components/InventoryTransferForm';
 import Report from './_components/Report';
 import { getInputFields, getSearchFields, IInventoryTransfer } from './_lib/utils';
@@ -13,11 +12,6 @@ export default async function InventoryTransfer({ searchParams }: { searchParams
             endpoint: `${process.env.API_URL}/inventory/stock-transfer/`,
             revalidatePath: '/dashboard/inventory/transaction/transfer',
         });
-
-    const { getItems: getInventoryItems } = await createGenericServerActions<InventoryItem>({
-        endpoint: `${process.env.API_URL}/inventory/item/`,
-        revalidatePath: '/dashboard/inventory/transaction/transfer',
-    });
 
     const { results: inventoryTransferItems, count } = await getItems({
         ...searchParams,
@@ -61,7 +55,6 @@ export default async function InventoryTransfer({ searchParams }: { searchParams
                     CustomItemForm: InventoryTransferForm,
                     customItemFormProps: {
                         fields: itemFields,
-                        getInventoryItems,
                     },
                 }}
                 modalTitles={{
