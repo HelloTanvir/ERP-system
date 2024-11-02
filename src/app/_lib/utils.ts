@@ -5,6 +5,7 @@ export interface DropdownSelectOption {
 
 export interface InputField {
     label: string;
+    labelPara?: string;
     name: string;
     type:
         | 'text'
