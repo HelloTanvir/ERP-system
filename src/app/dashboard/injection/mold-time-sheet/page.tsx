@@ -36,7 +36,7 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
                         item.voucher_no,
                         item.name,
                         item.number,
-                        '',
+                        item.hourly_production_rate,
                         item.status,
                     ]),
                     items: moldTimeSheetItems,

@@ -108,6 +108,13 @@ function MoldRegisterForm({
         'Actions',
     ];
 
+    const totalCavityCount = tableRows.length;
+    console.log(totalCavityCount);
+    const totalWeight = tableRows.reduce((acc, item) => acc + Number(item.net_cavity_weight), 0);
+    console.log(totalWeight);
+    const totalCalculation = tableRows.reduce((acc, item) => acc + Number(item.calculation), 0);
+    console.log(totalCalculation);
+
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
@@ -215,6 +222,12 @@ function MoldRegisterForm({
                 <button type="button" onClick={addRow} className="btn btn-sm mt-2 text-purple-500">
                     Add Row
                 </button>
+                {/* Display Totals */}
+                <div className="mt-4 flex justify-end gap-10 text-right">
+                    <p>Total Cavity Count: {totalCavityCount}</p>
+                    <p>Total Cavity Weight: {totalWeight}</p>
+                    <p>Total Calculation: {totalCalculation}</p>
+                </div>
             </div>
 
             <div className="flex gap-2 justify-end text-center">

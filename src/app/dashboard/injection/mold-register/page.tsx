@@ -31,12 +31,18 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
                     fields: searchFields,
                 }}
                 tableConfig={{
-                    tableColumns: ['Date', 'Mold Name', 'Mold Number ', 'Amount', 'Status'],
+                    tableColumns: [
+                        'Date',
+                        'Mold Name',
+                        'Mold Number ',
+                        'Hourly Production',
+                        'Status',
+                    ],
                     tableRows: moldRegisterItems.map((item) => [
                         '',
                         item.name,
                         item.number,
-                        '',
+                        item.hourly_production_rate,
                         item.cavity.map((cavity) => cavity.status),
                     ]),
                     items: moldRegisterItems,

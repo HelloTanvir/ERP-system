@@ -67,6 +67,13 @@ export const getInputFields = (): InputField[] => {
             required: false,
         },
         {
+            label: 'Hourly Production',
+            name: 'hourly_production_rate',
+            type: 'number',
+            placeholder: 'Conter/Hour',
+            required: false,
+        },
+        {
             label: 'Net Cycle Time',
             name: 'net_cycle_time',
             type: 'number',
