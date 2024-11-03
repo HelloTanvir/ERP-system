@@ -56,6 +56,10 @@ function ManufacturingJournalForm({
                     manufacturingJournal[key] = value;
             });
 
+            if (journalType === 'manufacturing_template') {
+                manufacturingJournal.is_template = true;
+            }
+
             const currentFormState = await handleSubmit(manufacturingJournal);
 
             if (currentFormState?.errors) {

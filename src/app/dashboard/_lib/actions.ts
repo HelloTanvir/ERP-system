@@ -61,8 +61,10 @@ export async function createGenericServerActions<T extends { id: number | string
             body: JSON.stringify(item),
         });
 
+        console.log(response);
         if (!response.ok) {
             const errors = await response.json();
+            console.log(errors);
             return { success: false, errors };
         }
 

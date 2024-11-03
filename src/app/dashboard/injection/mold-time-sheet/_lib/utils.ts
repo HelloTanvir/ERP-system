@@ -1,28 +1,26 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
 
-export interface IMoldRegisterItem {
-    cavity_number: number;
-    cavity_name: string;
-    net_cavity_weight: number;
-    calculation: number;
-    barcode: string;
-    status: string;
+export interface IMoldTimeSheetItem {
+    id: number;
+    quantity: number;
+    rate_per_unit: number;
+    amount: number;
+    item: number; // Item ID
+    source_warehouse: number; // Warehouse ID
 }
 
-export interface IMoldRegister {
+export interface IMoldTimeSheet {
     id: number;
-    cavity: IMoldRegisterItem[];
-    number: string;
-    item_number: string;
-    name: string;
-    net_cycle_time: number;
-    average_cycle_time: number;
-    hourly_production_rate: number;
-    resin_type: string;
-    capacity_range_from: number;
-    capacity_range_to: number;
-    product_linkage: number;
+    items: IMoldTimeSheetItem[];
+    voucher_no: string;
+    voucher_date: string;
+    created_at: string;
+    updated_at: string;
+    narration: string;
+    total_value: number;
+    destination_warehouse: number; // Warehouse ID
+    status: 'todo' | 'pending' | 'completed';
 }
 
 export const getInputFields = (): InputField[] => {
@@ -51,26 +49,15 @@ export const getInputFields = (): InputField[] => {
         {
             label: 'Production Linkage',
             name: 'product_linkage',
-            type: 'dropdown',
-            placeholder: 'Select a product',
+            type: 'text',
+            placeholder: 'Give a narration for the transfer',
             required: false,
-            creatable: true,
-            optionsGetUrl: 'inventory/item/',
-            optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/inventory/inventory-item',
         },
         {
             label: 'Avarage Cycle Time',
             name: 'average_cycle_time',
             type: 'number',
             placeholder: 'Give a narration for the transfer',
-            required: false,
-        },
-        {
-            label: 'Hourly Production',
-            name: 'hourly_production_rate',
-            type: 'number',
-            placeholder: 'Conter/Hour',
             required: false,
         },
         {

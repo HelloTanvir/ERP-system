@@ -44,7 +44,8 @@ function MoldRegisterForm({
             });
 
             // Store table row data in the moldRegister object
-            moldRegister.items = tableRows;
+            moldRegister.cavity = tableRows;
+            console.log(moldRegister);
 
             const currentFormState = await handleSubmit(moldRegister);
 
@@ -107,6 +108,13 @@ function MoldRegisterForm({
         'Actions',
     ];
 
+    const totalCavityCount = tableRows.length;
+    console.log(totalCavityCount);
+    const totalWeight = tableRows.reduce((acc, item) => acc + Number(item.net_cavity_weight), 0);
+    console.log(totalWeight);
+    const totalCalculation = tableRows.reduce((acc, item) => acc + Number(item.calculation), 0);
+    console.log(totalCalculation);
+
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
@@ -115,7 +123,12 @@ function MoldRegisterForm({
                         <Input
                             field={{
                                 ...field,
-                                placeholder: field.label, // Placeholder only
+                                ...(currentItem?.[field.name as keyof IMoldRegister]
+                                    ? {
+                                          defaultValue:
+                                              currentItem[field.name as keyof IMoldRegister],
+                                      }
+                                    : {}),
                             }}
                             error={itemFormState.errors?.[field.name]}
                         />
@@ -181,7 +194,7 @@ function MoldRegisterForm({
                                         className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
                                     />
                                 </td>
-                                <td className="border border-gray-300 border-l-0">
+                                <td className="border w-[150px] border-gray-300 border-l-0">
                                     <AsyncSelect
                                         cacheOptions
                                         defaultOptions
@@ -209,6 +222,12 @@ function MoldRegisterForm({
                 <button type="button" onClick={addRow} className="btn btn-sm mt-2 text-purple-500">
                     Add Row
                 </button>
+                {/* Display Totals */}
+                <div className="mt-4 flex justify-end gap-10 text-right">
+                    <p>Total Cavity Count: {totalCavityCount}</p>
+                    <p>Total Cavity Weight: {totalWeight}</p>
+                    <p>Total Calculation: {totalCalculation}</p>
+                </div>
             </div>
 
             <div className="flex gap-2 justify-end text-center">
