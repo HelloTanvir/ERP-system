@@ -75,7 +75,7 @@ function GenericCRUD<T extends GenericItem>({
     formConfig,
     modalTitles,
 }: Readonly<GenericCRUDProps<T>>) {
-    const { modalRef, openModal, closeModal: _closeModal } = useModal();
+    const { modalRef, openModal, closeModal: _closeModal, isOpen } = useModal();
     const [currentItem, setCurrentItem] = useState<T | null>(null);
 
     const cleanUpCurrentItem = () => {
@@ -166,6 +166,7 @@ function GenericCRUD<T extends GenericItem>({
                     </div>
                     {!formConfig.noAction && !formConfig.fields && formConfig.CustomItemForm ? (
                         <formConfig.CustomItemForm
+                            key={`${isOpen}`}
                             currentItem={currentItem}
                             handleSubmit={handleSubmit}
                             closeModal={closeModal}
@@ -175,6 +176,7 @@ function GenericCRUD<T extends GenericItem>({
                         !formConfig.noAction &&
                         formConfig.fields && (
                             <ItemForm
+                                key={`${isOpen}`}
                                 fields={
                                     currentItem
                                         ? formConfig.fields.map((field) => ({
