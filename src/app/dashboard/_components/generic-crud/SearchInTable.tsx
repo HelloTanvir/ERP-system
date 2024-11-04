@@ -44,7 +44,7 @@ function SearchInTable({ fields }: Props) {
     }, 500);
 
     return (
-        <div className="ml-5 flex gap-5">
+        <div className="ml-5 flex items-end gap-5">
             {fields?.map((field) => {
                 if (field.type === 'dropdown') {
                     return (
@@ -70,7 +70,7 @@ function SearchInTable({ fields }: Props) {
                 return (
                     <div
                         key={field.name}
-                        className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px]"
+                        className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px] h-10"
                     >
                         {icon}
                         <input
