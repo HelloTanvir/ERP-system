@@ -19,6 +19,8 @@ export default async function InventoryTransfer({ searchParams }: { searchParams
         records: ITEMS_PER_PAGE,
     });
 
+    console.log(inventoryTransferItems);
+
     const itemFields = getInputFields();
     const searchFields = getSearchFields();
 

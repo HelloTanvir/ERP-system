@@ -63,7 +63,7 @@ export const getInputFields = (): InputField[] => {
             label: 'Avarage Cycle Time',
             name: 'average_cycle_time',
             type: 'number',
-            placeholder: 'Give a narration for the transfer',
+            placeholder: 'Enter average cycle time',
             required: false,
         },
         {
