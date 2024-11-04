@@ -96,7 +96,7 @@ function MoldTimeSheetForm({
 
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <div className="overflow-y-auto max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
+            <div className=" max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
                 {fields.map((field) => (
                     <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>
                         <Input
