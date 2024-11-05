@@ -31,13 +31,12 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
                     fields: searchFields,
                 }}
                 tableConfig={{
-                    tableColumns: ['Date', 'Mold Name', 'Mold Number ', 'Amount', 'Status'],
+                    tableColumns: ['Date', 'Mold Name', 'Mold Number ', 'Status'],
                     tableRows: moldTimeSheetItems.map((item) => [
-                        item.voucher_no,
+                        item.id,
                         item.name,
                         item.number,
-                        item.hourly_production_rate,
-                        item.status,
+                        item.average_cycle_time,
                     ]),
                     items: moldTimeSheetItems,
                     totalItemsCount: count,
@@ -51,11 +50,10 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
                     customItemFormProps: {
                         fields: itemFields,
                     },
-                    maxWidth: 1200,
                 }}
                 modalTitles={{
                     create: 'Mold Time Sheet',
-                    edit: 'Mold Time Sheet',
+                    edit: 'Edit Mold Time Sheet',
                 }}
             />
         </Suspense>
