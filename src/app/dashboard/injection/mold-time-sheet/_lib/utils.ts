@@ -1,25 +1,20 @@
 import { InputField } from '@/app/_lib/utils';
 
-export interface IMoldTimeSheetItem {
-    id: number;
-    quantity: number;
-    rate_per_unit: number;
-    amount: number;
-    item: number; // Item ID
-    source_warehouse: number; // Warehouse ID
-}
-
 export interface IMoldTimeSheet {
     id: number;
-    items: IMoldTimeSheetItem[];
     voucher_no: string;
     voucher_date: string;
-    created_at: string;
-    updated_at: string;
-    narration: string;
-    total_value: number;
-    destination_warehouse: number;
-    status: 'todo' | 'pending' | 'completed';
+    mold_name: string;
+    mold_item_number: string;
+    downtime_from: string;
+    production_from: string;
+    production_end: string;
+    revised_target: number;
+    target_production: number;
+    is_timesheet: boolean;
+    machine: number;
+    mold_register: number;
+    downtime: number;
 }
 
 export const getInputFields = (): InputField[] => {
@@ -42,6 +37,7 @@ export const getInputFields = (): InputField[] => {
             optionsGetUrl: 'injection/machine/',
             optionsFilterQuery: 'name__icontains',
             redirectURLOnCreate: '/dashboard/injection/mold-time-sheet',
+            required: true,
         },
         {
             label: 'Select Mold',
@@ -53,13 +49,14 @@ export const getInputFields = (): InputField[] => {
             optionsGetUrl: 'injection/mold-registration/',
             optionsFilterQuery: 'name__icontains',
             redirectURLOnCreate: '/dashboard/injection/mold-time-sheet',
+            required: true,
         },
         {
             label: 'Inactive From',
             name: 'inactive_from',
             type: 'text',
             placeholder: 'Enter mold name',
-            required: false,
+            required: true,
             disabled: true,
         },
         {
@@ -75,7 +72,7 @@ export const getInputFields = (): InputField[] => {
             name: 'start_time',
             type: 'text',
             placeholder: 'Enter production start time',
-            required: false,
+            required: true,
             disabled: true,
         },
         {

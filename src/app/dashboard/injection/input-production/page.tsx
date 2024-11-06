@@ -10,7 +10,7 @@ import { getInputFields, IInputProduction } from './_lib/utils';
 export default async function InputProduction({ searchParams }: { searchParams?: SearchParams }) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IInputProduction>({
-            endpoint: `${process.env.API_URL}/injection/downtime/`,
+            endpoint: `${process.env.API_URL}/injection/production/`,
             revalidatePath: '/dashboard/injection/input-production',
         });
 
@@ -31,9 +31,9 @@ export default async function InputProduction({ searchParams }: { searchParams?:
                 tableConfig={{
                     tableColumns: ['Date', 'Mold Number', 'Voucher Number'],
                     tableRows: inputProductionItems.map((item) => [
-                        item.created_at.split('T')[0],
-                        item.machine.length,
-                        'Voucher No',
+                        item.voucher_date.split('T')[0],
+                        item.mold_item_number,
+                        item.voucher_no,
                     ]),
                     items: inputProductionItems,
                     totalItemsCount: count,
@@ -50,7 +50,7 @@ export default async function InputProduction({ searchParams }: { searchParams?:
                     maxWidth: 1200,
                 }}
                 modalTitles={{
-                    create: 'Create Production',
+                    create: 'Update Production',
                     edit: 'Edit Production',
                 }}
             />
