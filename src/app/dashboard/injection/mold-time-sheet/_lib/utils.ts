@@ -1,5 +1,4 @@
 import { InputField } from '@/app/_lib/utils';
-import { SearchField } from '@/app/dashboard/_lib/utils';
 
 export interface IMoldTimeSheetItem {
     id: number;
@@ -19,7 +18,7 @@ export interface IMoldTimeSheet {
     updated_at: string;
     narration: string;
     total_value: number;
-    destination_warehouse: number; // Warehouse ID
+    destination_warehouse: number;
     status: 'todo' | 'pending' | 'completed';
 }
 
@@ -31,6 +30,7 @@ export const getInputFields = (): InputField[] => {
             type: 'text',
             placeholder: 'Auto generated',
             required: true,
+            disabled: true,
         },
         {
             label: 'Machine Name',
@@ -38,6 +38,10 @@ export const getInputFields = (): InputField[] => {
             type: 'dropdown',
             placeholder: 'Select machine',
             required: true,
+            creatable: true,
+            optionsGetUrl: 'injection/machine/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/injection/mold-time-sheet',
         },
         {
             label: 'Select Mold',
@@ -67,11 +71,12 @@ export const getInputFields = (): InputField[] => {
             disabled: true,
         },
         {
-            label: 'Production Date',
-            name: 'production_date',
-            type: 'date',
-            placeholder: 'Select production date',
+            label: 'Production Start  (Date-Time)',
+            name: 'start_time',
+            type: 'text',
+            placeholder: 'Enter production start time',
             required: false,
+            disabled: true,
         },
         {
             label: 'Mold Item Number',
@@ -81,12 +86,11 @@ export const getInputFields = (): InputField[] => {
             required: false,
             disabled: true,
         },
-
         {
-            label: 'Production Start Time',
-            name: 'start_time',
+            label: 'Production End (Date-Time)',
+            name: 'production_end',
             type: 'text',
-            placeholder: 'Enter production start time',
+            placeholder: 'Enter production end time',
             required: false,
         },
         {
@@ -95,24 +99,7 @@ export const getInputFields = (): InputField[] => {
             type: 'number',
             placeholder: 'Enter target production',
             required: false,
-        },
-        {
-            label: 'Production End Time',
-            name: 'end_time',
-            type: 'text',
-            placeholder: 'Enter production end time',
-            required: false,
-        },
-    ];
-};
-
-export const getSearchFields = (): SearchField[] => {
-    return [
-        {
-            type: 'dropdown',
-            name: 'status',
-            options: ['todo', 'pending', 'completed'],
-            label: 'Status',
+            disabled: true,
         },
     ];
 };

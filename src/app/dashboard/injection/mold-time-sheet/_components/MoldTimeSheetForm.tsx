@@ -69,28 +69,20 @@ function MoldTimeSheetForm({
                 ))}
             </div>
 
-            <div className="flex gap-2 justify-between text-center">
+            <div className="flex gap-2 justify-end text-center">
                 <button
                     type="button"
-                    className="btn btn-sm text-purple-600 hover:bg-purple-500 hover:text-white btn-outline font-bold px-4 rounded-md"
+                    onClick={closeModal}
+                    className="btn btn-sm text-purple-600 hover:bg-purple-500 hover:text-white btn-outline font-bold px-6 rounded-md"
                 >
-                    Go to Production
+                    Cancel
                 </button>
-                <div className="flex gap-2">
-                    <button
-                        type="button"
-                        onClick={closeModal}
-                        className="btn btn-sm text-purple-600 hover:bg-purple-500 hover:text-white btn-outline font-bold px-6 rounded-md"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        className="btn btn-sm bg-purple-500 text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 btn-outline font-bold rounded-md px-8"
-                    >
-                        Save
-                    </button>
-                </div>
+                <button
+                    type="submit"
+                    className="btn btn-sm bg-purple-500 text-white hover:bg-white hover:text-purple-500 hover:border-purple-500 btn-outline font-bold rounded-md px-8"
+                >
+                    Save
+                </button>
             </div>
         </form>
     );
