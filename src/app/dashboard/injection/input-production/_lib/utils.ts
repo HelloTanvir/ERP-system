@@ -5,6 +5,7 @@ export interface IInputProductionItem {
     total_counter: number;
     rejected_counter: number;
     pushing_weight: number;
+    actual_pushing_weight: number;
     consumption_variance: number;
     resin_name_one: string;
     resin_name_two: string;
