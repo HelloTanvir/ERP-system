@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Component, FC } from 'react';
 import AsyncSelect from 'react-select/async';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import { getPromiseOptionsForDropdown, redirectTo } from '../_lib/actions';
@@ -13,36 +13,47 @@ function DropdownInput({ field, error }: Readonly<InputProps>) {
         };
     }
 
+    let component: Component;
+    if (field.creatable) {
+        component = (
+            <AsyncCreatableSelect
+                id={field.name}
+                name={field.name}
+                defaultValue={defaultValue}
+                isDisabled={field.disabled}
+                isMulti={field.isMulti}
+                cacheOptions
+                defaultOptions
+                loadOptions={(inputValue) => getPromiseOptionsForDropdown(inputValue, field)}
+                onCreateOption={() =>
+                    field.redirectURLOnCreate && redirectTo(field.redirectURLOnCreate)
+                }
+                // test
+                // defaultMenuIsOpen
+            />
+        );
+    } else {
+        component = (
+            <AsyncSelect
+                id={field.name}
+                name={field.name}
+                defaultValue={defaultValue}
+                isDisabled={field.disabled}
+                isMulti={field.isMulti}
+                cacheOptions
+                defaultOptions
+                loadOptions={(inputValue) => getPromiseOptionsForDropdown(inputValue, field)}
+            />
+        );
+    }
+
     return (
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
                 {field.label}
             </label>
 
-            {field.creatable ? (
-                <AsyncCreatableSelect
-                    id={field.name}
-                    name={field.name}
-                    defaultValue={defaultValue}
-                    isDisabled={field.disabled}
-                    cacheOptions
-                    defaultOptions
-                    loadOptions={(inputValue) => getPromiseOptionsForDropdown(inputValue, field)}
-                    onCreateOption={() =>
-                        field.redirectURLOnCreate && redirectTo(field.redirectURLOnCreate)
-                    }
-                />
-            ) : (
-                <AsyncSelect
-                    id={field.name}
-                    name={field.name}
-                    defaultValue={defaultValue}
-                    isDisabled={field.disabled}
-                    cacheOptions
-                    defaultOptions
-                    loadOptions={(inputValue) => getPromiseOptionsForDropdown(inputValue, field)}
-                />
-            )}
+            {component}
 
             {error && (
                 <p className="text-red-400 italic font-semibold text-xs mx-2 mt-1">{error}</p>

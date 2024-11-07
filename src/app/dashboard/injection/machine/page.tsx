@@ -50,7 +50,6 @@ export default async function Machine({ searchParams }: { searchParams?: SearchP
                     createItem,
                     additionalActions: <Report />,
                     fields: itemFields,
-                    maxWidth: 1200,
                 }}
                 modalTitles={{
                     create: 'Create a new Machine',
