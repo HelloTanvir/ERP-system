@@ -28,8 +28,6 @@ function DropdownInput({ field, error }: Readonly<InputProps>) {
                 onCreateOption={() =>
                     field.redirectURLOnCreate && redirectTo(field.redirectURLOnCreate)
                 }
-                // test
-                // defaultMenuIsOpen
             />
         );
     } else {
