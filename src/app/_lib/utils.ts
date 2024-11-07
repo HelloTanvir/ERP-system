@@ -26,6 +26,7 @@ export interface InputField {
     options?: DropdownSelectOption[]; // for dropdown option input
     creatable?: boolean; // for dropdown option input
     redirectURLOnCreate?: string; // for dropdown option input
+    isMulti?: boolean; // for dropdown option input
     minLength?: number;
     maxLength?: number;
     required?: boolean;
