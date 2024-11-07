@@ -2,40 +2,40 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
-import MoldTimeSheetForm from './_components/MoldTimeSheetForm';
-import Report from './_components/Report';
-import { getInputFields, IMoldTimeSheet } from './_lib/utils';
+import InputProductionForm from './_components/InputProductionForm';
 
-export default async function MoldTimeSheet({ searchParams }: { searchParams?: SearchParams }) {
+import Report from './_components/Report';
+import { getInputFields, IInputProduction } from './_lib/utils';
+
+export default async function InputProduction({ searchParams }: { searchParams?: SearchParams }) {
     const { createItem, updateItem, deleteItem, getItems } =
-        await createGenericServerActions<IMoldTimeSheet>({
-            endpoint: `${process.env.API_URL}/injection/mold-timesheet/`,
-            revalidatePath: '/dashboard/injection/mold-time-sheet',
+        await createGenericServerActions<IInputProduction>({
+            endpoint: `${process.env.API_URL}/injection/production/`,
+            revalidatePath: '/dashboard/injection/input-production',
         });
 
-    const { results: moldTimeSheetItems, count } = await getItems({
+    const { results: inputProductionItems, count } = await getItems({
         ...searchParams,
         page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
 
-    console.log(moldTimeSheetItems);
+    console.log('Test', inputProductionItems);
+
     const itemFields = getInputFields();
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
-                pageTitle="Mold Time Sheet"
+                pageTitle="Input Production"
                 tableConfig={{
-                    tableColumns: ['Production From', 'Production To', 'Mold Name', 'Mold Number '],
-                    tableRows: moldTimeSheetItems.map((item) => [
-                        item.production_from.split('T')[0],
-                        item.production_end.split('T')[0],
-                        item.mold_name,
+                    tableColumns: ['Date', 'Mold Number', 'Voucher Number'],
+                    tableRows: inputProductionItems.map((item) => [
+                        item.voucher_date.split('T')[0],
                         item.mold_item_number,
-                        item.average_cycle_time,
+                        item.voucher_no,
                     ]),
-                    items: moldTimeSheetItems,
+                    items: inputProductionItems,
                     totalItemsCount: count,
                     updateItem,
                     deleteItem,
@@ -43,14 +43,15 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
                 formConfig={{
                     createItem,
                     additionalActions: <Report />,
-                    CustomItemForm: MoldTimeSheetForm,
+                    CustomItemForm: InputProductionForm,
                     customItemFormProps: {
                         fields: itemFields,
                     },
+                    maxWidth: 1200,
                 }}
                 modalTitles={{
-                    create: 'Mold Time Sheet',
-                    edit: 'Edit Mold Time Sheet',
+                    create: 'Update Production',
+                    edit: 'Edit Production',
                 }}
             />
         </Suspense>

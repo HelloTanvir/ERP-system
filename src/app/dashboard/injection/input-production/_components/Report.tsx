@@ -3,12 +3,12 @@
 import Modal from '@/app/dashboard/_components/Modal';
 import useModal from '@/app/dashboard/_hooks/useModal';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 
 export default function Report() {

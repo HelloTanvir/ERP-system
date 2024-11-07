@@ -3,12 +3,12 @@
 import Input from '@/app/_components/Input';
 import { FormState, InputField } from '@/app/_lib/utils';
 import { useFormState } from 'react-dom';
-import { IMoldTimeSheet } from '../_lib/utils';
+import { IInputProduction } from '../_lib/utils';
 
 interface ItemFormProps {
     fields: InputField[];
-    currentItem: IMoldTimeSheet | null;
-    handleSubmit: (item: IMoldTimeSheet) => Promise<{
+    currentItem: IInputProduction | null;
+    handleSubmit: (item: IInputProduction) => Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
@@ -17,7 +17,7 @@ interface ItemFormProps {
     closeModal: () => void;
 }
 
-function MoldTimeSheetForm({
+function InputProductionForm({
     fields,
     currentItem,
     handleSubmit,
@@ -30,17 +30,16 @@ function MoldTimeSheetForm({
 
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const moldRegister = {} as IMoldTimeSheet;
-            if (currentItem?.id) moldRegister.id = currentItem.id;
+            const inputProduction = {} as IInputProduction;
+            if (currentItem?.id) inputProduction.id = currentItem.id;
 
-            [...formData.entries()].forEach((entry) => {
-                const [key, value] = entry;
-                if (!key.includes('$ACTION_ID_')) moldRegister[key] = value;
+            [...formData.entries()].forEach(([key, value]) => {
+                if (!key.includes('$ACTION_ID_')) inputProduction[key] = value;
             });
 
-            console.log(moldRegister);
+            console.log(inputProduction);
 
-            const currentFormState = await handleSubmit(moldRegister);
+            const currentFormState = await handleSubmit(inputProduction);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -55,13 +54,18 @@ function MoldTimeSheetForm({
 
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <div className=" max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
+            <div className="max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
                 {fields.map((field) => (
                     <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>
                         <Input
                             field={{
                                 ...field,
-                                placeholder: field.label, // Placeholder only
+                                ...(currentItem?.[field.name as keyof IInputProduction]
+                                    ? {
+                                          defaultValue:
+                                              currentItem[field.name as keyof IInputProduction],
+                                      }
+                                    : {}),
                             }}
                             error={itemFormState.errors?.[field.name]}
                         />
@@ -88,4 +92,4 @@ function MoldTimeSheetForm({
     );
 }
 
-export default MoldTimeSheetForm;
+export default InputProductionForm;

@@ -1,7 +1,20 @@
 import { InputField } from '@/app/_lib/utils';
 
-export interface IMoldTimeSheet {
+export interface IInputProductionItem {
     id: number;
+    total_counter: number;
+    rejected_counter: number;
+    pushing_weight: number;
+    consumption_variance: number;
+    resin_name_one: string;
+    resin_name_two: string;
+    color: string;
+    production: number;
+}
+
+export interface IInputProduction {
+    id: number;
+    production_details: IInputProductionItem[];
     voucher_no: string;
     voucher_date: string;
     mold_name: string;
@@ -16,7 +29,6 @@ export interface IMoldTimeSheet {
     mold_register: number;
     downtime: number;
 }
-
 export const getInputFields = (): InputField[] => {
     return [
         {
@@ -28,59 +40,61 @@ export const getInputFields = (): InputField[] => {
             disabled: true,
         },
         {
-            label: 'Machine Name',
-            name: 'machine',
+            label: 'Voucher Date',
+            name: 'voucher_date',
+            type: 'date',
+            placeholder: 'Select voucher date',
+            required: false,
+            disabled: true,
+        },
+        {
+            label: 'Mold Time Sheet',
+            name: 'mold_time_sheet',
             type: 'dropdown',
             placeholder: 'Select machine',
             required: true,
             creatable: true,
-            optionsGetUrl: 'injection/machine/',
+            optionsGetUrl: 'injection/mold-timesheet/',
             optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/injection/mold-time-sheet',
+            redirectURLOnCreate: '/dashboard/injection/input-production',
             required: true,
         },
         {
             label: 'Select Mold',
             name: 'selected_mold',
-            type: 'dropdown',
+            type: 'text',
             placeholder: 'Select mold',
             required: true,
-            creatable: true,
-            optionsGetUrl: 'injection/mold-registration/',
-            optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/injection/mold-time-sheet',
-            required: true,
-        },
-        {
-            label: 'Inactive From',
-            name: 'inactive_from',
-            type: 'text',
-            placeholder: 'Enter mold name',
-            required: true,
-            disabled: true,
         },
         {
             label: 'Mold Name',
-            name: 'name',
+            name: 'mold_name',
             type: 'text',
             placeholder: 'Enter mold name',
-            required: false,
+            required: true,
+        },
+        {
+            label: 'Mold Item Number',
+            name: 'mold_item_number',
+            type: 'text',
+            placeholder: 'Enter mold item number',
+            required: true,
+        },
+        {
+            label: 'Machine Name',
+            name: 'machine',
+            type: 'text',
+            placeholder: 'Select machine',
+            required: true,
             disabled: true,
         },
+
         {
             label: 'Production Start  (Date-Time)',
             name: 'start_time',
             type: 'text',
             placeholder: 'Enter production start time',
             required: true,
-            disabled: true,
-        },
-        {
-            label: 'Mold Item Number',
-            name: 'item_number',
-            type: 'text',
-            placeholder: 'Enter mold item number',
-            required: false,
             disabled: true,
         },
         {
@@ -91,10 +105,10 @@ export const getInputFields = (): InputField[] => {
             required: false,
         },
         {
-            label: 'Target Production(As of schedule)',
-            name: 'target_production',
+            label: 'Revised Target',
+            name: 'revised_target',
             type: 'number',
-            placeholder: 'Enter target production',
+            placeholder: 'Enter revised target',
             required: false,
             disabled: true,
         },
