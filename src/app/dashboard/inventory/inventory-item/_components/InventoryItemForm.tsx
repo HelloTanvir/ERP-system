@@ -69,9 +69,6 @@ function InventoryItemForm({
                 if (allocations.length > 0) inventoryItem.allocations = allocations;
             }
 
-            console.log({ inventoryItem });
-            return { success: true, errors: null };
-
             const currentFormState = await handleSubmit(inventoryItem);
 
             if (currentFormState?.errors) {
