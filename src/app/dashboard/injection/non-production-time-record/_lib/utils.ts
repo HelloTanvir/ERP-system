@@ -13,33 +13,29 @@ export interface INonProductionTimeRecord {
 export const getInputFields = (): InputField[] => {
     return [
         {
-            label: 'Voucher No',
-            name: 'voucher_no',
-            type: 'text',
-            placeholder: 'Enter voucher no',
-            required: false,
-        },
-        {
             label: 'Machine',
             name: 'machine',
             type: 'dropdown',
             placeholder: 'Select machine',
             creatable: true,
-            required: false,
+            optionsGetUrl: 'injection/machine/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/injection/machine',
+            required: true,
         },
         {
             label: 'Inactive From(Date/Time)',
             name: 'inactive_from',
             type: 'date',
             placeholder: 'Enter mold name',
-            required: false,
+            required: true,
         },
         {
             label: 'Inactive To(Date/Time)',
             name: 'inactive_to',
             type: 'date',
             placeholder: 'Enter mold name',
-            required: false,
+            required: true,
         },
     ];
 };
