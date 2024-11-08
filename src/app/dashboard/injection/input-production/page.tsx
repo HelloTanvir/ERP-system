@@ -47,7 +47,7 @@ export default async function InputProduction({ searchParams }: { searchParams?:
                     customItemFormProps: {
                         fields: itemFields,
                     },
-                    maxWidth: 1200,
+                    maxWidth: 1300,
                 }}
                 modalTitles={{
                     create: 'Update Production',
