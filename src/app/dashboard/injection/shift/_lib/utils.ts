@@ -2,77 +2,59 @@ import { InputField } from '@/app/_lib/utils';
 
 export interface IShift {
     id: number;
-    reason: string;
-    inactive_from: string;
-    inactive_to: string;
-    created_at: string;
-    updated_at: string;
-    machine: number[];
+    voucher_no: string;
+    voucher_date: string;
+    name: string;
+    start_time: string;
+    end_time: string;
+    total_time: string;
 }
 
 export const getInputFields = (): InputField[] => {
     return [
         {
-            label: 'Voucher Ref',
-            name: 'voucher_ref',
+            label: 'Voucher No.',
+            name: 'voucher_no',
             type: 'text',
-            placeholder: 'Enter voucher ref',
-            required: false,
-        },
-        {
-            label: 'Start Time',
-            name: 'start_time',
-            type: 'text',
-            placeholder: 'Enter start time',
+            placeholder: 'Enter voucher number',
+            disabled: true,
             required: false,
         },
         {
             label: 'Voucher Date',
             name: 'voucher_date',
-            type: 'date',
-            placeholder: 'Select voucher date',
-            required: false,
-        },
-        {
-            label: 'End Time',
-            name: 'end_time',
             type: 'text',
-            placeholder: 'Enter end time',
+            placeholder: 'Enter voucher date',
+            disabled: true,
             required: false,
         },
         {
             label: 'Shift Name',
-            name: 'shift_name',
+            name: 'name',
             type: 'text',
             placeholder: 'Enter shift name',
-            required: false,
+            required: true,
         },
         {
-            label: 'Shift Type',
-            name: 'shift_type',
-            type: 'dropdown',
-            placeholder: 'Select shift type',
-            options: [
-                {
-                    label: 'Day',
-                    value: 'day',
-                },
-                {
-                    label: 'Evening',
-                    value: 'evening',
-                },
-                {
-                    label: 'Night',
-                    value: 'night',
-                },
-            ],
-            required: false,
+            label: 'Start Time',
+            name: 'start_time',
+            type: 'date-time',
+            placeholder: 'Enter start time',
+            required: true,
+        },
+        {
+            label: 'End Time',
+            name: 'end_time',
+            type: 'date-time',
+            placeholder: 'Enter end time',
+            required: true,
         },
         {
             label: 'Total time calculated (sec)',
-            name: 'total_time_calculated',
+            name: 'total_time',
             type: 'text',
             placeholder: 'Enter total time calculated',
+            disabled: true,
             required: false,
         },
     ];
