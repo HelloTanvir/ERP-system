@@ -41,9 +41,8 @@ function DateTimeInput({ field, error }: Readonly<InputProps>) {
             </label>
 
             <DatePicker
-                id={field.name}
-                name={field.name}
                 disabled={field.disabled}
+                required={field.required}
                 selected={startDate}
                 onChange={handleDateChange}
                 startDate={startDate}
@@ -61,6 +60,12 @@ function DateTimeInput({ field, error }: Readonly<InputProps>) {
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {formatDateRange()}
+                        <input
+                            className="h-0 absolute top-1/2 left-3 -translate-x-1/2"
+                            required={field.required}
+                            name={field.name}
+                            value={formatDateRange()}
+                        />
                     </button>
                 }
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

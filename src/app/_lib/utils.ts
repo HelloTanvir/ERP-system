@@ -70,12 +70,15 @@ export const formatNestedItemToDropdownOption = (item: NestedItem): DropdownSele
     value: item?.id?.toString(),
 });
 
-export const formatDateTimestamp = (date: string | undefined) => {
+export const formatDateTimestamp = (date: string | undefined | null) => {
     if (!date) return '';
     return format(date, 'PPpp');
 };
 
-export const addMinutesToDateTimestamp = (date: string | undefined, minutes: number): string => {
+export const addMinutesToDateTimestamp = (
+    date: string | undefined | null,
+    minutes: number
+): string => {
     if (!date) return '';
 
     const newDate = new Date(date);
