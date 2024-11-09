@@ -26,14 +26,14 @@ export const getInputFields = (): InputField[] => {
         {
             label: 'Inactive From(Date/Time)',
             name: 'inactive_from',
-            type: 'date',
+            type: 'date-time',
             placeholder: 'Enter mold name',
             required: true,
         },
         {
             label: 'Inactive To(Date/Time)',
             name: 'inactive_to',
-            type: 'date',
+            type: 'date-time',
             placeholder: 'Enter mold name',
             required: true,
         },

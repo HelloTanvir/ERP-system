@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { InputProps } from '../_lib/utils';
 import CheckboxInput from './CheckboxInput';
+import DateTimeInput from './DateTimeInput';
 import DropdownInput from './DropdownInput';
 import MultipleDragDropFile from './MultipleDragDropFile';
 import PhoneNumberInput from './PhoneNumberInput';
 import TextareaInput from './TextareaInput';
 
-function Input({ field, error }: InputProps) {
+function Input({ field, error }: Readonly<InputProps>) {
     if (field.type === 'tel') {
         return <PhoneNumberInput field={field} error={error} />;
     }
@@ -25,6 +26,10 @@ function Input({ field, error }: InputProps) {
 
     if (field.type === 'checkbox') {
         return <CheckboxInput field={field} error={error} />;
+    }
+
+    if (field.type === 'date-time') {
+        return <DateTimeInput field={field} error={error} />;
     }
 
     return (

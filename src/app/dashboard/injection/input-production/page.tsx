@@ -50,7 +50,7 @@ export default async function InputProduction({ searchParams }: { searchParams?:
                     maxWidth: 1300,
                 }}
                 modalTitles={{
-                    create: 'Update Production',
+                    create: 'Create Production',
                     edit: 'Edit Production',
                 }}
             />

@@ -2,10 +2,12 @@
 
 import Input from '@/app/_components/Input';
 import { FormState, InputField } from '@/app/_lib/utils';
-import { useState } from 'react';
+import { differenceInMinutes } from 'date-fns';
+import { useCallback, useState } from 'react';
 import { useFormState } from 'react-dom';
 import AsyncSelect from 'react-select/async';
 import { INonProductionTimeRecord } from '../_lib/utils';
+import SelectInactiveFromOrTo from './SelectInactiveFromOrTo';
 
 interface ItemFormProps {
     fields: InputField[];
@@ -34,6 +36,8 @@ function NonProductionTimeRecordForm({
 
     const [selectedReason, setSelectedReason] = useState([]);
     const [machineType, setMachineType] = useState<MachineType>('single_machine');
+    const [inactiveFrom, setInactiveFrom] = useState<Date | null>(null);
+    const [inactiveTo, setInactiveTo] = useState<Date | null>(null);
 
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
@@ -44,8 +48,13 @@ function NonProductionTimeRecordForm({
                 if (!key.includes('$ACTION_ID_')) nonProductionTimeRecord[key] = value;
             });
 
+            nonProductionTimeRecord.inactive_from = inactiveFrom?.toISOString();
+            nonProductionTimeRecord.inactive_to = inactiveTo?.toISOString();
             nonProductionTimeRecord.reason = selectedReason;
-            nonProductionTimeRecord.machine = [0, 1];
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            nonProductionTimeRecord.machine = nonProductionTimeRecord.machine?.split(',');
+
             console.log(nonProductionTimeRecord);
 
             const currentFormState = await handleSubmit(nonProductionTimeRecord);
@@ -83,9 +92,48 @@ function NonProductionTimeRecordForm({
 
     const columnNames = ['Reason', 'Hours', 'Minutes'];
 
+    const renderInput = (field: InputField) => {
+        if (['inactive_from', 'inactive_to'].includes(field.name))
+            return (
+                <SelectInactiveFromOrTo
+                    field={field}
+                    error={itemFormState.errors?.[field.name]}
+                    dateTime={field.name === 'inactive_from' ? inactiveFrom : inactiveTo}
+                    setDateTime={field.name === 'inactive_from' ? setInactiveFrom : setInactiveTo}
+                />
+            );
+
+        return (
+            <Input
+                field={{
+                    ...field,
+                    ...(currentItem?.[field.name as keyof INonProductionTimeRecord]
+                        ? {
+                              defaultValue:
+                                  currentItem[field.name as keyof INonProductionTimeRecord],
+                          }
+                        : {}),
+                    ...(field.type === 'dropdown'
+                        ? {
+                              isMulti:
+                                  field.name === 'machine' && machineType === 'multiple_machine',
+                          }
+                        : {}),
+                }}
+                error={itemFormState.errors?.[field.name]}
+            />
+        );
+    };
+
+    const calculateMinutes = useCallback(() => {
+        const minutes = differenceInMinutes(inactiveTo || new Date(), inactiveFrom || new Date());
+
+        return minutes;
+    }, [inactiveFrom, inactiveTo]);
+
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <div className="max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
+            <div className="max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 <div className="flex flex-col justify-end">
                     {['single_machine', 'multiple_machine'].map((type) => (
                         <div key={type}>
@@ -106,28 +154,8 @@ function NonProductionTimeRecordForm({
                 </div>
 
                 {fields.map((field) => (
-                    <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>
-                        <Input
-                            field={{
-                                ...field,
-                                ...(currentItem?.[field.name as keyof INonProductionTimeRecord]
-                                    ? {
-                                          defaultValue:
-                                              currentItem[
-                                                  field.name as keyof INonProductionTimeRecord
-                                              ],
-                                      }
-                                    : {}),
-                                ...(field.type === 'dropdown'
-                                    ? {
-                                          isMulti:
-                                              field.name === 'machine' &&
-                                              machineType === 'multiple_machine',
-                                      }
-                                    : {}),
-                            }}
-                            error={itemFormState.errors?.[field.name]}
-                        />
+                    <div key={field.name} className={field.fullWidth ? 'col-span-2' : ''}>
+                        {renderInput(field)}
                     </div>
                 ))}
             </div>
@@ -160,10 +188,10 @@ function NonProductionTimeRecordForm({
                                 />
                             </td>
                             <td className="border border-gray-300 border-l-0">
-                                <p>20 hr</p>
+                                <p>{Math.floor(calculateMinutes() / 60) || 0} hr</p>
                             </td>
                             <td className="border border-gray-300 border-l-0">
-                                <p>45 mins</p>
+                                <p>{calculateMinutes() % 60 || 0} min</p>
                             </td>
                         </tr>
                     </tbody>

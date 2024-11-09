@@ -1,8 +1,12 @@
 'use server';
 
+import {
+    DropdownSelectOption,
+    formatDateTimestamp,
+    InputField,
+    ListResponse,
+} from '@/app/_lib/utils';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { DropdownSelectOption, InputField, ListResponse } from './utils';
 
 export const getPromiseOptionsForDropdown = (inputValue: string, field: InputField) => {
     const cookieStore = cookies();
@@ -34,12 +38,12 @@ export const getPromiseOptionsForDropdown = (inputValue: string, field: InputFie
                 (
                     data: ListResponse<{
                         id: string;
-                        name: string;
+                        inactive_from: string;
                     }>
                 ) => {
                     resolve(
                         data?.results?.map((item) => ({
-                            label: item.name,
+                            label: formatDateTimestamp(item.inactive_from),
                             value: item.id,
                             item,
                         }))
@@ -47,8 +51,4 @@ export const getPromiseOptionsForDropdown = (inputValue: string, field: InputFie
                 }
             );
     });
-};
-
-export const redirectTo = (url: string) => {
-    redirect(url);
 };

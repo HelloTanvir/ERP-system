@@ -1,3 +1,5 @@
+import { add, format } from 'date-fns';
+
 export interface DropdownSelectOption {
     label: string;
     value: string;
@@ -17,6 +19,7 @@ export interface InputField {
         | 'checkbox'
         | 'textarea'
         | 'date'
+        | 'date-time'
         | 'file'
         | 'multiple-drag-drop-file'
         | 'otp';
@@ -65,3 +68,20 @@ export const formatNestedItemToDropdownOption = (item: NestedItem): DropdownSele
     label: item?.name,
     value: item?.id?.toString(),
 });
+
+export const formatDateTimestamp = (date: string | undefined | null) => {
+    if (!date) return '';
+    return format(date, 'PPpp');
+};
+
+export const addMinutesToDateTimestamp = (
+    date: string | undefined | null,
+    minutes: number
+): string => {
+    if (!date) return '';
+
+    const newDate = new Date(date);
+    const updatedDate = add(newDate, { minutes });
+
+    return formatDateTimestamp(updatedDate);
+};
