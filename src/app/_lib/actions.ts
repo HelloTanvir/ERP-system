@@ -41,6 +41,7 @@ export const getPromiseOptionsForDropdown = (inputValue: string, field: InputFie
                         data?.results?.map((item) => ({
                             label: item.name,
                             value: item.id,
+                            item,
                         }))
                     );
                 }
