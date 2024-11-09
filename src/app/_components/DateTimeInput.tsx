@@ -65,6 +65,7 @@ function DateTimeInput({ field, error }: Readonly<InputProps>) {
                             required={field.required}
                             name={field.name}
                             value={formatDateRange()}
+                            readOnly
                         />
                     </button>
                 }

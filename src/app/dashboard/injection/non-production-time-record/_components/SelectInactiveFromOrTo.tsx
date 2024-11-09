@@ -10,13 +10,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 interface Props {
     field: InputField;
     error: string | null;
-    productionEnd: Date | null;
-    setProductionEnd: Dispatch<SetStateAction<Date | null>>;
+    dateTime: Date | null;
+    setDateTime: Dispatch<SetStateAction<Date | null>>;
 }
 
-function SelectProductionEnd({ field, error, productionEnd, setProductionEnd }: Readonly<Props>) {
+function SelectInactiveFromOrTo({ field, error, dateTime, setDateTime }: Readonly<Props>) {
     const handleDateChange = (date: Date | null) => {
-        setProductionEnd(date);
+        setDateTime(date);
     };
 
     return (
@@ -28,9 +28,9 @@ function SelectProductionEnd({ field, error, productionEnd, setProductionEnd }: 
             <DatePicker
                 required={field.required}
                 disabled={field.disabled}
-                selected={productionEnd}
+                selected={dateTime}
                 onChange={handleDateChange}
-                startDate={productionEnd}
+                startDate={dateTime}
                 showTimeSelect
                 dateFormat="MMMM d, yyyy h:mm aa"
                 customInput={
@@ -38,16 +38,16 @@ function SelectProductionEnd({ field, error, productionEnd, setProductionEnd }: 
                         type="button"
                         className={cn(
                             'w-full justify-start text-left font-normal rounded-btn border relative',
-                            !productionEnd && 'text-muted-foreground'
+                            !dateTime && 'text-muted-foreground'
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {formatDateTimestamp(productionEnd)}
+                        {formatDateTimestamp(dateTime)}
                         <input
                             className="h-0 absolute top-1/2 left-3 -translate-x-1/2"
                             required={field.required}
                             name={field.name}
-                            value={formatDateTimestamp(productionEnd)}
+                            value={formatDateTimestamp(dateTime)}
                             readOnly
                         />
                     </button>
@@ -63,4 +63,4 @@ function SelectProductionEnd({ field, error, productionEnd, setProductionEnd }: 
     );
 }
 
-export default SelectProductionEnd;
+export default SelectInactiveFromOrTo;
