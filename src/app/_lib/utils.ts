@@ -40,7 +40,6 @@ export interface InputField {
     defaultValue?: any;
     disabled?: boolean;
     fullWidth?: boolean;
-    isDateTimeRange?: boolean; // for date-time input
 }
 
 export interface InputProps {

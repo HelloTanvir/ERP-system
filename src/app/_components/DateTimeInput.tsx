@@ -9,29 +9,14 @@ import { formatDateTimestamp, InputProps } from '../_lib/utils';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function DateTimeInput({ field, error }: Readonly<InputProps>) {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+    const [date, setDate] = useState<Date | null>(null);
 
-    const isRange = field.isDateTimeRange;
-
-    const handleDateChange = (date: Date | null) => {
-        if (isRange) {
-            if (!startDate) {
-                setStartDate(date);
-                setEndDate(null);
-            } else {
-                setEndDate(date);
-            }
-        } else {
-            setStartDate(date);
-        }
+    const handleDateChange = (selectedDate: Date | null) => {
+        setDate(selectedDate);
     };
 
     const formatDateRange = () => {
-        if (isRange && startDate && endDate) {
-            return `${formatDateTimestamp(startDate)} - ${formatDateTimestamp(endDate)}`;
-        }
-        return formatDateTimestamp(startDate);
+        return formatDateTimestamp(date);
     };
 
     return (
@@ -43,11 +28,9 @@ function DateTimeInput({ field, error }: Readonly<InputProps>) {
             <DatePicker
                 disabled={field.disabled}
                 required={field.required}
-                selected={startDate}
+                selected={date}
                 onChange={handleDateChange}
-                startDate={startDate}
-                endDate={endDate}
-                selectsRange={isRange}
+                startDate={date}
                 showTimeSelect
                 dateFormat="MMMM d, yyyy h:mm aa"
                 customInput={
@@ -55,7 +38,7 @@ function DateTimeInput({ field, error }: Readonly<InputProps>) {
                         type="button"
                         className={cn(
                             'w-full justify-start text-left font-normal rounded-btn border',
-                            !startDate && 'text-muted-foreground'
+                            !date && 'text-muted-foreground'
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
