@@ -33,6 +33,7 @@ export const sidebarItems: SidebarItem[] = [
         label: 'Accounts Module',
         icon: accountsIcons.root,
         subItems: [
+            { label: 'Chart of Accounts', link: '/dashboard/accounts/chart-of-accounts' },
             { label: 'Expense Entry', link: '/dashboard/accounts/expense-entry' },
             { label: 'Income Entry', link: '/dashboard/accounts/income-entry' },
             { label: 'Journal Entry', link: '/dashboard/accounts/journal-entry' },
