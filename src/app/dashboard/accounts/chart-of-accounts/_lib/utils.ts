@@ -6,9 +6,15 @@ interface IAccountGroup {
     name: string;
 }
 
+interface ICategory {
+    id: string;
+    account_type: string;
+    detail_type: string;
+}
+
 export interface IChartOfAccount {
     id: number;
-    category: number;
+    category: ICategory;
     group: IAccountGroup;
     name: string;
     remarks: string;
@@ -34,52 +40,19 @@ export const getInputFields = (): InputField[] => {
             placeholder: 'Enter opening balance',
         },
         {
-            label: 'Account Type',
-            name: 'category',
-            type: 'dropdown',
-            placeholder: 'Select account type',
-            creatable: true,
-            optionsGetUrl: 'finance/account-cateogy/',
-            optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/accounts/chart-of-accounts',
-        },
-        {
             label: 'Account Group',
-            name: 'group',
+            name: 'group_name',
             type: 'dropdown',
             placeholder: 'Select account group',
-            creatable: true,
             optionsGetUrl: 'finance/account-group/',
             optionsFilterQuery: 'name__icontains',
-            redirectURLOnCreate: '/dashboard/accounts/chart-of-accounts',
-        },
-        {
-            label: 'Detail Type',
-            name: 'detail_type',
-            type: 'dropdown',
-            placeholder: 'Select detail type',
-            creatable: true,
-            options: [
-                {
-                    label: 'Debit Account',
-                    value: 'debit_account',
-                },
-                {
-                    label: 'Student Account',
-                    value: 'student_account',
-                },
-                {
-                    label: 'Business Account',
-                    value: 'business_account',
-                },
-            ],
+            required: true,
         },
         {
             label: 'Account Creation Date',
             name: 'as_of_date',
             type: 'date',
             placeholder: 'Select account creation date',
-            required: true,
         },
         {
             label: 'Vat No',
@@ -90,8 +63,9 @@ export const getInputFields = (): InputField[] => {
         {
             label: 'Remarks',
             name: 'remarks',
-            type: 'text',
+            type: 'textarea',
             placeholder: 'Enter remarks',
+            fullWidth: true,
         },
     ];
 };
