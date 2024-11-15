@@ -64,11 +64,14 @@ function CategoryAndSubCategorySelect({ selectedItem }: Props) {
                         selectedItem?.subcategory ?? ({} as NestedItem)
                     )}
                     isDisabled={!selectedCategory}
-                    loadOptions={(inputValue) =>
-                        getPromiseOptionsForDropdown(inputValue, {
-                            optionsGetUrl: `inventory/sub-category/?category__name__icontains=${selectedCategory?.label ?? ''}`,
-                            optionsFilterQuery: 'name__icontains',
-                        } as InputField)
+                    loadOptions={
+                        !selectedCategory
+                            ? undefined
+                            : (inputValue) =>
+                                  getPromiseOptionsForDropdown(inputValue, {
+                                      optionsGetUrl: `inventory/sub-category/?category__name__icontains=${selectedCategory?.label ?? ''}`,
+                                      optionsFilterQuery: 'name__icontains',
+                                  } as InputField)
                     }
                 />
             </div>
