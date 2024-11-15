@@ -2,10 +2,13 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
+import ChartOfAccountsForm from './_components/ChartOfAccountsForm';
 import Report from './_components/Report';
 import { getInputFields, getSearchFields, IChartOfAccount } from './_lib/utils';
 
-export default async function Machine({ searchParams }: { searchParams?: SearchParams }) {
+export default async function ChartOfAccounts({
+    searchParams,
+}: Readonly<{ searchParams?: SearchParams }>) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IChartOfAccount>({
             endpoint: `${process.env.API_URL}/finance/accounts/`,
@@ -60,7 +63,10 @@ export default async function Machine({ searchParams }: { searchParams?: SearchP
                 formConfig={{
                     createItem,
                     additionalActions: <Report />,
-                    fields: itemFields,
+                    CustomItemForm: ChartOfAccountsForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                    },
                 }}
                 modalTitles={{
                     create: 'Create Account',
