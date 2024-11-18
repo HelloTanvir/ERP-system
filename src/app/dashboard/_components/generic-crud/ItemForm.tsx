@@ -30,7 +30,13 @@ function ItemForm<T extends GenericItem>({
             } = {};
             if (currentItem?.id) formObject.id = currentItem.id as FormDataEntryValue;
             formData.forEach((value, key) => {
-                formObject[key] = value;
+                if (key.includes('.')) {
+                    const [objectKey, objectField] = key.split('.');
+                    if (!formObject[objectKey]) formObject[objectKey] = {};
+                    formObject[objectKey][objectField] = value;
+                } else {
+                    formObject[key] = value;
+                }
             });
 
             const currentFormState = await handleSubmit(formObject as unknown as T);
@@ -50,7 +56,10 @@ function ItemForm<T extends GenericItem>({
         <form action={formSubmitAction} className="flex flex-col gap-6">
             <div className="overflow-y-auto max-h-[40rem] grid grid-cols-2 gap-x-5 gap-y-4">
                 {fields.map((field) => (
-                    <div key={field.name} className={field.fullWidth ? 'col-span-2' : ''}>
+                    <div
+                        key={field.name}
+                        className={field.fullWidth || field.sectionLabel ? 'col-span-2' : ''}
+                    >
                         <Input field={field} error={itemFormState.errors?.[field.name]} />
                     </div>
                 ))}
