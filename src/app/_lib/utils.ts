@@ -40,6 +40,7 @@ export interface InputField {
     defaultValue?: any;
     disabled?: boolean;
     fullWidth?: boolean;
+    sectionLabel?: string; // should be used to separate fields into sections
 }
 
 export interface InputProps {

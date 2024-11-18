@@ -49,6 +49,7 @@ export const sidebarItems: SidebarItem[] = [
         label: 'Sales Module',
         icon: salesIcons.root,
         subItems: [
+            { label: 'Customer', link: '/dashboard/sales/customer' },
             { label: 'Dashboard/Workflow Notifications', link: '/dashboard/sales/dashboard' },
             { label: 'Delivery Challan (DCN)', link: '/dashboard/sales/delivery-challan' },
             { label: 'Sales/Invoice/Bill', link: '/dashboard/sales/invoice-bill' },

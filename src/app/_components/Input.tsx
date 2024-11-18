@@ -32,6 +32,14 @@ function Input({ field, error }: Readonly<InputProps>) {
         return <DateTimeInput field={field} error={error} />;
     }
 
+    if (field.sectionLabel) {
+        return (
+            <div className="mt-4">
+                <p className="text-gray-600 font-semibold">{field.sectionLabel}</p>
+            </div>
+        );
+    }
+
     return (
         <div>
             <label className="font-medium text-gray-600" htmlFor={field.name}>
