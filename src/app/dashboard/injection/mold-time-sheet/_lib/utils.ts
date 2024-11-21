@@ -15,6 +15,7 @@ export interface IMoldTimeSheet {
     machine: number;
     mold_register: number;
     downtime: number;
+    status: 'upcoming' | 'running' | 'completed';
 }
 
 export const getInputFields = (): InputField[] => {

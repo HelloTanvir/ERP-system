@@ -15,6 +15,7 @@ import SelectProductionEnd from './SelectProductionEnd';
 interface ItemFormProps {
     fields: InputField[];
     currentItem: IMoldTimeSheet | null;
+    status?: IMoldTimeSheet['status'];
     handleSubmit: (item: IMoldTimeSheet) => Promise<{
         success: boolean;
         errors: {
@@ -27,6 +28,7 @@ interface ItemFormProps {
 function MoldTimeSheetForm({
     fields,
     currentItem,
+    status,
     handleSubmit,
     closeModal,
 }: Readonly<ItemFormProps>) {
@@ -71,6 +73,8 @@ function MoldTimeSheetForm({
                 'yyyy-MM-dd HH:mm:ss'
             );
             moldTimeSheet.target_production = calculateTargetProduction() || 0;
+
+            if (status) moldTimeSheet.status = status;
 
             const currentFormState = await handleSubmit(moldTimeSheet);
 

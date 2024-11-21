@@ -2,15 +2,17 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
-import MoldTimeSheetForm from './_components/MoldTimeSheetForm';
-import Report from './_components/Report';
-import { getInputFields, IMoldTimeSheet } from './_lib/utils';
+import MoldTimeSheetForm from '../mold-time-sheet/_components/MoldTimeSheetForm';
+import Report from '../mold-time-sheet/_components/Report';
+import { getInputFields, IMoldTimeSheet } from '../mold-time-sheet/_lib/utils';
 
-export default async function MoldTimeSheet({ searchParams }: { searchParams?: SearchParams }) {
+export default async function MoldTimeSheet({
+    searchParams,
+}: Readonly<{ searchParams?: SearchParams }>) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IMoldTimeSheet>({
-            endpoint: `${process.env.API_URL}/injection/mold-timesheet/`,
-            revalidatePath: '/dashboard/injection/mold-time-sheet',
+            endpoint: `${process.env.API_URL}/injection/mold-timesheet/?status=upcoming`,
+            revalidatePath: '/dashboard/injection/upcoming-molds',
         });
 
     const { results: moldTimeSheetItems, count } = await getItems({
@@ -25,7 +27,7 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
-                pageTitle="Mold Time Sheet"
+                pageTitle="Upcoming Molds"
                 tableConfig={{
                     tableColumns: ['Production From', 'Production To', 'Mold Name', 'Mold Number '],
                     tableRows: moldTimeSheetItems.map((item) => [
@@ -46,12 +48,12 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
                     CustomItemForm: MoldTimeSheetForm,
                     customItemFormProps: {
                         fields: itemFields,
-                        status: 'running',
+                        status: 'upcoming',
                     },
                 }}
                 modalTitles={{
-                    create: 'Mold Time Sheet',
-                    edit: 'Edit Mold Time Sheet',
+                    create: 'Create Upcoming Mold',
+                    edit: 'Edit Upcoming Mold',
                 }}
             />
         </Suspense>
