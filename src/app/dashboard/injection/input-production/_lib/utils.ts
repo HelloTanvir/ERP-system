@@ -58,7 +58,6 @@ export const getInputFields = (): InputField[] => {
             optionsGetUrl: 'injection/mold-timesheet/',
             optionsFilterQuery: 'name__icontains',
             redirectURLOnCreate: '/dashboard/injection/input-production',
-            required: true,
         },
         {
             label: 'Select Mold',
