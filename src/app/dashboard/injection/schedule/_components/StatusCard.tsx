@@ -1,8 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 
 export default function StatusCard({ title, data, isCarousel = false }) {
     const [currentSlide, setCurrentSlide] = useState(0);
+
+    console.log(data);
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % data.length);
@@ -15,29 +19,26 @@ export default function StatusCard({ title, data, isCarousel = false }) {
     const renderContent = (item) => (
         <div className="space-y-2">
             <p>
-                <span className="font-semibold">Mold Name:</span> {item.moldName}
+                <span className="font-semibold">Mold Name:</span>
             </p>
             <p>
-                <span className="font-semibold">Start Time:</span> {item.startTime}
+                <span className="font-semibold">Start Time:</span>
+            </p>
+
+            <p>End time</p>
+
+            <p>
+                <span className="font-semibold">Output:</span>
             </p>
             <p>
-                <span className="font-semibold">
-                    {item.endTime ? 'End Time:' : 'Tentative End Time:'}
-                </span>{' '}
-                {item.endTime || item.tentativeEndTime}
-            </p>
-            <p>
-                <span className="font-semibold">Output:</span> {item.output}
-            </p>
-            <p>
-                <span className="font-semibold">Revised Target:</span> {item.revisedTarget}
+                <span className="font-semibold">Revised Target:</span>
             </p>
         </div>
     );
 
     return (
         <div
-            className={`p-6 rounded-lg min-h-[250px] ${
+            className={`p-6 rounded-lg min-h-[250px] transition duration-300 hover:scale-110 ${
                 {
                     Previous: 'bg-gray-100 border border-gray-400',
                     Current: 'bg-green-100 shadow-2xl border border-green-400',
