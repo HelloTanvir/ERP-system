@@ -78,12 +78,14 @@ export default async function Schedule({
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <div>
-                <SearchInTable fields={searchFields} />
-
-                <div className="mt-5 border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg mb-12 ">
+                <div className="border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg mb-12 ">
                     <h3 className="text-2xl text-purple-700  font-semibold text-center">
                         Schedule
                     </h3>
+                </div>
+
+                <div className="my-5">
+                    <SearchInTable fields={searchFields} />
                 </div>
 
                 {Object.entries(
