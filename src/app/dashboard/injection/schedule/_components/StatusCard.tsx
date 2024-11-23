@@ -1,40 +1,30 @@
-'use client';
+import { formatDateTimestamp } from '@/app/_lib/utils';
+import { IMoldTimeSheet } from '../../mold-time-sheet/_lib/utils';
 
-import { useState } from 'react';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+interface Props {
+    title: 'Previous' | 'Current' | 'Upcoming';
+    data: IMoldTimeSheet | null;
+}
 
-export default function StatusCard({ title, data, isCarousel = false }) {
-    const [currentSlide, setCurrentSlide] = useState(0);
+export default function StatusCard({ title, data }: Readonly<Props>) {
+    const calculateProgress = (): number => {
+        if (!data) return 0;
+        const productionFrom = new Date(data.production_from).getTime();
+        const productionEnd = new Date(data.production_end).getTime();
+        const currentTime = new Date().getTime();
 
-    console.log(data);
+        const total = productionEnd - productionFrom;
+        const current = currentTime - productionFrom;
 
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % data.length);
+        return Math.floor((current / total) * 100);
     };
 
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + data.length) % data.length);
-    };
-
-    const renderContent = (item) => (
-        <div className="space-y-2">
-            <p>
-                <span className="font-semibold">Mold Name:</span>
-            </p>
-            <p>
-                <span className="font-semibold">Start Time:</span>
-            </p>
-
-            <p>End time</p>
-
-            <p>
-                <span className="font-semibold">Output:</span>
-            </p>
-            <p>
-                <span className="font-semibold">Revised Target:</span>
-            </p>
-        </div>
-    );
+    if (!data)
+        return (
+            <div className="rounded-lg min-h-[250px] bg-gray-100 border-gray-400 flex justify-center items-center text-xl text-muted-foreground border">
+                No data available
+            </div>
+        );
 
     return (
         <div
@@ -45,31 +35,26 @@ export default function StatusCard({ title, data, isCarousel = false }) {
                 }[title] || 'bg-yellow-100 border border-yellow-400'
             }`}
         >
-            {isCarousel ? (
-                <div className="relative">
-                    {renderContent(data[currentSlide])}
-                    <div className="flex justify-between mt-4">
-                        <button
-                            type="button"
-                            onClick={prevSlide}
-                            className="bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors duration-200"
-                            aria-label="Previous slide"
-                        >
-                            <FaAngleLeft />
-                        </button>
-                        <button
-                            type="button"
-                            onClick={nextSlide}
-                            className="bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors duration-200"
-                            aria-label="Next slide"
-                        >
-                            <FaAngleRight />
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                renderContent(data)
-            )}
+            <div className="space-y-2">
+                <p>
+                    <span className="font-semibold">Mold Name: </span>
+                    <span>{data?.mold_name}</span>
+                </p>
+                <p>
+                    <span className="font-semibold">Start Time: </span>
+                    <span>{formatDateTimestamp(data?.production_from)}</span>
+                </p>
+                <p>
+                    <span className="font-semibold">End Time: </span>
+                    <span>{formatDateTimestamp(data?.production_end)}</span>
+                </p>
+                {title === 'Current' && (
+                    <p>
+                        <span className="font-semibold">Progress (approx.): </span>
+                        <span>{calculateProgress()}%</span>
+                    </p>
+                )}
+            </div>
         </div>
     );
 }

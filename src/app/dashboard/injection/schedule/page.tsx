@@ -1,17 +1,15 @@
 import { Suspense } from 'react';
 import { createGenericServerActions } from '../../_lib/actions';
 
+import { IMoldTimeSheet } from '../mold-time-sheet/_lib/utils';
 import EmblaCarousel from './_components/Carousel';
 import StatusCard from './_components/StatusCard';
-import { ISchedule } from './_lib/utils';
 
 export default async function Schedule() {
-    const { getItems } = await createGenericServerActions<ISchedule>({
+    const { getItems } = await createGenericServerActions<IMoldTimeSheet>({
         endpoint: `${process.env.API_URL}/injection/mold-timesheet/`,
         revalidatePath: '/dashboard/injection/schedule',
     });
-
-    const { results: allData } = await getItems();
 
     const { results: completedItems } = await getItems({
         status: 'completed',
@@ -23,51 +21,43 @@ export default async function Schedule() {
         status: 'upcoming',
     });
 
-    console.log('All Data:', allData);
+    const groupItemsByMachine = (
+        items: IMoldTimeSheet[]
+    ): {
+        [key: string]: {
+            current: IMoldTimeSheet | null;
+            upcoming: IMoldTimeSheet[];
+            completed: IMoldTimeSheet[];
+        };
+    } => {
+        const groupedItems: {
+            [key: string]: {
+                current: IMoldTimeSheet | null;
+                upcoming: IMoldTimeSheet[];
+                completed: IMoldTimeSheet[];
+            };
+        } = {};
 
-    console.log('Status Card:', { completedItems, currentItems, upcomingItems });
+        items.forEach((item) => {
+            if (groupedItems[item.machine_name]) {
+                if (item.status === 'running') {
+                    groupedItems[item.machine_name].current = item;
+                } else if (item.status === 'upcoming') {
+                    groupedItems[item.machine_name].upcoming.push(item);
+                } else {
+                    groupedItems[item.machine_name].completed.push(item);
+                }
+            } else {
+                groupedItems[item.machine_name] = {
+                    current: item.status === 'running' ? item : null,
+                    upcoming: item.status === 'upcoming' ? [item] : [],
+                    completed: item.status === 'completed' ? [item] : [],
+                };
+            }
+        });
 
-    // const mockData = {
-    //     previous: [
-    //         {
-    //             moldName: 'Mold A',
-    //             startTime: '2023-05-01 08:00',
-    //             endTime: '2023-05-01 16:00',
-    //             output: 500,
-    //             revisedTarget: 550,
-    //         },
-    //         {
-    //             moldName: 'Mold B',
-    //             startTime: '2023-05-02 08:00',
-    //             endTime: '2023-05-02 16:00',
-    //             output: 480,
-    //             revisedTarget: 500,
-    //         },
-    //     ],
-    //     current: {
-    //         moldName: 'Mold C',
-    //         startTime: '2023-05-03 08:00',
-    //         tentativeEndTime: '2023-05-03 16:00',
-    //         output: 300,
-    //         revisedTarget: 600,
-    //     },
-    //     upcoming: [
-    //         {
-    //             moldName: 'Mold D',
-    //             startTime: '2023-05-04 08:00',
-    //             tentativeEndTime: '2023-05-04 16:00',
-    //             output: 0,
-    //             revisedTarget: 550,
-    //         },
-    //         {
-    //             moldName: 'Mold E',
-    //             startTime: '2023-05-05 08:00',
-    //             tentativeEndTime: '2023-05-05 16:00',
-    //             output: 0,
-    //             revisedTarget: 580,
-    //         },
-    //     ],
-    // };
+        return groupedItems;
+    };
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
@@ -78,40 +68,48 @@ export default async function Schedule() {
                     </h3>
                 </div>
 
-                <div className="mb-10 border p-5">
-                    {/* Machine Name */}
-                    <div className="text-center text-xl mb-4">
-                        <h1>
-                            <span className="font-bold">Machine Name:</span> Toy Machine
-                        </h1>
-                        <hr className="mt-2 w-[0px] mx-auto" />
+                {Object.entries(
+                    groupItemsByMachine([...completedItems, ...currentItems, ...upcomingItems])
+                ).map(([machineName, items]) => (
+                    <div key={machineName} className="mb-10 border p-5 max-w-full">
+                        {/* Machine Name */}
+                        <div className="text-center text-xl mb-4">
+                            <h1>
+                                <span className="font-bold">Machine Name:</span> {machineName}
+                            </h1>
+                            <hr className="mt-2 w-[0px] mx-auto" />
+                        </div>
+
+                        {/* Machine Status Cards */}
+                        <div className="grid grid-cols-3 gap-10">
+                            <div className="">
+                                <h1 className="text-center text-xl font-semibold ">Previous</h1>
+                                <hr className="mt-2 mb-6" />
+                                <EmblaCarousel
+                                    status="completed"
+                                    machine_name={machineName}
+                                    data={items.completed}
+                                />
+                            </div>
+
+                            <div className="">
+                                <h1 className="text-center text-xl font-semibold  ">Current</h1>
+                                <hr className="mt-2 mb-6" />
+                                <StatusCard title="Current" data={items.current} />
+                            </div>
+
+                            <div className="">
+                                <h1 className="text-center text-xl font-semibold">Upcoming</h1>
+                                <hr className="mt-2 mb-6" />
+                                <EmblaCarousel
+                                    status="upcoming"
+                                    machine_name={machineName}
+                                    data={items.upcoming}
+                                />
+                            </div>
+                        </div>
                     </div>
-
-                    {/* Machine Status Cards */}
-                    <div className="flex justify-between gap-10  w-[80%] mx-auto">
-                        <div className="w-[32%] ">
-                            <h1 className="text-center text-xl font-semibold ">Previous</h1>
-                            <hr className="mt-2 mb-6" />
-                            {/* <StatusCard title="Previous" data={completedItems} isCarousel /> */}
-                            <EmblaCarousel />
-                        </div>
-
-                        <div className="w-[36%]">
-                            <h1 className="text-center text-xl font-semibold  ">Current</h1>
-                            <hr className="mt-2 mb-6" />
-                            <StatusCard title="Current" data={currentItems?.[0]} />
-                        </div>
-
-                        <div className="w-[32%]">
-                            <h1 className="text-center text-xl font-semibold">Upcoming</h1>
-                            <hr className="mt-2 mb-6" />
-                            {/* <div className="max-w-[500px] relative">
-                            <Slider />
-                        </div> */}
-                            <EmblaCarousel status="upcoming" />
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
         </Suspense>
     );

@@ -1,10 +1,18 @@
 'use client';
 
+import { formatDateTimestamp } from '@/app/_lib/utils';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
+import { IMoldTimeSheet } from '../../mold-time-sheet/_lib/utils';
 
-export default function EmblaCarousel({ status }) {
+interface Props {
+    status: IMoldTimeSheet['status'];
+    data: IMoldTimeSheet[];
+    machine_name: string;
+}
+
+export default function EmblaCarousel({ status, data, machine_name }: Readonly<Props>) {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
     const [activeIndex, setActiveIndex] = useState(0);
     const [slidesCount, setSlidesCount] = useState(0);
@@ -39,6 +47,13 @@ export default function EmblaCarousel({ status }) {
         [emblaApi]
     );
 
+    if (!data.length)
+        return (
+            <div className="rounded-lg min-h-[250px] bg-gray-100 border-gray-400 flex justify-center items-center text-xl text-muted-foreground border">
+                No data available
+            </div>
+        );
+
     return (
         <div className="embla">
             <div
@@ -47,80 +62,37 @@ export default function EmblaCarousel({ status }) {
             >
                 <div className="embla__container">
                     {/* Slide 1 */}
-                    <div className="embla__slide  p-10 ">
-                        <div className="space-y-2 ">
-                            <p>
-                                <span className="font-semibold "> Mold Name:</span>
-                                Muhammad
-                            </p>
-                            <p>
-                                <span className="font-semibold ">Start Time:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> End Time:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Output:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Revised Target:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
+                    {data?.map((item) => (
+                        <div key={item.id} className="embla__slide  p-10 ">
+                            <div className="space-y-2 ">
+                                <p>
+                                    <span className="font-semibold"> Mold Name: </span>
+                                    {item.mold_name}
+                                </p>
+                                <p>
+                                    <span className="font-semibold ">Start Time: </span>
+                                    {formatDateTimestamp(item.production_from)}
+                                </p>
+                                <p>
+                                    <span className="font-semibold "> End Time: </span>
+                                    {formatDateTimestamp(item.production_end)}
+                                </p>
+
+                                {status === 'completed' && (
+                                    <>
+                                        <p>
+                                            <span className="font-semibold ">Output: </span>
+                                            {item.total_counter}
+                                        </p>
+                                        <p>
+                                            <span className="font-semibold ">Revised Target: </span>
+                                            {item.revised_target}
+                                        </p>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    {/* Slide 2 */}
-                    <div className="embla__slide p-10 ">
-                        <div className="space-y-2 ">
-                            <p>
-                                <span className="font-semibold "> Mold Name:</span>
-                                Tanvir
-                            </p>
-                            <p>
-                                <span className="font-semibold ">Start Time:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> End Time:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Output:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Revised Target:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
-                        </div>
-                    </div>
-                    {/* Slide 3 */}
-                    <div className="embla__slide p-10 ">
-                        <div className="space-y-2 ">
-                            <p>
-                                <span className="font-semibold "> Mold Name:</span>
-                                Hasan
-                            </p>
-                            <p>
-                                <span className="font-semibold ">Start Time:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> End Time:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Output:</span>
-                                {'Muhammad Tanvir Hasan '}
-                            </p>
-                            <p>
-                                <span className="font-semibold "> Revised Target:</span>
-                                {' Muhammad Tanvir Hasan'}
-                            </p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
 
@@ -146,18 +118,25 @@ export default function EmblaCarousel({ status }) {
 
                 {/* Dot Navigation */}
                 <div className="flex justify-center gap-2 ">
-                    {Array.from({ length: slidesCount }).map((_, index) => (
+                    {Array.from({
+                        length: Math.min(slidesCount, 5),
+                    }).map((_, index) => (
                         <button
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={`${machine_name}-${status}-${index}`}
                             type="button"
                             onClick={() => scrollTo(index)}
-                            className={`w-3 h-3 rounded-full transition ${
+                            className={`w-4 h-4 flex justify-center items-center text-xs rounded-full transition ${
+                                // eslint-disable-next-line no-nested-ternary
                                 index === activeIndex && status === 'upcoming'
                                     ? 'bg-yellow-500'
                                     : index === activeIndex
                                       ? 'bg-gray-500'
                                       : 'bg-gray-300'
                             }`}
-                        />
+                        >
+                            {index + 1}
+                        </button>
                     ))}
                 </div>
             </div>
