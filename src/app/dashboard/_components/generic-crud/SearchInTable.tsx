@@ -49,8 +49,10 @@ function SearchInTable({ fields }: Props) {
                 if (field.type === 'dropdown') {
                     return (
                         <div key={field.name} className="flex flex-col gap-1">
-                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                            <label className="text-[#5E697A] text-sm">{field.label}</label>
+                            {field.label && (
+                                <div className="text-[#5E697A] text-sm">{field.label}</div>
+                            )}
+
                             <Select
                                 className="basic-single w-[200px]"
                                 classNamePrefix="select"
@@ -68,18 +70,19 @@ function SearchInTable({ fields }: Props) {
                 }
 
                 return (
-                    <div
-                        key={field.name}
-                        className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px] h-10"
-                    >
-                        {icon}
-                        <input
-                            key={field.name}
-                            type={field.type}
-                            placeholder="Search"
-                            className="input input-sm rounded-input-radius flex-1 bg-transparent focus:outline-none focus:ring-0 focus:border-0 pl-0"
-                            onChange={(e) => handleSearch(e.target.value, field.name)}
-                        />
+                    <div key={field.name} className="flex flex-col gap-1">
+                        {field.label && <div className="text-[#5E697A] text-sm">{field.label}</div>}
+
+                        <div className="bg-[#F0F0F0] rounded-input-radius flex items-center w-[300px] h-10">
+                            {icon}
+                            <input
+                                key={field.name}
+                                type={field.type}
+                                placeholder="Search"
+                                className="input input-sm rounded-input-radius flex-1 bg-transparent focus:outline-none focus:ring-0 focus:border-0 pl-0"
+                                onChange={(e) => handleSearch(e.target.value, field.name)}
+                            />
+                        </div>
                     </div>
                 );
             })}
