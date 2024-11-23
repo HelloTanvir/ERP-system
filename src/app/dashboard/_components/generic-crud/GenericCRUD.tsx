@@ -105,15 +105,15 @@ function GenericCRUD<T extends GenericItem>({
         }
     };
 
-    const handleSubmit = async (item: T): Promise<FormState> => {
+    const handleSubmit = async (item: T, endpoint?: string): Promise<FormState> => {
         let formState: FormState | undefined;
 
         if (currentItem) {
             if (tableConfig.noTableAction) return { success: false, errors: null };
-            formState = await tableConfig.updateItem(item);
+            formState = await tableConfig.updateItem(item, endpoint);
         } else {
             if (formConfig.noAction) return { success: false, errors: null };
-            formState = await formConfig.createItem(item as Omit<T, 'id'>);
+            formState = await formConfig.createItem(item as Omit<T, 'id'>, endpoint);
         }
 
         return formState;

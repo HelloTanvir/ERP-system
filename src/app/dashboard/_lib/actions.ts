@@ -44,7 +44,12 @@ export async function createGenericServerActions<T extends { id: number | string
     const cookieStore = cookies();
     const access_token = cookieStore.get('access-token');
 
-    async function createItem(item: Omit<T, 'id'>): Promise<{
+    const BASE_URL = process.env.API_URL;
+
+    async function createItem(
+        item: Omit<T, 'id'>,
+        ep?: string
+    ): Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
@@ -52,7 +57,7 @@ export async function createGenericServerActions<T extends { id: number | string
     }> {
         'use server';
 
-        const response = await fetch(endpoint, {
+        const response = await fetch(ep ? `${BASE_URL}${ep}` : endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +77,10 @@ export async function createGenericServerActions<T extends { id: number | string
         return { success: true, errors: null };
     }
 
-    async function updateItem(item: T): Promise<{
+    async function updateItem(
+        item: T,
+        ep?: string
+    ): Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
@@ -80,7 +88,7 @@ export async function createGenericServerActions<T extends { id: number | string
     }> {
         'use server';
 
-        const response = await fetch(`${endpoint}${item.id}/`, {
+        const response = await fetch(`${ep ? `${BASE_URL}${ep}` : endpoint}${item.id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

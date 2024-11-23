@@ -117,7 +117,9 @@ export const sidebarItems: SidebarItem[] = [
         label: 'Injection Module',
         icon: injectionModuleIcons.root,
         subItems: [
+            { label: 'Color', link: '/dashboard/injection/color' },
             { label: 'Mold Register', link: '/dashboard/injection/mold-register' },
+            { label: 'Upcoming Molds', link: '/dashboard/injection/upcoming-molds' },
             { label: 'Mold Time Sheet', link: '/dashboard/injection/mold-time-sheet' },
             {
                 label: 'Non Production Time Record',
@@ -158,4 +160,4 @@ export interface SearchParams {
     [key: string]: string;
 }
 
-export const ITEMS_PER_PAGE = '20';
+export const ITEMS_PER_PAGE = '10';

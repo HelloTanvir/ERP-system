@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
 import { ITEMS_PER_PAGE, SearchParams } from '../../_lib/utils';
+import CustomerForm from './_components/CustomerForm';
 import { getInputFields, ICustomer } from './_lib/utils';
 
 export default async function Customer({
@@ -54,7 +55,10 @@ export default async function Customer({
                 }}
                 formConfig={{
                     createItem,
-                    fields: itemFields,
+                    CustomItemForm: CustomerForm,
+                    customItemFormProps: {
+                        fields: itemFields,
+                    },
                 }}
                 modalTitles={{
                     create: 'Create Customer',
