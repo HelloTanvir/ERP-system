@@ -15,6 +15,7 @@ export default async function MoldTimeSheet({ searchParams }: { searchParams?: S
 
     const { results: moldTimeSheetItems, count } = await getItems({
         ...searchParams,
+        status: 'running',
         page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });

@@ -2,20 +2,22 @@ import { InputField } from '@/app/_lib/utils';
 
 export interface IMoldTimeSheet {
     id: number;
+    machine_name: string;
+    average_cycle_time: number;
+    total_cavity_weight: number;
     voucher_no: string;
     voucher_date: string;
+    status: 'upcoming' | 'running' | 'completed';
     mold_name: string;
     mold_item_number: string;
     downtime_from: string;
     production_from: string;
     production_end: string;
-    revised_target: number;
     target_production: number;
     is_timesheet: boolean;
     machine: number;
     mold_register: number;
     downtime: number;
-    status: 'upcoming' | 'running' | 'completed';
 }
 
 export const getInputFields = (): InputField[] => {

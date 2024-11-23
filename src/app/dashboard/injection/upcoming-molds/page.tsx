@@ -11,12 +11,13 @@ export default async function MoldTimeSheet({
 }: Readonly<{ searchParams?: SearchParams }>) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IMoldTimeSheet>({
-            endpoint: `${process.env.API_URL}/injection/mold-timesheet/?status=upcoming`,
+            endpoint: `${process.env.API_URL}/injection/mold-timesheet/`,
             revalidatePath: '/dashboard/injection/upcoming-molds',
         });
 
     const { results: moldTimeSheetItems, count } = await getItems({
         ...searchParams,
+        status: 'upcoming',
         page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
     });
