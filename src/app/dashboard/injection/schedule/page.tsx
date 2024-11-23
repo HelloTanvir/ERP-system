@@ -1,11 +1,16 @@
 import { Suspense } from 'react';
 import { createGenericServerActions } from '../../_lib/actions';
 
+import SearchInTable from '../../_components/generic-crud/SearchInTable';
+import { SearchParams } from '../../_lib/utils';
 import { IMoldTimeSheet } from '../mold-time-sheet/_lib/utils';
 import EmblaCarousel from './_components/Carousel';
 import StatusCard from './_components/StatusCard';
+import { getSearchFields } from './_lib/utils';
 
-export default async function Schedule() {
+export default async function Schedule({
+    searchParams,
+}: Readonly<{ searchParams?: SearchParams }>) {
     const { getItems } = await createGenericServerActions<IMoldTimeSheet>({
         endpoint: `${process.env.API_URL}/injection/mold-timesheet/`,
         revalidatePath: '/dashboard/injection/schedule',
@@ -13,13 +18,18 @@ export default async function Schedule() {
 
     const { results: completedItems } = await getItems({
         status: 'completed',
+        machine__name__icontains: searchParams?.machine_name || '',
     });
     const { results: currentItems } = await getItems({
         status: 'running',
+        machine__name__icontains: searchParams?.machine_name || '',
     });
     const { results: upcomingItems } = await getItems({
         status: 'upcoming',
+        machine__name__icontains: searchParams?.machine_name || '',
     });
+
+    const searchFields = getSearchFields();
 
     const groupItemsByMachine = (
         items: IMoldTimeSheet[]
@@ -62,7 +72,9 @@ export default async function Schedule() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <div>
-                <div className="border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg mb-12 ">
+                <SearchInTable fields={searchFields} />
+
+                <div className="mt-5 border-[3px] border-x-[1px] border-b-0 rounded-t-lg  rounded-b-none p-2 rounded-lg mb-12 ">
                     <h3 className="text-2xl text-purple-700  font-semibold text-center">
                         Schedule
                     </h3>
