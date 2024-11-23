@@ -6,7 +6,7 @@ import { SearchParams } from '../../_lib/utils';
 import { IMoldTimeSheet } from '../mold-time-sheet/_lib/utils';
 import EmblaCarousel from './_components/Carousel';
 import StatusCard from './_components/StatusCard';
-import { getSearchFields } from './_lib/utils';
+import { getSearchFields, MAX_ITEMS_PER_CAROUSEL } from './_lib/utils';
 
 export default async function Schedule({
     searchParams,
@@ -50,12 +50,18 @@ export default async function Schedule({
 
         items.forEach((item) => {
             if (groupedItems[item.machine_name]) {
-                if (item.status === 'running') {
-                    groupedItems[item.machine_name].current = item;
-                } else if (item.status === 'upcoming') {
+                if (
+                    item.status === 'upcoming' &&
+                    groupedItems[item.machine_name].upcoming.length < MAX_ITEMS_PER_CAROUSEL
+                ) {
                     groupedItems[item.machine_name].upcoming.push(item);
-                } else {
+                } else if (
+                    item.status === 'completed' &&
+                    groupedItems[item.machine_name].completed.length < MAX_ITEMS_PER_CAROUSEL
+                ) {
                     groupedItems[item.machine_name].completed.push(item);
+                } else {
+                    groupedItems[item.machine_name].current = item;
                 }
             } else {
                 groupedItems[item.machine_name] = {

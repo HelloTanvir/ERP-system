@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { IMoldTimeSheet } from '../../mold-time-sheet/_lib/utils';
+import { MAX_ITEMS_PER_CAROUSEL } from '../_lib/utils';
 
 interface Props {
     status: IMoldTimeSheet['status'];
@@ -119,7 +120,7 @@ export default function EmblaCarousel({ status, data, machine_name }: Readonly<P
                 {/* Dot Navigation */}
                 <div className="flex justify-center gap-2 ">
                     {Array.from({
-                        length: Math.min(slidesCount, 5),
+                        length: Math.min(slidesCount, MAX_ITEMS_PER_CAROUSEL),
                     }).map((_, index) => (
                         <button
                             // eslint-disable-next-line react/no-array-index-key

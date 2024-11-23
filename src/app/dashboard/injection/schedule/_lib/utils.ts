@@ -9,3 +9,5 @@ export const getSearchFields = (): SearchField[] => {
         },
     ];
 };
+
+export const MAX_ITEMS_PER_CAROUSEL = 3;
