@@ -42,6 +42,7 @@ export default async function Schedule({
     } => {
         const groupedItems: {
             [key: string]: {
+                machine_id: number;
                 current: IMoldTimeSheet | null;
                 upcoming: IMoldTimeSheet[];
                 completed: IMoldTimeSheet[];
@@ -65,6 +66,7 @@ export default async function Schedule({
                 }
             } else {
                 groupedItems[item.machine_name] = {
+                    machine_id: item.machine,
                     current: item.status === 'running' ? item : null,
                     upcoming: item.status === 'upcoming' ? [item] : [],
                     completed: item.status === 'completed' ? [item] : [],
