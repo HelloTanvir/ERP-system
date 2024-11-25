@@ -1,11 +1,12 @@
 'use client';
 
 import { FormState, InputField } from '@/app/_lib/utils';
-import { ElementType, ReactNode, useState } from 'react';
+import { ElementType, ReactNode, useEffect, useState } from 'react';
 import { LuPlus } from 'react-icons/lu';
 import useModal from '../../_hooks/useModal';
 import { GenericItem, SearchField } from '../../_lib/utils';
 import Modal from '../Modal';
+import ItemDetailView from './ItemDetailView';
 import ItemForm from './ItemForm';
 import ItemTable from './ItemTable';
 import Pagination from './Pagination';
@@ -48,6 +49,11 @@ type TableConfig<T extends GenericItem> = {
     | { noTableAction: true }
     | {
           noTableAction?: false;
+          noView?: boolean;
+          CustomDetailView?: ElementType;
+          customDetailViewProps?: {
+              [key: string]: any;
+          };
           updateItem: (item: T) => Promise<FormState>;
           deleteItem: (id: T['id']) => Promise<void>;
       }
@@ -77,12 +83,27 @@ function GenericCRUD<T extends GenericItem>({
 }: Readonly<GenericCRUDProps<T>>) {
     const { modalRef, openModal, closeModal: _closeModal, isOpen } = useModal();
     const [currentItem, setCurrentItem] = useState<T | null>(null);
+    const [isViewing, setIsViewing] = useState<boolean>(false);
 
     const cleanUpCurrentItem = () => {
         setCurrentItem(null);
+        setIsViewing(false);
     };
 
     const closeModal = () => _closeModal(cleanUpCurrentItem);
+
+    useEffect(() => {
+        if (!isOpen) {
+            cleanUpCurrentItem();
+        }
+    }, [isOpen]);
+
+    const handleViewItem = (item: T) => {
+        if (tableConfig.noView) return;
+        setCurrentItem(item);
+        setIsViewing(true);
+        openModal();
+    };
 
     const handleAddItem = () => {
         setCurrentItem(null);
@@ -119,6 +140,59 @@ function GenericCRUD<T extends GenericItem>({
         return formState;
     };
 
+    const renderModalContent = () => {
+        if (isViewing && currentItem) {
+            if (tableConfig.CustomDetailView) {
+                return (
+                    <tableConfig.CustomDetailView
+                        currentItem={currentItem}
+                        {...tableConfig.customDetailViewProps}
+                    />
+                );
+            }
+
+            return <ItemDetailView currentItem={currentItem} />;
+        }
+
+        return (
+            <>
+                <div className="mb-6">
+                    <h1 className="text-xl text-purple-700 mb-2">
+                        {currentItem ? modalTitles?.edit : modalTitles?.create}
+                    </h1>
+                    <hr />
+                </div>
+                {!formConfig.noAction && !formConfig.fields && formConfig.CustomItemForm ? (
+                    <formConfig.CustomItemForm
+                        key={`${isOpen}`}
+                        currentItem={currentItem}
+                        handleSubmit={handleSubmit}
+                        closeModal={closeModal}
+                        {...formConfig.customItemFormProps}
+                    />
+                ) : (
+                    !formConfig.noAction &&
+                    formConfig.fields && (
+                        <ItemForm
+                            key={`${isOpen}`}
+                            fields={
+                                currentItem
+                                    ? formConfig.fields.map((field) => ({
+                                          ...field,
+                                          defaultValue: currentItem[field.name],
+                                      }))
+                                    : formConfig.fields
+                            }
+                            currentItem={currentItem}
+                            handleSubmit={handleSubmit}
+                            closeModal={closeModal}
+                        />
+                    )
+                )}
+            </>
+        );
+    };
+
     return (
         <>
             <div className="flex flex-col gap-6" style={{ width }}>
@@ -148,6 +222,8 @@ function GenericCRUD<T extends GenericItem>({
                         tableColumns={tableConfig.tableColumns}
                         tableRows={tableConfig.tableRows}
                         noTableAction={tableConfig.noTableAction}
+                        noView={tableConfig.noView}
+                        handleViewItem={handleViewItem}
                         handleEditItem={handleEditItem}
                         handleDeleteItem={handleDeleteItem}
                     />
@@ -158,39 +234,7 @@ function GenericCRUD<T extends GenericItem>({
 
             {(!formConfig.noAction || !tableConfig.noTableAction) && (
                 <Modal ref={modalRef} maxWidth={!formConfig.noAction && formConfig.maxWidth}>
-                    <div className="mb-6">
-                        <h1 className="text-xl text-purple-700 mb-2">
-                            {currentItem ? modalTitles?.edit : modalTitles?.create}
-                        </h1>
-                        <hr />
-                    </div>
-                    {!formConfig.noAction && !formConfig.fields && formConfig.CustomItemForm ? (
-                        <formConfig.CustomItemForm
-                            key={`${isOpen}`}
-                            currentItem={currentItem}
-                            handleSubmit={handleSubmit}
-                            closeModal={closeModal}
-                            {...formConfig.customItemFormProps}
-                        />
-                    ) : (
-                        !formConfig.noAction &&
-                        formConfig.fields && (
-                            <ItemForm
-                                key={`${isOpen}`}
-                                fields={
-                                    currentItem
-                                        ? formConfig.fields.map((field) => ({
-                                              ...field,
-                                              defaultValue: currentItem[field.name],
-                                          }))
-                                        : formConfig.fields
-                                }
-                                currentItem={currentItem}
-                                handleSubmit={handleSubmit}
-                                closeModal={closeModal}
-                            />
-                        )
-                    )}
+                    {renderModalContent()}
                 </Modal>
             )}
         </>

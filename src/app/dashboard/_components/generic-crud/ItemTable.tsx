@@ -8,6 +8,8 @@ interface ItemTableProps<T extends GenericItem> {
     tableColumns: string[];
     tableRows: ReactNode[][];
     noTableAction?: boolean;
+    noView?: boolean;
+    handleViewItem: (item: T) => void;
     handleEditItem: (item: T) => void;
     handleDeleteItem: (formData: FormData) => Promise<void>;
 }
@@ -17,6 +19,8 @@ function ItemTable<T extends GenericItem>({
     tableColumns,
     tableRows,
     noTableAction,
+    noView,
+    handleViewItem,
     handleEditItem,
     handleDeleteItem,
 }: Readonly<ItemTableProps<T>>) {
@@ -58,6 +62,16 @@ function ItemTable<T extends GenericItem>({
                         {!noTableAction && (
                             <td className="border border-r-0 border-gray-300">
                                 <div className="flex gap-2 justify-end">
+                                    {!noView && (
+                                        <button
+                                            type="button"
+                                            className="btn btn-ghost btn-sm text-blue-400"
+                                            onClick={() => handleViewItem(items[index])}
+                                        >
+                                            View
+                                        </button>
+                                    )}
+
                                     <button
                                         type="button"
                                         className="btn btn-ghost btn-sm text-blue-400"
