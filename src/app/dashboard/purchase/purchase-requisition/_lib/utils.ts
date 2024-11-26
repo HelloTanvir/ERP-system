@@ -34,6 +34,8 @@ export const getInputFields = (): InputField[] => {
             type: 'date',
             placeholder: 'Select Voucher Date',
             required: true,
+            disabled: true,
+            defaultValue: new Date().toISOString(),
         },
         {
             label: 'Delivery Deadline',
