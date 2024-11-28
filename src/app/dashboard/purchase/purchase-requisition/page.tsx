@@ -1,3 +1,4 @@
+import { formatDateTimestamp } from '@/app/_lib/utils';
 import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
@@ -19,11 +20,8 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
         records: ITEMS_PER_PAGE,
     });
 
-    console.log('Test', purchaseRequisitionItems);
     const searchFields = getSearchFields();
     const itemFields = getInputFields();
-
-    console.log(itemFields);
 
     return (
         <Suspense fallback={<div>Loading...</div>}>
@@ -33,13 +31,19 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
                     fields: searchFields,
                 }}
                 tableConfig={{
-                    tableColumns: ['Date', 'Accounts', 'Voucher No', 'Warehouse', 'Status'],
+                    tableColumns: [
+                        'Voucher No',
+                        'Voucher Date',
+                        'Accounts',
+                        'Delivery Deadline',
+                        'Status',
+                    ],
                     tableRows: purchaseRequisitionItems.map((item) => [
-                        '',
-                        item.name,
-                        item.number,
                         item.voucher_no,
-                        item.cavity.map((cavity) => cavity.status),
+                        item.voucher_date,
+                        '', // accounts is empty for now, as it is not yet implemented in the backend
+                        formatDateTimestamp(item.delivery_deadline),
+                        '', // status is empty for now, as it is not yet implemented in the backend
                     ]),
                     items: purchaseRequisitionItems,
                     totalItemsCount: count,
