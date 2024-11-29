@@ -12,8 +12,14 @@ export interface IPurchaseRequisitionItem {
         measure_unit: string;
         is_inventory_item: boolean;
     };
-    warehouse: number;
-    requested_by: number;
+    warehouse: {
+        id: number;
+        name: string;
+    };
+    requested_by: {
+        id: number;
+        name: string;
+    };
 }
 
 export interface IPurchaseRequisition {

@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { useFormState } from 'react-dom';
 import { IPurchaseRequisition } from '../../purchase-requisition/_lib/utils';
 import { IPurchaseOrder } from '../_lib/utils';
-import SelectRequisitionItem from './SelectRequisitonItem';
+
+import SelectRequisitionItem from './SelectRequisitionItem';
 import TableInputRow from './TableInputRow';
 
 interface ItemFormProps {

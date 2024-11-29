@@ -1,7 +1,7 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
 
-export interface IPurchaseOrderItem {
+export interface IReceiveInventoryWithoutBillItem {
     id: number;
     quantity: number;
     remarks: string;
@@ -24,9 +24,9 @@ export interface IPurchaseOrderItem {
     remarks: string;
 }
 
-export interface IPurchaseOrder {
+export interface IReceiveInventoryWithoutBill {
     id: number;
-    preq_items: IPurchaseOrderItem[];
+    preq_items: IReceiveInventoryWithoutBillItem[];
     purchase_order_no: string;
     supplier: string;
     purchase_requisition_no: number;

@@ -33,11 +33,11 @@ export default async function PurchaseOrder({ searchParams }: { searchParams?: S
                 tableConfig={{
                     tableColumns: ['Date', 'Accounts', 'Voucher No', 'Warehouse', 'Status'],
                     tableRows: purchaseOrderItems.map((item) => [
+                        item.voucher_date,
                         '',
-                        item.name,
-                        item.number,
                         item.voucher_no,
-                        item.cavity.map((cavity) => cavity.status),
+                        item.delivery_deadline,
+                        '',
                     ]),
                     items: purchaseOrderItems,
                     totalItemsCount: count,
