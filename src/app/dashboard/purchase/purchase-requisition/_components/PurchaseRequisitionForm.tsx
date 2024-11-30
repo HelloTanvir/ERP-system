@@ -110,7 +110,7 @@ export default function PurchaseRequisitionForm({
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
             <Link
-                href="/dashboard/accounts/chart-of-account"
+                href="/dashboard/accounts/chart-of-accounts"
                 type="button"
                 className="btn btn-primary bg-purple-700 text-white w-[200px]"
             >

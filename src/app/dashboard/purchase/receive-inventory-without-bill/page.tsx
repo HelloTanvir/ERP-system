@@ -1,4 +1,3 @@
-import { formatDateTimestamp } from '@/app/_lib/utils';
 import { Suspense } from 'react';
 import GenericCRUD from '../../_components/generic-crud/GenericCRUD';
 import { createGenericServerActions } from '../../_lib/actions';
@@ -31,18 +30,12 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
                     fields: searchFields,
                 }}
                 tableConfig={{
-                    tableColumns: [
-                        'Voucher No',
-                        'Voucher Date',
-                        'Accounts',
-                        'Delivery Deadline',
-                        'Status',
-                    ],
+                    tableColumns: ['Voucher Date', 'Voucher No', 'Accounts', 'Warehouse', 'Status'],
                     tableRows: purchaseRequisitionItems.map((item) => [
-                        item.voucher_no,
                         item.voucher_date,
+                        item.voucher_no,
                         '', // accounts is empty for now, as it is not yet implemented in the backend
-                        formatDateTimestamp(item.delivery_deadline),
+                        '',
                         '', // status is empty for now, as it is not yet implemented in the backend
                     ]),
                     items: purchaseRequisitionItems,

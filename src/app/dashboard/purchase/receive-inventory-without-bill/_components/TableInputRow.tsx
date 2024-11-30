@@ -2,16 +2,21 @@
 
 import Input from '@/app/_components/Input';
 import { Dispatch, SetStateAction } from 'react';
-import { IPurchaseOrderItem } from '../_lib/utils';
+import { IReceiveInventoryWithoutBillItem } from '../_lib/utils';
 
 interface Props {
     rowNumber: number;
-    ratePerUnit: number;
-    setRatePerUnits: Dispatch<SetStateAction<number[]>>;
-    preqItem: IPurchaseOrderItem;
+    receivingQuantity: number;
+    setReceivingQuantities: Dispatch<SetStateAction<number[]>>;
+    preqItem: IReceiveInventoryWithoutBillItem;
 }
 
-function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Readonly<Props>) {
+function TableInputRow({
+    preqItem,
+    rowNumber,
+    receivingQuantity,
+    setReceivingQuantities,
+}: Readonly<Props>) {
     return (
         <tr>
             <td className="border border-gray-300 border-l-0 w-[200px]">
@@ -64,29 +69,18 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
 
             <td className="border border-gray-300 border-l-0">
                 <input
-                    placeholder="Rate per unit"
+                    placeholder="Receiving quantity"
                     type="number"
-                    name="rate_per_unit"
-                    value={ratePerUnit}
+                    name="receiving_quantity"
+                    value={receivingQuantity}
                     onChange={(e) =>
-                        setRatePerUnits((prev) => {
+                        setReceivingQuantities((prev) => {
                             const units = [...prev];
                             units[rowNumber] = e.target.value;
                             return units;
                         })
                     }
                     required
-                    className="border placeholder-gray-400 focus:outline-none focus:border-blue-500  w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
-                />
-            </td>
-
-            <td className="border border-gray-300 border-l-0">
-                <input
-                    placeholder="Total"
-                    type="number"
-                    name="total"
-                    value={Number(ratePerUnit) * preqItem.quantity}
-                    disabled
                     className="border placeholder-gray-400 focus:outline-none focus:border-blue-500  w-full p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
                 />
             </td>
@@ -111,7 +105,7 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
                         placeholder: 'Item type',
                         disabled: true,
                         defaultValue: (() => {
-                            if (preqItem?.item?.is_inventory_item) {
+                            if (preqItem?.item?.is_inventory_item === true) {
                                 return 'Inventory';
                             }
                             if (preqItem?.item?.is_inventory_item === false) {

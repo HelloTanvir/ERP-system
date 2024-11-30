@@ -2,6 +2,7 @@
 
 import Input from '@/app/_components/Input';
 import { FormState, InputField } from '@/app/_lib/utils';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 import { IPurchaseRequisition } from '../../purchase-requisition/_lib/utils';
@@ -80,9 +81,13 @@ export default function PurchaseOrderForm({
 
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
-            <button type="button" className="btn btn-primary bg-purple-700 text-white w-[200px]">
+            <Link
+                href="/dashboard/accounts/chart-of-accounts"
+                type="button"
+                className="btn btn-primary bg-purple-700 text-white w-[200px]"
+            >
                 Create New Account
-            </button>
+            </Link>
             <div className="max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
                 {fields.map((field) => (
                     <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>

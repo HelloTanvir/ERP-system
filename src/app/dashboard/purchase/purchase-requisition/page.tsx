@@ -23,6 +23,8 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
     const searchFields = getSearchFields();
     const itemFields = getInputFields();
 
+    console.log(purchaseRequisitionItems);
+
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <GenericCRUD
