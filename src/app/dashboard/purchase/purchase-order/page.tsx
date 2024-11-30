@@ -9,8 +9,8 @@ import { getInputFields, getSearchFields, IPurchaseOrder } from './_lib/utils';
 export default async function PurchaseOrder({ searchParams }: { searchParams?: SearchParams }) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IPurchaseOrder>({
-            endpoint: `${process.env.API_URL}/finance/purchase/requisition/`,
-            revalidatePath: '/dashboard/purchase/purchase-requisition',
+            endpoint: `${process.env.API_URL}/finance/purchase/order/`,
+            revalidatePath: '/dashboard/purchase/purchase-order',
         });
 
     const { results: purchaseOrderItems, count } = await getItems({
@@ -33,11 +33,11 @@ export default async function PurchaseOrder({ searchParams }: { searchParams?: S
                 tableConfig={{
                     tableColumns: ['Date', 'Accounts', 'Voucher No', 'Warehouse', 'Status'],
                     tableRows: purchaseOrderItems.map((item) => [
+                        item.voucher_date || '',
                         '',
-                        item.name,
-                        item.number,
-                        item.voucher_no,
-                        item.cavity.map((cavity) => cavity.status),
+                        item.voucher_no || '',
+                        item.delivery_deadline || '',
+                        '',
                     ]),
                     items: purchaseOrderItems,
                     totalItemsCount: count,

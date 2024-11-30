@@ -5,15 +5,14 @@ import { FormState, InputField } from '@/app/_lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
-import { IPurchaseRequisition } from '../../purchase-requisition/_lib/utils';
-import { IPurchaseOrder } from '../_lib/utils';
-import SelectRequisitionItem from './SelectRequisitonItem';
+import { IReceiveInventoryWithoutBill } from '../_lib/utils';
+import SelectRequisitionItem from './SelectRequisitionItem';
 import TableInputRow from './TableInputRow';
 
 interface ItemFormProps {
     fields: InputField[];
-    currentItem: IPurchaseOrder | null;
-    handleSubmit: (item: IPurchaseOrder) => Promise<{
+    currentItem: IReceiveInventoryWithoutBill | null;
+    handleSubmit: (item: IReceiveInventoryWithoutBill) => Promise<{
         success: boolean;
         errors: {
             [key: string]: string;
@@ -21,7 +20,7 @@ interface ItemFormProps {
     }>;
     closeModal: () => void;
 }
-export default function PurchaseOrderForm({
+export default function ReceiveInventoryWithoutBillForm({
     fields,
     currentItem,
     handleSubmit,
@@ -32,27 +31,26 @@ export default function PurchaseOrderForm({
         success: false,
     };
 
-    const [selectedRequisition, setSelectedRequisition] = useState<IPurchaseRequisition | null>(
-        null
-    );
-    const [ratePerUnits, setRatePerUnits] = useState<number[]>([]);
+    const [selectedRequisition, setSelectedRequisition] =
+        useState<IReceiveInventoryWithoutBill | null>(null);
+    const [receivingQuantities, setReceivingQuantities] = useState<number[]>([]);
 
     console.log(selectedRequisition);
 
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const purchaseRequisition = {} as IPurchaseOrder;
-            if (currentItem?.id) purchaseRequisition.id = currentItem.id;
+            const receiveInventoryWithoutBill = {} as IReceiveInventoryWithoutBill;
+            if (currentItem?.id) receiveInventoryWithoutBill.id = currentItem.id;
 
             // Store main form data
             [...formData.entries()].forEach(([key, value]) => {
-                if (!key.includes('$ACTION_ID_')) purchaseRequisition[key] = value;
+                if (!key.includes('$ACTION_ID_')) receiveInventoryWithoutBill[key] = value;
             });
 
             // Store table row data in the purchase requisition object
-            console.log(purchaseRequisition);
+            console.log(receiveInventoryWithoutBill);
 
-            const currentFormState = await handleSubmit(purchaseRequisition);
+            const currentFormState = await handleSubmit(receiveInventoryWithoutBill);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -69,9 +67,8 @@ export default function PurchaseOrderForm({
         'Product Name',
         'Product Code',
         'Warehouse',
-        'Quantity',
-        'Rate per Unit',
-        'Total',
+        'Requisition Quantity',
+        'Receiving Quantity',
         'UoM',
         'Type',
         'Requested by',
@@ -97,10 +94,14 @@ export default function PurchaseOrderForm({
                             <Input
                                 field={{
                                     ...field,
-                                    ...(currentItem?.[field.name as keyof IPurchaseOrder]
+                                    ...(currentItem?.[
+                                        field.name as keyof IReceiveInventoryWithoutBill
+                                    ]
                                         ? {
                                               defaultValue:
-                                                  currentItem[field.name as keyof IPurchaseOrder],
+                                                  currentItem[
+                                                      field.name as keyof IReceiveInventoryWithoutBill
+                                                  ],
                                           }
                                         : {}),
                                 }}
@@ -132,8 +133,8 @@ export default function PurchaseOrderForm({
                                 preqItem={
                                     currentItem ? currentItem?.preq_items?.[index] : preq_item
                                 }
-                                ratePerUnit={ratePerUnits[index]}
-                                setRatePerUnits={setRatePerUnits}
+                                receivingQuantity={receivingQuantities[index]}
+                                setReceivingQuantities={setReceivingQuantities}
                                 rowNumber={index}
                             />
                         ))}
@@ -141,17 +142,12 @@ export default function PurchaseOrderForm({
                 </table>
 
                 <div className="flex items-center justify-end mt-6 gap-2">
-                    <p>Subtotal:</p>
+                    <p>Total Receiving Quantity:</p>
                     <input
                         type="number"
                         disabled
                         className="border w-[100px] placeholder-gray-400 focus:outline-none focus:border-blue-500   p-2 text-sm border-gray-300 rounded-input-radius text-black autofill:text-black"
-                        value={selectedRequisition?.preq_items
-                            ?.map(
-                                (preq_item, index) =>
-                                    preq_item.quantity * Number(ratePerUnits[index])
-                            )
-                            .reduce((acc, current) => current + acc, 0)}
+                        value={receivingQuantities.reduce((acc, current) => +current + +acc, 0)}
                     />
                 </div>
             </div>
