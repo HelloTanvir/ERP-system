@@ -72,7 +72,7 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
                 <input
                     placeholder="Rate per unit"
                     type="number"
-                    name={`items.${rowNumber}.rate_per_unit`}
+                    name={`items.${rowNumber}.rate_par_unit`}
                     value={ratePerUnit}
                     onChange={(e) =>
                         setRatePerUnits((prev) => {
