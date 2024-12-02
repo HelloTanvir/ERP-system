@@ -1,70 +1,63 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
+import { IPurchaseRequisition } from '../../purchase-requisition/_lib/utils';
 
 export interface IPurchaseOrderItem {
-    id: number;
-    quantity: number;
-    remarks: string;
-    item: {
-        id: number;
-        code: string;
-        name: string;
-        measure_unit: string;
-        is_inventory_item: boolean;
-    };
-    warehouse: {
-        id: number;
-        name: string;
-    };
-    requested_by: {
-        id: number;
-        name: string;
-    };
+    item_id: number;
     rate_per_unit: number;
     remarks: string;
 }
 
 export interface IPurchaseOrder {
     id: number;
-    preq_items: IPurchaseOrderItem[];
-    purchase_order_no: string;
-    supplier: string;
-    purchase_requisition_no: number;
-    record_date: string;
+    voucher_no: string;
+    voucher_date: string;
+    purchase_requisition: IPurchaseRequisition;
+    supplier: {
+        id: number;
+        name: string;
+    };
+    created_by: number;
+    created_by_name: string;
+    items: IPurchaseOrderItem[];
 }
 
 export const getInputFields = (): InputField[] => {
     return [
         {
-            label: 'Purchase Order No',
-            name: 'purchase_order_no',
+            label: 'Voucher No',
+            name: 'voucher_no',
             type: 'text',
             placeholder: 'Auto Generated',
             required: true,
             disabled: true,
         },
         {
+            label: 'Voucher Date',
+            name: 'voucher_date',
+            type: 'date',
+            placeholder: 'Select record date',
+            required: true,
+            defaultValue: new Date().toISOString().split('T')[0],
+        },
+        {
             label: 'Supplier/Creditor',
             name: 'supplier',
-            type: 'text',
-            placeholder: 'Select supplier/creditor',
+            type: 'dropdown',
+            creatable: true,
+            optionsGetUrl: 'finance/customer/',
+            optionsFilterQuery: 'name__icontains',
+            redirectURLOnCreate: '/dashboard/sales/customer',
             required: true,
         },
         {
             label: 'Purchase Requisition No',
-            name: 'purchase_requisition_no',
+            name: 'purchase_requisition',
             type: 'dropdown',
             creatable: true,
             optionsGetUrl: 'finance/purchase/requisition/',
             optionsFilterQuery: 'name__icontains',
             redirectURLOnCreate: '/dashboard/purchase/purchase-requisition',
-            required: true,
-        },
-        {
-            label: 'Record Date',
-            name: 'record_date',
-            type: 'date',
-            placeholder: 'Select record date',
             required: true,
         },
     ];

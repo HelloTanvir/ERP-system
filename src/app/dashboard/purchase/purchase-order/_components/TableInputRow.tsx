@@ -15,6 +15,12 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
     return (
         <tr>
             <td className="border border-gray-300 border-l-0 w-[200px]">
+                <input
+                    hidden
+                    type="number"
+                    name={`items.${rowNumber}.item_id`}
+                    value={preqItem?.item?.id}
+                />
                 <Input
                     field={{
                         name: 'item_name',
@@ -66,7 +72,7 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
                 <input
                     placeholder="Rate per unit"
                     type="number"
-                    name="rate_per_unit"
+                    name={`items.${rowNumber}.rate_par_unit`}
                     value={ratePerUnit}
                     onChange={(e) =>
                         setRatePerUnits((prev) => {
@@ -138,7 +144,7 @@ function TableInputRow({ preqItem, rowNumber, ratePerUnit, setRatePerUnits }: Re
             <td className="border border-gray-300 border-l-0">
                 <Input
                     field={{
-                        name: 'item_remarks',
+                        // name: `items.${rowNumber}.remarks`,
                         type: 'text',
                         placeholder: 'Enter remarks',
                         defaultValue: preqItem?.remarks,

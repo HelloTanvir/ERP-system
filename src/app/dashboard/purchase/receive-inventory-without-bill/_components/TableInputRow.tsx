@@ -20,6 +20,12 @@ function TableInputRow({
     return (
         <tr>
             <td className="border border-gray-300 border-l-0 w-[200px]">
+                <input
+                    hidden
+                    type="number"
+                    name={`items.${rowNumber}.item_id`}
+                    value={preqItem?.item?.id}
+                />
                 <Input
                     field={{
                         name: 'item_name',
@@ -71,7 +77,7 @@ function TableInputRow({
                 <input
                     placeholder="Receiving quantity"
                     type="number"
-                    name="receiving_quantity"
+                    name={`items.${rowNumber}.received_quantity`}
                     value={receivingQuantity}
                     onChange={(e) =>
                         setReceivingQuantities((prev) => {
@@ -132,7 +138,7 @@ function TableInputRow({
             <td className="border border-gray-300 border-l-0">
                 <Input
                     field={{
-                        name: 'item_remarks',
+                        // name: `items.${rowNumber}.remarks`,
                         type: 'text',
                         placeholder: 'Enter remarks',
                         defaultValue: preqItem?.remarks,

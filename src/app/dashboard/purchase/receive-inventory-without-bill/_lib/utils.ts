@@ -1,42 +1,24 @@
 import { InputField } from '@/app/_lib/utils';
 import { SearchField } from '@/app/dashboard/_lib/utils';
+import { IPurchaseRequisition } from '../../purchase-requisition/_lib/utils';
 
 export interface IReceiveInventoryWithoutBillItem {
-    id: number;
-    quantity: number;
-    receiving_quantity: number;
-    remarks: string;
-    item: {
-        id: number;
-        code: string;
-        name: string;
-        measure_unit: string;
-        is_inventory_item: boolean;
-    };
-    warehouse: {
-        id: number;
-        name: string;
-    };
-    requested_by: {
-        id: number;
-        name: string;
-    };
-    remarks: string;
+    item_id: number;
+    received_quantity: number;
 }
 
 export interface IReceiveInventoryWithoutBill {
     id: number;
-    preq_items: IReceiveInventoryWithoutBillItem[];
+    voucher_no: string;
     voucher_date: string;
-    purchase_requisition_no: number;
-    receiving_warehouse: {
+    received_warehouse: {
         id: number;
         name: string;
     };
-    created_by: {
-        id: number;
-        name: string;
-    };
+    purchase_requisition: IPurchaseRequisition;
+    created_by: number;
+    created_by_name: string;
+    items: IReceiveInventoryWithoutBillItem[];
 }
 
 export const getInputFields = (): InputField[] => {
@@ -62,12 +44,11 @@ export const getInputFields = (): InputField[] => {
             name: 'created_by',
             type: 'text',
             placeholder: 'Created by',
-            defaultValue: '',
             disabled: true,
         },
         {
-            label: 'Purchase Requisition No',
-            name: 'purchase_requisition_no',
+            label: 'Purchase Requisition',
+            name: 'purchase_requisition',
             type: 'dropdown',
             creatable: true,
             optionsGetUrl: 'finance/purchase/requisition/',
@@ -77,7 +58,7 @@ export const getInputFields = (): InputField[] => {
         },
         {
             label: 'Receiving Warehouse',
-            name: 'receiving_warehouse',
+            name: 'received_warehouse',
             type: 'dropdown',
             creatable: true,
             optionsGetUrl: 'inventory/warehouse/',
