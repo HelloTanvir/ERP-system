@@ -5,8 +5,8 @@ import { FormState, InputField } from '@/app/_lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
+import SelectRequisitionItem from '../../purchase-order/_components/SelectRequisitonItem';
 import { IReceiveInventoryWithoutBill } from '../_lib/utils';
-import SelectRequisitionItem from './SelectRequisitionItem';
 import TableInputRow from './TableInputRow';
 
 interface ItemFormProps {
@@ -41,14 +41,21 @@ export default function ReceiveInventoryWithoutBillForm({
         async (prevState: FormState, formData: FormData) => {
             const receiveInventoryWithoutBill = {} as IReceiveInventoryWithoutBill;
             if (currentItem?.id) receiveInventoryWithoutBill.id = currentItem.id;
+            receiveInventoryWithoutBill.items = [];
 
             // Store main form data
             [...formData.entries()].forEach(([key, value]) => {
-                if (!key.includes('$ACTION_ID_')) receiveInventoryWithoutBill[key] = value;
-            });
+                if (!['$ACTION_ID_'].includes(key)) {
+                    if (key.includes('items.')) {
+                        const [, index, fieldName] = key.split('.') as [string, string, string];
 
-            // Store table row data in the purchase requisition object
-            console.log(receiveInventoryWithoutBill);
+                        if (!receiveInventoryWithoutBill.items[Number(index)]) {
+                            receiveInventoryWithoutBill.items[Number(index)] = {};
+                        }
+                        receiveInventoryWithoutBill.items[Number(index)][fieldName] = value;
+                    } else receiveInventoryWithoutBill[key] = value;
+                }
+            });
 
             const currentFormState = await handleSubmit(receiveInventoryWithoutBill);
 
@@ -88,7 +95,7 @@ export default function ReceiveInventoryWithoutBillForm({
             <div className="max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
                 {fields.map((field) => (
                     <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>
-                        {field.name === 'purchase_requisition_no' ? (
+                        {field.name === 'purchase_requisition' ? (
                             <SelectRequisitionItem field={field} setItem={setSelectedRequisition} />
                         ) : (
                             <Input

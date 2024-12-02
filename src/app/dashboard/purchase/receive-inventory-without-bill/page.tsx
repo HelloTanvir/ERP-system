@@ -9,11 +9,11 @@ import { getInputFields, getSearchFields, IReceiveInventoryWithoutBill } from '.
 export default async function MoldRegister({ searchParams }: { searchParams?: SearchParams }) {
     const { createItem, updateItem, deleteItem, getItems } =
         await createGenericServerActions<IReceiveInventoryWithoutBill>({
-            endpoint: `${process.env.API_URL}/finance/purchase/requisition/`,
-            revalidatePath: '/dashboard/purchase/purchase-requisition',
+            endpoint: `${process.env.API_URL}/finance/purchase/received/`,
+            revalidatePath: '/dashboard/purchase/receive-inventory-without-bill',
         });
 
-    const { results: purchaseRequisitionItems, count } = await getItems({
+    const { results: purchaseReceivedItems, count } = await getItems({
         ...searchParams,
         page: searchParams?.page || '1',
         records: ITEMS_PER_PAGE,
@@ -31,14 +31,14 @@ export default async function MoldRegister({ searchParams }: { searchParams?: Se
                 }}
                 tableConfig={{
                     tableColumns: ['Voucher Date', 'Voucher No', 'Accounts', 'Warehouse', 'Status'],
-                    tableRows: purchaseRequisitionItems.map((item) => [
+                    tableRows: purchaseReceivedItems.map((item) => [
                         item.voucher_date,
                         item.voucher_no,
                         '', // accounts is empty for now, as it is not yet implemented in the backend
                         '',
                         '', // status is empty for now, as it is not yet implemented in the backend
                     ]),
-                    items: purchaseRequisitionItems,
+                    items: purchaseReceivedItems,
                     totalItemsCount: count,
                     updateItem,
                     deleteItem,

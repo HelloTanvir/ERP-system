@@ -37,22 +37,27 @@ export default function PurchaseOrderForm({
     );
     const [ratePerUnits, setRatePerUnits] = useState<number[]>([]);
 
-    console.log(selectedRequisition);
-
     const [itemFormState, formSubmitAction] = useFormState(
         async (prevState: FormState, formData: FormData) => {
-            const purchaseRequisition = {} as IPurchaseOrder;
-            if (currentItem?.id) purchaseRequisition.id = currentItem.id;
+            const purchaseOrder = {} as IPurchaseOrder;
+            if (currentItem?.id) purchaseOrder.id = currentItem.id;
+            purchaseOrder.items = [];
 
             // Store main form data
             [...formData.entries()].forEach(([key, value]) => {
-                if (!key.includes('$ACTION_ID_')) purchaseRequisition[key] = value;
+                if (!['$ACTION_ID_'].includes(key)) {
+                    if (key.includes('items.')) {
+                        const [, index, fieldName] = key.split('.') as [string, string, string];
+
+                        if (!purchaseOrder.items[Number(index)]) {
+                            purchaseOrder.items[Number(index)] = {};
+                        }
+                        purchaseOrder.items[Number(index)][fieldName] = value;
+                    } else purchaseOrder[key] = value;
+                }
             });
 
-            // Store table row data in the purchase requisition object
-            console.log(purchaseRequisition);
-
-            const currentFormState = await handleSubmit(purchaseRequisition);
+            const currentFormState = await handleSubmit(purchaseOrder);
 
             if (currentFormState?.errors) {
                 return { errors: currentFormState.errors, success: false };
@@ -77,7 +82,6 @@ export default function PurchaseOrderForm({
         'Requested by',
         'Remarks',
     ];
-    console.log('Fields:', fields);
 
     return (
         <form action={formSubmitAction} className="flex flex-col gap-6">
@@ -91,7 +95,7 @@ export default function PurchaseOrderForm({
             <div className="max-h-[40rem] grid grid-cols-3 gap-x-5 gap-y-4">
                 {fields.map((field) => (
                     <div key={field.name} className={field.fullWidth ? 'col-span-3' : ''}>
-                        {field.name === 'purchase_requisition_no' ? (
+                        {field.name === 'purchase_requisition' ? (
                             <SelectRequisitionItem field={field} setItem={setSelectedRequisition} />
                         ) : (
                             <Input
